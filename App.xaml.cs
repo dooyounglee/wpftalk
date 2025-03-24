@@ -35,6 +35,7 @@ public partial class App : Application
         services.AddSingleton<LoginViewModel>();
         services.AddSingleton<UserViewModel>();
         services.AddSingleton<ChatViewModel>();
+        services.AddSingleton<RoomViewModel>();
         services.AddSingleton<SettingViewModel>();
 
         services.AddSingleton(s => new MainView()

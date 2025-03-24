@@ -17,6 +17,9 @@
         <DataTemplate DataType="{x:Type viewmodels:ChatViewModel}">
             <local:ChatView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:RoomViewModel}">
+            <local:RoomView />
+        </DataTemplate>
         <DataTemplate DataType="{x:Type viewmodels:SettingViewModel}">
             <local:SettingView />
         </DataTemplate>

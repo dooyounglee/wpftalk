@@ -8,6 +8,7 @@ using System.Windows.Input;
 using talk2.Commands;
 using talk2.Models;
 using talk2.Services;
+using talk2.Views;
 
 namespace talk2.ViewModels
 {
@@ -66,6 +67,9 @@ namespace talk2.ViewModels
         {
             Debug.WriteLine("chat");
             Debug.WriteLine(roomNo);
+            var roomView = new RoomView();
+            roomView.DataContext = new RoomViewModel(roomNo);
+            roomView.Show();
         }
 
         public ICommand GotoUserCommand { get; set; }
