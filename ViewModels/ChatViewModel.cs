@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using talk2.Commands;
+using talk2.Models;
 using talk2.Services;
 
 namespace talk2.ViewModels
@@ -13,7 +14,7 @@ namespace talk2.ViewModels
     public class ChatViewModel : ViewModelBase
     {
         private readonly IChatService _chatService;
-        private List<string> _chatList = new List<string>();
+        private List<Room> _chatList = new List<Room>();
 
         public ChatViewModel(IChatService chatService)
         {
@@ -22,6 +23,7 @@ namespace talk2.ViewModels
             GotoUserCommand = new RelayCommand<object>(GotoUser);
             GotoChatCommand = new RelayCommand<object>(GotoChat);
             GotoSettingCommand = new RelayCommand<object>(GotoSetting);
+            ChatCommand = new RelayCommand<int>(Chat);
 
             Init();
         }
@@ -32,7 +34,7 @@ namespace talk2.ViewModels
             ChatList = _chatService.getChatList();
         }
 
-        public List<string> ChatList
+        public List<Room> ChatList
         {
             get => _chatList;
             set
@@ -60,8 +62,15 @@ namespace talk2.ViewModels
             _mainViewModel.changeViewModel(NaviType.SettingView);
         }
 
+        private void Chat(int roomNo)
+        {
+            Debug.WriteLine("chat");
+            Debug.WriteLine(roomNo);
+        }
+
         public ICommand GotoUserCommand { get; set; }
         public ICommand GotoChatCommand { get; set; }
         public ICommand GotoSettingCommand { get; set; }
+        public ICommand ChatCommand { get; set; }
     }
 }
