@@ -21,8 +21,7 @@ namespace talk2.ViewModels
         private ClientHandler? _clientHandler;
         private int _roomNo;
 
-        public int RoomNo { get => _roomNo;
-        }
+        public int RoomNo { get => _roomNo; }
         public RoomViewModel(int roomNo)
         {
             _msgs = new ObservableCollection<string>();
