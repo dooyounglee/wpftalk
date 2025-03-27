@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using talk2.Commands;
+using talk2.ViewModels;
 
 namespace talk2.Views
 {
@@ -19,9 +22,25 @@ namespace talk2.Views
     /// </summary>
     public partial class RoomView : Window
     {
+        // private FlashWindow FlashWindow;
         public RoomView()
         {
             InitializeComponent();
+            // var chatViewModel = this.DataContext as ChatViewModel;
+            this.Closed += new EventHandler(OnClose);
+        }
+
+        private void OnClose(object sender, EventArgs e)
+        {
+            var roomViewModel = this.DataContext as RoomViewModel;
+            roomViewModel.Disconnected();
+        }
+
+        private void Window_Deactivated(object sender, EventArgs e)
+        {
+            Debug.WriteLine("deactivated");
+            FlashWindow flashWindow = new FlashWindow(this);
+            flashWindow.FlashApplicationWindow();
         }
     }
 }

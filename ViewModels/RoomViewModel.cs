@@ -12,28 +12,34 @@ using System.Windows.Interop;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 using talk2.Models;
+using talk2.Services;
 
 namespace talk2.ViewModels
 {
     public class RoomViewModel : ObservableObject
     {
+        private IUserService _userService;
+
         private ChatClient _client;
         private ClientHandler? _clientHandler;
         private int _roomNo;
 
         public int RoomNo { get => _roomNo; }
-        public RoomViewModel(int roomNo)
+        public RoomViewModel(int roomNo, IUserService userService)
         {
+            _userService = userService;
             _msgs = new ObservableCollection<string>();
             _roomNo = roomNo;
 
-            _client = new ChatClient(IPAddress.Parse("127.0.0.1"), 8080);
+            _client = new ChatClient(IPAddress.Parse(_userService.Me.Ip), _userService.Me.Port);
             _client.Connected += Connected;
             _client.Disconnected += Disconnected;
             _client.Received += Received;
             _client.RunningStateChanged += RunningStateChanged;
 
             Connect();
+
+            _chats = new ObservableCollection<Chat>();
         }
 
         private string _msg;
@@ -63,7 +69,7 @@ namespace talk2.ViewModels
             await _client.ConnectAsync(new ConnectionDetails
             {
                 RoomId = _roomNo,
-                UsrNo = 1,// _loginService.UserInfo.UsrNo,
+                UsrNo = _userService.Me.UsrNo,
             });
         }
 
@@ -94,7 +100,7 @@ namespace talk2.ViewModels
             _clientHandler?.Send(new ChatHub
             {
                 RoomId = _roomNo,
-                UsrNo = 1, // _loginService.UserInfo.UsrNo,
+                UsrNo = _userService.Me.UsrNo,
                 Message = Msg,
             });
             // _chatService.InsertChat(_chatId, Msg);
@@ -124,12 +130,11 @@ namespace talk2.ViewModels
                     });
                     break;
                 default:
-                    // User me = _loginService.UserInfo;
                     _chats.Add(new Chat()
                     {
                         UsrNo = hub.UsrNo,
                         chat = hub.Message,
-                        Align = hub.UsrNo == 1 /*me.UsrNo*/ ? "Right" : "Left",
+                        Align = hub.UsrNo == _userService.Me.UsrNo ? "Right" : "Left",
                     });
                     break;
             }

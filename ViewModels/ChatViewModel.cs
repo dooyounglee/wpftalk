@@ -15,11 +15,13 @@ namespace talk2.ViewModels
     public class ChatViewModel : ViewModelBase
     {
         private readonly IChatService _chatService;
+        private readonly IUserService _userService;
         private List<Room> _chatList = new List<Room>();
 
-        public ChatViewModel(IChatService chatService)
+        public ChatViewModel(IUserService userService, IChatService chatService)
         {
             _chatService = chatService;
+            _userService = userService;
 
             GotoUserCommand = new RelayCommand<object>(GotoUser);
             GotoChatCommand = new RelayCommand<object>(GotoChat);
@@ -68,7 +70,7 @@ namespace talk2.ViewModels
             Debug.WriteLine("chat");
             Debug.WriteLine(roomNo);
             var roomView = new RoomView();
-            roomView.DataContext = new RoomViewModel(roomNo);
+            roomView.DataContext = new RoomViewModel(roomNo, _userService);
             roomView.Show();
         }
 
