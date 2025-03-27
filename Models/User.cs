@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace talk2.Models
 {
-    class User
+    public class User
     {
         public int UsrNo { get; set; }
         public string UsrId { get; set; }
