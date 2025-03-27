@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using talk2.Models;
 using talk2.Repositories;
 
 namespace talk2.Services
@@ -12,11 +13,27 @@ namespace talk2.Services
     {
         public void login(string id, string pw);
         public List<string> getUserList();
+
+        public User Me { get; }
     }
 
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        public User Me 
+        {
+            get => new()
+            {
+                UsrNo = 1,
+                UsrId = "gost",
+                UsrNm = "이두영",
+                DivNo = 1,
+                DivNm = "전략사업2 Div.",
+                Ip = "127.0.0.1",
+                Port = 8080,
+            };
+        }
+
         public UserService(IUserRepository userRepository)
         {
             _userRepository = userRepository;
