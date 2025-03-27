@@ -27,16 +27,16 @@ namespace talk2.ViewModels
             switch (naviType)
             {
                 case NaviType.LoginView:
-                    CurrentViewModel = (ViewModelBase)App.Current.Services.GetService(typeof(LoginViewModel))!;
+                    CurrentViewModel = (LoginViewModel)App.Current.Services.GetService(typeof(LoginViewModel))!;
                     break;
                 case NaviType.UserView:
-                    CurrentViewModel = (ViewModelBase)App.Current.Services.GetService(typeof(UserViewModel))!;
+                    CurrentViewModel = (UserViewModel)App.Current.Services.GetService(typeof(UserViewModel))!;
                     break;
                 case NaviType.ChatView:
-                    CurrentViewModel = (ViewModelBase)App.Current.Services.GetService(typeof(ChatViewModel))!;
+                    CurrentViewModel = (ChatViewModel)App.Current.Services.GetService(typeof(ChatViewModel))!;
                     break;
                 case NaviType.SettingView:
-                    CurrentViewModel = (ViewModelBase)App.Current.Services.GetService(typeof(SettingViewModel))!;
+                    CurrentViewModel = (SettingViewModel)App.Current.Services.GetService(typeof(SettingViewModel))!;
                     break;
                 default:
                     return;
