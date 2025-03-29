@@ -5,9 +5,37 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:talk2.Views"
         mc:Ignorable="d"
-        Title="RoomView" Height="450" Width="300"
-        Deactivated="Window_Deactivated">
+        Title="RoomView" Height="450" Width="300">
     <Grid>
-        <TextBlock Text="{Binding RoomNo}" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <!-- <ListBox x:Name="lbxMsg" ItemsSource="{Binding Chats, UpdateSourceTrigger=PropertyChanged}" ItemBindingGroup="{Binding Chat}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Layout}" TextAlignment="Right"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox> -->
+            <ScrollViewer x:Name="scroll">
+                <ItemsControl ItemsSource="{Binding Chats}" >
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Layout}" TextAlignment="{Binding Align}" TextWrapping="Wrap"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+        
+        <Grid Grid.Row="1">
+            <TextBox KeyDown="TextBox_KeyDown" TextWrapping="Wrap"
+             Text="{Binding Msg, UpdateSourceTrigger=PropertyChanged}" />
+        </Grid>
     </Grid>
 </Window>

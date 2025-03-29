@@ -36,11 +36,14 @@ namespace talk2.Views
             roomViewModel.Disconnected();
         }
 
-        private void Window_Deactivated(object sender, EventArgs e)
+        private void TextBox_KeyDown(object sender, KeyEventArgs e)
         {
-            Debug.WriteLine("deactivated");
-            FlashWindow flashWindow = new FlashWindow(this);
-            flashWindow.FlashApplicationWindow();
+            if (e.Key == Key.Enter)
+            {
+                var roomViewModel = this.DataContext as RoomViewModel;
+                roomViewModel.SendMsg();
+                scroll.ScrollToBottom();
+            }
         }
     }
 }
