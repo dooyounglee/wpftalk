@@ -12,5 +12,9 @@ namespace talk2.Models
         public int UsrNo { get; set; }
         public string chat { get; set; }
         public string Align { get; set; }
+        public string Layout
+        {
+            get => $"{UsrNo}: {chat}";
+        }
     }
 }
