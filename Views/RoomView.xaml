@@ -26,7 +26,7 @@
                 <ItemsControl ItemsSource="{Binding Chats}" >
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <TextBox Text="{Binding Path=Layout, Mode=OneWay}" TextAlignment="{Binding Align}" TextWrapping="Wrap" IsReadOnly="True"/>
+                            <TextBox Text="{Binding Path=Layout, Mode=OneWay}" HorizontalAlignment="{Binding Align}" TextWrapping="Wrap" IsReadOnly="True" MaxWidth="160" Background="#FFFFA0A0" SelectionBrush="White" SelectionTextBrush="{x:Null}" BorderBrush="White" Padding="5,5,5,5" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
