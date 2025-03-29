@@ -20,19 +20,8 @@ namespace talk2.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
-        public User Me 
-        {
-            get => new()
-            {
-                UsrNo = 1,
-                UsrId = "gost",
-                UsrNm = "이두영",
-                DivNo = 1,
-                DivNm = "전략사업2 Div.",
-                Ip = "127.0.0.1",
-                Port = 8080,
-            };
-        }
+        private User _user;
+        public User Me { get => _user; }
 
         public UserService(IUserRepository userRepository)
         {
@@ -43,6 +32,16 @@ namespace talk2.Services
             Debug.WriteLine(id);
             Debug.WriteLine(pw);
             _userRepository.login();
+            _user = new()
+            {
+                UsrNo = int.Parse(id),
+                UsrId = id,
+                UsrNm = "이두영" + id,
+                DivNo = 1,
+                DivNm = "전략사업2 Div.",
+                Ip = "127.0.0.1",
+                Port = 8080,
+            };
         }
 
         public List<string> getUserList()
