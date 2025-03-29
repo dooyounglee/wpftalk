@@ -70,6 +70,7 @@ namespace talk2.ViewModels
             {
                 RoomId = _roomNo,
                 UsrNo = _userService.Me.UsrNo,
+                UsrNm = _userService.Me.UsrNm,
             });
         }
 
