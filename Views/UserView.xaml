@@ -15,7 +15,15 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="2">
-            <ListBox ItemsSource="{Binding UserList}"/>
+            <ScrollViewer x:Name="scroll">
+                <ItemsControl ItemsSource="{Binding UserList}" >
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Layout}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
         </Grid>
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>

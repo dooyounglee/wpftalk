@@ -12,7 +12,7 @@ namespace talk2.Services
     public interface IUserService
     {
         public void login(string id, string pw);
-        public List<string> getUserList();
+        public List<User> getUserList();
 
         public User Me { get; }
     }
@@ -35,7 +35,7 @@ namespace talk2.Services
             _user = new()
             {
                 UsrNo = int.Parse(id),
-                UsrId = id,
+                UsrId = "gost" + id,
                 UsrNm = "이두영" + id,
                 DivNo = 1,
                 DivNm = "전략사업2 Div.",
@@ -44,12 +44,17 @@ namespace talk2.Services
             };
         }
 
-        public List<string> getUserList()
+        public List<User> getUserList()
         {
-            List<string> userList = new List<string>();
-            for (int i = 0; i < 10; i++)
+            List<User> userList = new List<User>();
+            for (int i = 1; i <= 10; i++)
             {
-                userList.Add("이두영" + i);
+                userList.Add(new User
+                {
+                    UsrNo = i,
+                    UsrNm = "이두영" + i,
+                    UsrId = "gost" + i,
+                });
             }
             return userList;
         }

@@ -27,7 +27,7 @@ namespace talk2.ViewModels
         private int _roomNo = 0;
 
         private readonly IUserService _userService;
-        private List<string> _userList = new List<string>();
+        private List<User> _userList = new List<User>();
 
         public UserViewModel(IUserService userService)
         {
@@ -53,11 +53,10 @@ namespace talk2.ViewModels
 
         private void Init()
         {
-            Debug.WriteLine("user init");
             UserList = _userService.getUserList();
         }
 
-        public List<string> UserList
+        public List<User> UserList
         {
             get => _userList;
             set
@@ -105,7 +104,7 @@ namespace talk2.ViewModels
             await _client.ConnectAsync(new ConnectionDetails
             {
                 RoomId = _roomNo,
-                UsrNo = 1,// _loginService.UserInfo.UsrNo,
+                UsrNo = _userService.Me.UsrNo,
             });
         }
 
@@ -136,7 +135,7 @@ namespace talk2.ViewModels
             _clientHandler?.Send(new ChatHub
             {
                 RoomId = _roomNo,
-                UsrNo = 1, // _loginService.UserInfo.UsrNo,
+                UsrNo = _userService.Me.UsrNo,
                 Message = Msg,
             });
             // _chatService.InsertChat(_chatId, Msg);
@@ -155,8 +154,26 @@ namespace talk2.ViewModels
 
             switch (hub.State)
             {
-                case ChatState.Connect: break;
-                case ChatState.Disconnect: break;
+                case ChatState.Connect:
+                    for (var i=1; i<_userList.Count; i++)
+                    {
+                        if (_userList[i].UsrNo == hub.UsrNo)
+                        {
+                            _userList[i].ConnState = ConnState.Online;
+                            break;
+                        }
+                    }
+                    break;
+                case ChatState.Disconnect:
+                    for (var i = 0; i < _userList.Count; i++)
+                    {
+                        if (_userList[i].UsrNo == hub.UsrNo)
+                        {
+                            _userList[i].ConnState = ConnState.Offline;
+                            break;
+                        }
+                    }
+                    break;
                 /* case ChatState.Invite:
                     _chats.Add(new Chat()
                     {
