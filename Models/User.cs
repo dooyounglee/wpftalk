@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OTILib.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,5 +18,10 @@ namespace talk2.Models
         public string DivNm { get; set; }
         public string Ip { get; set; }
         public int Port { get; set; }
+        public ConnState ConnState { get; set; }
+        public string Layout
+        {
+            get => $"{UsrNm} ({UsrNo}) [{ConnState}]";
+        }
     }
 }
