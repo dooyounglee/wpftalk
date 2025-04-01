@@ -98,7 +98,7 @@ namespace talk2.ViewModels
             set => SetProperty(ref _msg, value);
 
         }
-        #region socket
+        
         private async void Connect()
         {
             await _client.ConnectAsync(new ConnectionDetails
@@ -108,6 +108,7 @@ namespace talk2.ViewModels
             });
         }
 
+        #region socket
         private void Connected(object? sender, OTILib.Events.ChatEventArgs e)
         {
             _clientHandler = e.ClientHandler;
@@ -152,6 +153,8 @@ namespace talk2.ViewModels
             //     _ => $"{hub.UsrId}: {hub.Message}"
             // };
 
+            List<User> p_userList = new List<User>();
+            p_userList = _userList;
             switch (hub.State)
             {
                 case ChatState.Connect:
@@ -160,6 +163,9 @@ namespace talk2.ViewModels
                         if (_userList[i].UsrNo == hub.UsrNo)
                         {
                             _userList[i].ConnState = ConnState.Online;
+                            p_userList = _userList;
+                            UserList = new List<User>();
+                            UserList = p_userList;
                             break;
                         }
                     }
@@ -170,6 +176,9 @@ namespace talk2.ViewModels
                         if (_userList[i].UsrNo == hub.UsrNo)
                         {
                             _userList[i].ConnState = ConnState.Offline;
+                            p_userList = _userList;
+                            UserList = new List<User>();
+                            UserList = p_userList;
                             break;
                         }
                     }
