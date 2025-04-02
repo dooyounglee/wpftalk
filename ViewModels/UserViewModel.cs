@@ -2,6 +2,7 @@
 using OTILib.Handlers;
 using OTILib.Models;
 using OTILib.Sockets;
+using OTILib.Util;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,12 +10,14 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Interop;
 using talk2.Commands;
 using talk2.Models;
 using talk2.Services;
+using talkLib.Util;
 
 namespace talk2.ViewModels
 {
@@ -62,7 +65,7 @@ namespace talk2.ViewModels
             set
             {
                 _userList = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(UserList));
             }
         }
 
@@ -153,24 +156,34 @@ namespace talk2.ViewModels
             //     _ => $"{hub.UsrId}: {hub.Message}"
             // };
 
-            List<User> p_userList = new List<User>();
-            p_userList = _userList;
             switch (hub.State)
             {
                 case ChatState.Connect:
-                    for (var i=1; i<_userList.Count; i++)
+                    // 이미 접속한 유저는 새로운 접속유저만 받으면 되는데,
+                    // 새로 접속한 유저는 이미 접속한 유저들 모두를 알아야 함
+                    // 그래서 한명만 보낼수없고 전체 접속상황을 봐야 함
+                    // hub.Data1 = _roomManager.ClientStates();
+                    Dictionary<int, ConnState> p_connMap = JsonUtil.StringToObject<Dictionary<int, ConnState>>(hub.Data1);
+                    List<User> p_userList = new List<User>();
+                    for (var i=0; i<_userList.Count; i++)
                     {
-                        if (_userList[i].UsrNo == hub.UsrNo)
+                        if (p_connMap.ContainsKey(_userList[i].UsrNo))
                         {
-                            _userList[i].ConnState = ConnState.Online;
-                            p_userList = _userList;
-                            UserList = new List<User>();
-                            UserList = p_userList;
-                            break;
+                            _userList[i].ConnState = p_connMap[_userList[i].UsrNo];
                         }
+                        else
+                        {
+                            _userList[i].ConnState = ConnState.Offline;
+                        }
+                            p_userList.Add(_userList[i]);
                     }
+                    UserList = new List<User>();
+                    UserList = p_userList;
                     break;
                 case ChatState.Disconnect:
+                    // 나갈사람은 더이상 받든말든 상관없음
+                    // 대신 이미 접속한 유저는 나간사람을 알아야 함. 한명만 알아도 됌
+                    // new ChatHub{RoomId = 0,UsrNo = e.Hub.UsrNo,State = ChatState.Disconnect,}
                     for (var i = 0; i < _userList.Count; i++)
                     {
                         if (_userList[i].UsrNo == hub.UsrNo)
