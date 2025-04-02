@@ -35,6 +35,13 @@
             <Button Grid.Column="1" Content="Chat" Command="{Binding GotoChatCommand}" />
             <Button Grid.Column="2" Content="Setting" Command="{Binding GotoSettingCommand}" />
         </Grid>
-        <TextBlock TextWrapping="Wrap" Text="User"/>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="{Binding Me_Layout}"/>
+            <ComboBox Grid.Column="1" ItemsSource="{Binding ConnStateItems}" SelectedItem="{Binding SelectedConnState}" />
+        </Grid>
     </Grid>
 </UserControl>

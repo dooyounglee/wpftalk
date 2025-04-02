@@ -30,6 +30,7 @@ namespace talk2.ViewModels
         private int _roomNo = 0;
 
         private readonly IUserService _userService;
+        private User _me;
         private List<User> _userList = new List<User>();
 
         public UserViewModel(IUserService userService)
@@ -37,6 +38,7 @@ namespace talk2.ViewModels
             _mainViewModel = (MainViewModel)App.Current.Services.GetService(typeof(MainViewModel))!;
 
             _userService = userService;
+            _me = _userService.Me;
 
             LogoutCommand = new RelayCommand<object>(GoToLogout);
             GotoUserCommand = new RelayCommand<object>(GotoUser);
@@ -66,6 +68,32 @@ namespace talk2.ViewModels
             {
                 _userList = value;
                 OnPropertyChanged(nameof(UserList));
+            }
+        }
+
+        public string Me_Layout { get => _me.Layout; }
+
+        public ObservableCollection<string> ConnStateItems
+        {
+            get => new ObservableCollection<string>
+            {
+                "Offline", "Online", "Busy", "AFK"
+            };
+        }
+        private string _selectedConnState;
+        public string SelectedConnState
+        {
+            get { return _selectedConnState; }
+            set
+            {
+                _selectedConnState = value;
+                _clientHandler?.Send(new ChatHub
+                {
+                    RoomId = 0,
+                    UsrNo = _userService.Me.UsrNo,
+                    State = ChatState.StateChange,
+                    connState = "Offline".Equals(_selectedConnState) ? ConnState.Offline : "Online".Equals(_selectedConnState) ? ConnState.Online : "Busy".Equals(_selectedConnState) ? ConnState.Busy : ConnState.AFK
+                });
             }
         }
 
@@ -159,6 +187,7 @@ namespace talk2.ViewModels
             switch (hub.State)
             {
                 case ChatState.Connect:
+                case ChatState.StateChange:
                     // 이미 접속한 유저는 새로운 접속유저만 받으면 되는데,
                     // 새로 접속한 유저는 이미 접속한 유저들 모두를 알아야 함
                     // 그래서 한명만 보낼수없고 전체 접속상황을 봐야 함
@@ -175,7 +204,7 @@ namespace talk2.ViewModels
                         {
                             _userList[i].ConnState = ConnState.Offline;
                         }
-                            p_userList.Add(_userList[i]);
+                        p_userList.Add(_userList[i]);
                     }
                     UserList = new List<User>();
                     UserList = p_userList;
