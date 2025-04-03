@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using talk2.Commands;
+using talk2.Models;
 using talk2.Services;
 // using talk2.Services;
 
@@ -26,7 +27,9 @@ namespace talk2.ViewModels
 
         private void DoLogin(object _)
         {
-            _userService.login(Id, Pw);
+            User user = _userService.login(Id, Pw);
+            if (user is null) return;
+
             var _mainViewModel = (MainViewModel)App.Current.Services.GetService(typeof(MainViewModel))!;
             _mainViewModel.changeViewModel(NaviType.UserView);
             GoToUser(_);
