@@ -40,7 +40,7 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="{Binding Me_Layout}"/>
+            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="{Binding Me.UsrNm}" />
             <ComboBox Grid.Column="1" ItemsSource="{Binding ConnStateItems}" SelectedItem="{Binding SelectedConnState}" />
         </Grid>
     </Grid>

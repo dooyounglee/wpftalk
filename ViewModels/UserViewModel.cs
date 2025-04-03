@@ -71,7 +71,7 @@ namespace talk2.ViewModels
             }
         }
 
-        public string Me_Layout { get => _me.Layout; }
+        public User Me { get => _me; }
 
         public ObservableCollection<string> ConnStateItems
         {
