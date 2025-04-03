@@ -1,16 +1,16 @@
-﻿-- kakao."USER" definition
+﻿--docker run -p 5432:5432 --name postgres_talk -e POSTGRES_PASSWORD=postgres -e TZ=Asia/Seoul -d postgres:17.4-bookworm
 
--- Drop table
+-- DROP SCHEMA talk;
+CREATE SCHEMA talk AUTHORIZATION postgres;
 
--- DROP TABLE kakao."USER";
-
-CREATE TABLE kakao."USER" (
+-- DROP TABLE talk."USER";
+CREATE TABLE talk."USER" (
 	usr_no int8 NOT NULL,
 	usr_nm varchar NOT NULL,
 	div_no int8 NULL,
 	usr_id varchar NULL,
-	"password" varchar NULL,
-	CONSTRAINT user_pk PRIMARY KEY (usr_no)
+	usr_pw varchar NULL,
+	CONSTRAINT usr_pk PRIMARY KEY (usr_no)
 );
 
 -- kakao.chat definition
