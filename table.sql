@@ -40,13 +40,8 @@ CREATE TABLE kakao.chatuser (
 	room_title varchar NOT NULL
 );
 
--- kakao.div definition
-
--- Drop table
-
--- DROP TABLE kakao.div;
-
-CREATE TABLE kakao.div (
+-- DROP TABLE talk.div;
+CREATE TABLE talk.div (
 	div_no int8 NOT NULL,
 	div_nm varchar NOT NULL
 );
