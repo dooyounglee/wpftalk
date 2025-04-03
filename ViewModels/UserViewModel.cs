@@ -38,8 +38,12 @@ namespace talk2.ViewModels
             _mainViewModel = (MainViewModel)App.Current.Services.GetService(typeof(MainViewModel))!;
 
             _userService = userService;
-            _me = _userService.Me;
 
+            Init();
+        }
+
+        public void Init()
+        {
             LogoutCommand = new RelayCommand<object>(GoToLogout);
             GotoUserCommand = new RelayCommand<object>(GotoUser);
             GotoChatCommand = new RelayCommand<object>(GotoChat);
@@ -53,11 +57,7 @@ namespace talk2.ViewModels
 
             Connect();
 
-            Init();
-        }
-
-        private void Init()
-        {
+            _me = _userService.Me;
             UserList = _userService.getUserList();
         }
 
@@ -99,6 +99,11 @@ namespace talk2.ViewModels
 
         private void GoToLogout(object _)
         {
+            _userService.logout();
+            Disconnected();
+            _client = null;
+            _clientHandler = null;
+            _userList.Clear();
             _mainViewModel.changeViewModel(NaviType.LoginView);
         }
 

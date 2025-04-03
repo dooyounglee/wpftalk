@@ -15,6 +15,7 @@ namespace talk2.Services
         public List<User> getUserList();
 
         public User Me { get; }
+        public void logout();
     }
 
     public class UserService : IUserService
@@ -36,6 +37,11 @@ namespace talk2.Services
         public List<User> getUserList()
         {
             return _userRepository.getUserList();
+        }
+
+        public void logout()
+        {
+            _user = null;
         }
     }
 }
