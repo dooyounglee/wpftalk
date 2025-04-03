@@ -31,6 +31,7 @@ namespace talk2.ViewModels
                     break;
                 case NaviType.UserView:
                     CurrentViewModel = (UserViewModel)App.Current.Services.GetService(typeof(UserViewModel))!;
+                    ((UserViewModel)CurrentViewModel).Init();
                     break;
                 case NaviType.ChatView:
                     CurrentViewModel = (ChatViewModel)App.Current.Services.GetService(typeof(ChatViewModel))!;
