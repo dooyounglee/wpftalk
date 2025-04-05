@@ -34,7 +34,7 @@ namespace talk2.ViewModels
         private void Init()
         {
             Debug.WriteLine("chat init");
-            ChatList = _chatService.getChatList();
+            ChatList = _chatService.getChatList(_userService.Me.UsrNo);
         }
 
         public List<Room> ChatList

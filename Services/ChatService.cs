@@ -4,24 +4,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using talk2.Models;
+using talk2.Repositories;
 
 namespace talk2.Services
 {
     public interface IChatService
     {
-        public List<Room> getChatList();
+        public List<Room> getChatList(int usrNo);
     }
 
     public class ChatService : IChatService
     {
-        public List<Room> getChatList()
+        private readonly IChatRepository? _chatRepository;
+
+        public ChatService(IChatRepository? chatRepository)
         {
-            List<Room> chatList = new List<Room>();
-            for (int i = 0; i < 10; i++)
-            {
-                chatList.Add(new Room(i, "채팅방" + i));
-            }
-            return chatList;
+            _chatRepository = chatRepository;
+        }
+
+        public List<Room> getChatList(int usrNo)
+        {
+            return _chatRepository.GetRoomList(usrNo);
         }
     }
 }
