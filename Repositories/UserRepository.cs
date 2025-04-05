@@ -58,7 +58,7 @@ namespace talk2.Repositories
                              FROM talk.""USER"" a
                                 , talk.div b
                             where a.div_no = b.div_no
-                            order by 3,1";
+                            order by 1";
             DataTable? dt = Query.select1(sql);
 
             var users = new List<User>();
