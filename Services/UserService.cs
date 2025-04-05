@@ -31,6 +31,8 @@ namespace talk2.Services
         public User login(string id, string pw)
         {
             _user = _userRepository.login("user" + id, "");
+            _user.Ip = "127.0.0.1";
+            _user.Port = 8080;
             return _user;
         }
 
