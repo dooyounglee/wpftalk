@@ -13,13 +13,14 @@ CREATE TABLE talk."USER" (
 	CONSTRAINT usr_pk PRIMARY KEY (usr_no)
 );
 
--- kakao.chat definition
+-- DROP TABLE talk.div;
+CREATE TABLE talk.div (
+	div_no int8 NOT NULL,
+	div_nm varchar NOT NULL
+);
 
--- Drop table
-
--- DROP TABLE kakao.chat;
-
-CREATE TABLE kakao.chat (
+-- DROP TABLE talk.chat;
+CREATE TABLE talk.chat (
 	chat_no int8 NOT NULL,
 	chat text NULL,
 	chat_fg varchar NOT NULL,
@@ -28,31 +29,15 @@ CREATE TABLE kakao.chat (
 	rgt_dtm varchar NULL
 );
 
--- kakao.chatuser definition
-
--- Drop table
-
--- DROP TABLE kakao.chatuser;
-
-CREATE TABLE kakao.chatuser (
+-- DROP TABLE talk.chatuser;
+CREATE TABLE talk.chatuser (
 	room_no int8 NOT NULL,
 	usr_no int8 NOT NULL,
-	room_title varchar NOT NULL
+	title varchar NOT NULL
 );
 
--- DROP TABLE talk.div;
-CREATE TABLE talk.div (
-	div_no int8 NOT NULL,
-	div_nm varchar NOT NULL
-);
-
--- kakao.room definition
-
--- Drop table
-
--- DROP TABLE kakao.room;
-
-CREATE TABLE kakao.room (
+-- DROP TABLE talk.room;
+CREATE TABLE talk.room (
 	room_no int8 NOT NULL,
 	usr_no int8 NOT NULL,
 	title varchar NOT NULL,
