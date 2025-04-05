@@ -14,10 +14,9 @@ namespace talk2.Models
         public string Chat { get; set; }
         public string RgtDtm { get; set; }
 
-        /* public Room(int RoomNo, string Title)
+        public string Layout
         {
-            this.RoomNo = RoomNo;
-            this.Title = Title;
-        } */
+            get => $"{Title} {Chat} {RgtDtm}";
+        }
     }
 }
