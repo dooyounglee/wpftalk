@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\talk2Lib\OTILib\OTILib.csproj" />
+    <ProjectReference Include="..\talkLib\talkLib.csproj" />
   </ItemGroup>
 
 </Project>

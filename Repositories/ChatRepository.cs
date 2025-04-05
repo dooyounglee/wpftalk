@@ -26,9 +26,10 @@ namespace talk2.Repositories
         {
             string sql = @$"SELECT a.room_no
                                  , a.title
-                                 , b.chat
-                                 , coalesce(b.rgt_dtm, a.rgt_dtm) as rgt_dtm
+                                 , c.chat
+                                 , coalesce(c.rgt_dtm, a.rgt_dtm) as rgt_dtm
                               FROM talk.room a
+                             inner join talk.chatuser b on (a.room_no = b.room_no)
                               left join (select room_no
                                               , chat
                                               , rgt_dtm
@@ -36,9 +37,9 @@ namespace talk2.Repositories
                                           where (room_no, chat_no) in (select room_no, max(chat_no) as chat_no
                                                                          from talk.chat
                                                                         group by room_no)
-                                        ) b
+                                        ) c
                                 on (a.room_no = b.room_no)
-                             where a.usr_no = {usrNo}
+                             where b.usr_no = {usrNo}
                              order by rgt_dtm desc";
             DataTable? dt = Query.select1(sql);
 
