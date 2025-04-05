@@ -30,6 +30,7 @@ public partial class App : Application
         services.AddSingleton<IChatService, ChatService>();
 
         services.AddSingleton<IUserRepository, UserRepository>();
+        services.AddSingleton<IChatRepository, ChatRepository>();
 
         services.AddSingleton<MainViewModel>();
         services.AddSingleton<LoginViewModel>();
