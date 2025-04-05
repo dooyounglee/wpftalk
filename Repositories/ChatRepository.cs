@@ -28,13 +28,13 @@ namespace talk2.Repositories
                                  , a.title
                                  , b.chat
                                  , coalesce(b.rgt_dtm, a.rgt_dtm) as rgt_dtm
-                              FROM kakao.room a
+                              FROM talk.room a
                               left join (select room_no
                                               , chat
                                               , rgt_dtm
-                                           from kakao.chat
+                                           from talk.chat
                                           where (room_no, chat_no) in (select room_no, max(chat_no) as chat_no
-                                                                         from kakao.chat
+                                                                         from talk.chat
                                                                         group by room_no)
                                         ) b
                                 on (a.room_no = b.room_no)
@@ -60,7 +60,7 @@ namespace talk2.Repositories
         public int GetRoomNo()
         {
             string sql = @$"SELECT COALESCE(MAX(room_no),0)+1 as room_no
-                              FROM kakao.room";
+                              FROM talk.room";
             DataTable? dt = Query.select1(sql);
 
             var roomNo = 0;
@@ -74,14 +74,14 @@ namespace talk2.Repositories
 
         public void AddRoom(Room room)
         {
-            string sql = @$"INSERT INTO kakao.room (ROOM_NO,USR_NO,TITLE,RGT_DTM) VALUES
+            string sql = @$"INSERT INTO talk.room (ROOM_NO,USR_NO,TITLE,RGT_DTM) VALUES
                            ('{room.RoomNo}',{room.UsrNo},'{room.Title}',to_char(now() + interval '9 hour','YYYYMMDDHH24MISS'))";
             Query.insert(sql);
         }
 
         public void LeaveRoom(int roomNo, int usrNo)
         {
-            string sql = @$"DELETE FROM kakao.room
+            string sql = @$"DELETE FROM talk.room
                              WHERE ROOM_NO = {roomNo}
                                AND USR_NO = {usrNo}"
                          ;
@@ -90,7 +90,7 @@ namespace talk2.Repositories
 
         public void UpdateTitle(int? roomNo, int usrNo, string title)
         {
-            string sql = @$"UPDATE kakao.room
+            string sql = @$"UPDATE talk.room
                                SET TITLE = '{title}'
                              WHERE ROOM_NO = {roomNo}
                                AND USR_NO = {usrNo}"
@@ -100,9 +100,9 @@ namespace talk2.Repositories
 
         public void InsertChat(int roomNo, int usrNo, string msg)
         {
-            string sql = @$"INSERT INTO kakao.chat
+            string sql = @$"INSERT INTO talk.chat
                             (CHAT_NO,ROOM_NO,USR_NO,CHAT_FG,CHAT,RGT_DTM) VALUES
-                            ((SELECT COALESCE(MAX(chat_no),0)+1 FROM kakao.chat),
+                            ((SELECT COALESCE(MAX(chat_no),0)+1 FROM talk.chat),
                             '{roomNo}',{usrNo},'A','{msg}',to_char(now() + interval '9 hour','YYYYMMDDHH24MISS'))"
                          ;
             Query.insert(sql);
@@ -113,7 +113,7 @@ namespace talk2.Repositories
             string sql = @$"SELECT a.chat_no
                                  , a.chat
                                  , a.usr_no
-                              FROM kakao.chat a
+                              FROM talk.chat a
                              where a.room_no = {roomNo}
                              order by chat_no";
             DataTable? dt = Query.select1(sql);
