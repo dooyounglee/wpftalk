@@ -16,6 +16,9 @@ namespace talk2.Models
         public string? Password1 { get; set; }
         public int DivNo { get; set; }
         public string DivNm { get; set; }
+        public string Phone { get; set; }
+        public string Level { get; set; }
+        public string Tel { get; set; }
         public string Ip { get; set; }
         public int Port { get; set; }
         public ConnState ConnState { get; set; }

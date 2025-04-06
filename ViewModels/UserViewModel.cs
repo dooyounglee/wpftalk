@@ -17,6 +17,7 @@ using System.Windows.Interop;
 using talk2.Commands;
 using talk2.Models;
 using talk2.Services;
+using talk2.Views;
 using talkLib.Util;
 
 namespace talk2.ViewModels
@@ -45,6 +46,7 @@ namespace talk2.ViewModels
         public void Init()
         {
             LogoutCommand = new RelayCommand<object>(GoToLogout);
+            CreateUserCommand = new RelayCommand<object>(GoToCreateUser);
             GotoUserCommand = new RelayCommand<object>(GotoUser);
             GotoChatCommand = new RelayCommand<object>(GotoChat);
             GotoSettingCommand = new RelayCommand<object>(GotoSetting);
@@ -107,6 +109,13 @@ namespace talk2.ViewModels
             _mainViewModel.changeViewModel(NaviType.LoginView);
         }
 
+        private void GoToCreateUser(object _)
+        {
+            var newUserView = new NewUserView();
+            newUserView.DataContext = new NewUserViewModel(_userService);
+            newUserView.Show();
+        }
+
         private void GotoUser(object _)
         {
             _mainViewModel.changeViewModel(NaviType.UserView);
@@ -123,6 +132,7 @@ namespace talk2.ViewModels
         }
 
         public ICommand LogoutCommand { get; set; }
+        public ICommand CreateUserCommand { get; set; }
         public ICommand GotoUserCommand { get; set; }
         public ICommand GotoChatCommand { get; set; }
         public ICommand GotoSettingCommand { get; set; }
