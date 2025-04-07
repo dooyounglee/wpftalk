@@ -27,9 +27,8 @@ namespace talk2.ViewModels
         public ICommand SaveCommand { get; set; }
         private void DoSave(object _)
         {
-            OtiLogger.log1(Me);
-            OtiLogger.log1(Me.UsrId);
-            OtiLogger.log1(Me.UsrNm);
+            Me.Password1 = "1";
+            _userService.save(Me);
         }
     }
 }

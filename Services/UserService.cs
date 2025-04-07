@@ -16,6 +16,7 @@ namespace talk2.Services
 
         public User Me { get; }
         public void logout();
+        public void save(User user);
     }
 
     public class UserService : IUserService
@@ -44,6 +45,11 @@ namespace talk2.Services
         public void logout()
         {
             _user = null;
+        }
+
+        public void save(User user)
+        {
+            _userRepository.save(user);
         }
     }
 }

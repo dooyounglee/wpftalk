@@ -16,6 +16,7 @@ namespace talk2.Repositories
     {
         User login(string usrId, string usrPw);
         public List<User> getUserList();
+        public int save(User user);
     }
 
     public class UserRepository : IUserRepository
@@ -75,6 +76,14 @@ namespace talk2.Repositories
             }
             ;
             return users;
+        }
+
+        public int save(User user)
+        {
+            string sql = @$"INSERT INTO talk.""USER"" (USR_NO,USR_NM,DIV_NO,USR_ID,USR_PW) VALUES
+                           ((SELECT MAX(USR_NO)+1 FROM talk.""USER"")
+                           ,'{user.UsrNm}',1,'{user.UsrId}','{user.Password1}')";
+            return Query.insert(sql);
         }
     }
 }
