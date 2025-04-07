@@ -19,7 +19,22 @@
                 <ItemsControl ItemsSource="{Binding UserList}" >
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Layout}"/>
+                            <TextBlock Text="{Binding Layout}">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property= "Foreground" Value="Black"/>
+                                        <Style.Triggers>
+                                            <Trigger Property ="IsMouseOver" Value="True">
+                                                <Setter Property= "Background" Value="Red"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                                <TextBlock.InputBindings>
+                                    <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DataContext.UserInfoCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
+                                    <MouseBinding Gesture="RightClick" Command="{Binding DataContext.UserContextmenuCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
+                                </TextBlock.InputBindings>
+                            </TextBlock>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

@@ -47,6 +47,8 @@ namespace talk2.ViewModels
         {
             LogoutCommand = new RelayCommand<object>(GoToLogout);
             CreateUserCommand = new RelayCommand<object>(GoToCreateUser);
+            UserInfoCommand = new RelayCommand<object>(GoToUserInfo);
+            UserContextmenuCommand = new RelayCommand<object>(GoToUserContextmenu);
             GotoUserCommand = new RelayCommand<object>(GotoUser);
             GotoChatCommand = new RelayCommand<object>(GotoChat);
             GotoSettingCommand = new RelayCommand<object>(GotoSetting);
@@ -116,6 +118,16 @@ namespace talk2.ViewModels
             newUserView.Show();
         }
 
+        private void GoToUserInfo(object _)
+        {
+            OtiLogger.log1("userinfo");
+        }
+
+        private void GoToUserContextmenu(object _)
+        {
+            OtiLogger.log1("usercontextmenu");
+        }
+
         private void GotoUser(object _)
         {
             _mainViewModel.changeViewModel(NaviType.UserView);
@@ -133,6 +145,8 @@ namespace talk2.ViewModels
 
         public ICommand LogoutCommand { get; set; }
         public ICommand CreateUserCommand { get; set; }
+        public ICommand UserInfoCommand { get; set; }
+        public ICommand UserContextmenuCommand { get; set; }
         public ICommand GotoUserCommand { get; set; }
         public ICommand GotoChatCommand { get; set; }
         public ICommand GotoSettingCommand { get; set; }
