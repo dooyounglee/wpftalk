@@ -16,6 +16,7 @@ namespace talk2.Repositories
     {
         User login(string usrId, string usrPw);
         public List<User> getUserList();
+        public User findById(int usrNo);
         public int save(User user);
     }
 
@@ -76,6 +77,33 @@ namespace talk2.Repositories
             }
             ;
             return users;
+        }
+
+        public User findById(int usrNo)
+        {
+            string sql = @$"SELECT a.usr_no
+                                 , a.usr_id
+                                 , a.usr_nm
+                                 , a.div_no
+                                 , b.div_nm
+                              FROM talk.""USER"" a
+                                 , talk.div b
+                             where a.div_no = b.div_no
+                               and a.usr_no = {usrNo}"
+                         ;
+            DataTable? dt = Query.select1(sql);
+
+            // 없으면 null
+            if (dt.Rows.Count == 0) return null;
+
+            return new User()
+            {
+                UsrNo = Convert.ToInt16(dt.Rows[0]["usr_no"]),
+                UsrId = Convert.ToString(dt.Rows[0]["usr_id"]),
+                UsrNm = Convert.ToString(dt.Rows[0]["usr_nm"]),
+                DivNo = Convert.ToInt16(dt.Rows[0]["div_no"]),
+                DivNm = Convert.ToString(dt.Rows[0]["div_nm"]),
+            };
         }
 
         public int save(User user)
