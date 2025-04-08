@@ -47,7 +47,7 @@ namespace talk2.ViewModels
         {
             LogoutCommand = new RelayCommand<object>(GoToLogout);
             CreateUserCommand = new RelayCommand<object>(GoToCreateUser);
-            UserInfoCommand = new RelayCommand<object>(GoToUserInfo);
+            UserInfoCommand = new RelayCommand<int>(GoToUserInfo);
             UserContextmenuCommand = new RelayCommand<object>(GoToUserContextmenu);
             GotoUserCommand = new RelayCommand<object>(GotoUser);
             GotoChatCommand = new RelayCommand<object>(GotoChat);
@@ -114,13 +114,16 @@ namespace talk2.ViewModels
         private void GoToCreateUser(object _)
         {
             var newUserView = new NewUserView();
-            newUserView.DataContext = new NewUserViewModel(_userService);
-            newUserView.Show();
+            newUserView.DataContext = new NewUserViewModel(newUserView, _userService);
+            newUserView.ShowDialog();
         }
 
-        private void GoToUserInfo(object _)
+        private void GoToUserInfo(int usrNo)
         {
-            OtiLogger.log1("userinfo");
+            var userInfoView = new NewUserView();
+            userInfoView.DataContext = new NewUserViewModel(userInfoView, _userService, usrNo);
+            // userInfoView.DataContext = new UserInfoViewModel(userInfoView, _userService, usrNo);
+            userInfoView.ShowDialog();
         }
 
         private void GoToUserContextmenu(object _)

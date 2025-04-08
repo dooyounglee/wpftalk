@@ -24,13 +24,14 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Label Grid.Row="0" Grid.Column="0" Content="ID" />     <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Me.UsrId}" />
-        <Label Grid.Row="1" Grid.Column="0" Content="이름" />    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Me.UsrNm}" />
-        <Label Grid.Row="2" Grid.Column="0" Content="소속" />    <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Me.DivNm}" />
-        <Label Grid.Row="3" Grid.Column="0" Content="연락처" />  <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Me.Phone}" />
-        <Label Grid.Row="4" Grid.Column="0" Content="직급" />    <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Me.Level}" />
-        <Label Grid.Row="5" Grid.Column="0" Content="내선번호" /> <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Me.Tel}" />
-        
-        <Button Grid.Row="8" Grid.Column="0" Content="저장" Command="{Binding SaveCommand}"/>
+        <Label Grid.Row="0" Grid.Column="0" Content="ID" />       <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding He.UsrId}" IsReadOnly="{Binding IsNotAdmin}"/>
+        <Label Grid.Row="1" Grid.Column="0" Content="이름" />     <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding He.UsrNm}" IsReadOnly="{Binding IsNotAdmin}"/>
+        <Label Grid.Row="2" Grid.Column="0" Content="소속" />     <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding He.DivNm}" IsReadOnly="{Binding IsNotAdmin}"/>
+        <Label Grid.Row="3" Grid.Column="0" Content="연락처" />   <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding He.Phone}" IsReadOnly="{Binding IsNotAdmin}"/>
+        <Label Grid.Row="4" Grid.Column="0" Content="직급" />     <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding He.Level}" IsReadOnly="{Binding IsNotAdmin}"/>
+        <Label Grid.Row="5" Grid.Column="0" Content="내선번호" /> <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding He.Tel}" IsReadOnly="{Binding IsNotAdmin}"/>
+
+        <Button Grid.Row="8" Grid.Column="0" Content="저장" Command="{Binding SaveCommand}" Visibility="{Binding Visibility_save}"/>
+        <Button Grid.Row="8" Grid.Column="1" Content="닫기" Command="{Binding CloseCommand}" />
     </Grid>
 </Window>
