@@ -13,6 +13,7 @@ namespace talk2.Services
     {
         public User login(string id, string pw);
         public List<User> getUserList();
+        public User getUser(int usrNo);
 
         public User Me { get; }
         public void logout();
@@ -34,12 +35,18 @@ namespace talk2.Services
             _user = _userRepository.login("user" + id, "");
             _user.Ip = "127.0.0.1";
             _user.Port = 8080;
+            if (_user.UsrNo == 0) _user.IsAdmin = true;
             return _user;
         }
 
         public List<User> getUserList()
         {
             return _userRepository.getUserList();
+        }
+
+        public User getUser(int usrNo)
+        {
+            return _userRepository.findById(usrNo);
         }
 
         public void logout()
