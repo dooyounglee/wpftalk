@@ -51,6 +51,8 @@ namespace talk2.ViewModels
         {
             ChatList = new List<Room>();
             ChatList = _chatService.getChatList(_userService.Me.UsrNo);
+            ChatList = new List<Room>();
+            ChatList = _chatService.getChatList(_userService.Me.UsrNo);
         }
 
         private void GotoUser(object _)
