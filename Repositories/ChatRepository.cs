@@ -38,7 +38,7 @@ namespace talk2.Repositories
                                                                          from talk.chat
                                                                         group by room_no)
                                         ) c
-                                on (a.room_no = b.room_no)
+                                on (a.room_no = c.room_no)
                              where b.usr_no = {usrNo}
                              order by rgt_dtm desc";
             DataTable? dt = Query.select1(sql);
