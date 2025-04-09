@@ -76,7 +76,7 @@ namespace talk2.Repositories
         public void AddRoom(Room room)
         {
             string sql = @$"INSERT INTO talk.room (ROOM_NO,USR_NO,TITLE,RGT_DTM) VALUES
-                           ('{room.RoomNo}',{room.UsrNo},'{room.Title}',to_char(now() + interval '9 hour','YYYYMMDDHH24MISS'))";
+                           ('{room.RoomNo}',{room.UsrNo},'{room.Title}',to_char(now(),'YYYYMMDDHH24MISS'))";
             Query.insert(sql);
         }
 
@@ -104,7 +104,7 @@ namespace talk2.Repositories
             string sql = @$"INSERT INTO talk.chat
                             (CHAT_NO,ROOM_NO,USR_NO,CHAT_FG,CHAT,RGT_DTM) VALUES
                             ((SELECT COALESCE(MAX(chat_no),0)+1 FROM talk.chat),
-                            '{roomNo}',{usrNo},'A','{msg}',to_char(now() + interval '9 hour','YYYYMMDDHH24MISS'))"
+                            '{roomNo}',{usrNo},'A','{msg}',to_char(now(),'YYYYMMDDHH24MISS'))"
                          ;
             Query.insert(sql);
         }
@@ -116,7 +116,8 @@ namespace talk2.Repositories
                                  , a.usr_no
                               FROM talk.chat a
                              where a.room_no = {roomNo}
-                             order by chat_no";
+                             order by chat_no desc
+                             limit 10";
             DataTable? dt = Query.select1(sql);
 
             var chats = new List<Chat>();
