@@ -11,6 +11,8 @@ namespace talk2.Services
     public interface IChatService
     {
         public List<Room> getChatList(int usrNo);
+        public void InsertChat(int roomNo, int usrNo, string msg);
+        public List<Chat> SelectChats(int roomNo);
     }
 
     public class ChatService : IChatService
@@ -25,6 +27,16 @@ namespace talk2.Services
         public List<Room> getChatList(int usrNo)
         {
             return _chatRepository.GetRoomList(usrNo);
+        }
+
+        public void InsertChat(int roomNo, int usrNo, string msg)
+        {
+            _chatRepository.InsertChat(roomNo, usrNo, msg);
+        }
+
+        public List<Chat> SelectChats(int roomNo)
+        {
+            return _chatRepository.SelectChats(roomNo);
         }
     }
 }
