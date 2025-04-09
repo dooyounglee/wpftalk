@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using talk2.Commands;
 using talk2.Models;
@@ -75,11 +76,18 @@ namespace talk2.ViewModels
 
         private void Chat(int roomNo)
         {
-            Debug.WriteLine("chat");
-            Debug.WriteLine(roomNo);
-            var roomView = new RoomView();
-            roomView.DataContext = new RoomViewModel(roomNo, _userService, _chatService);
-            roomView.Show();
+            var roomWin = Application.Current.Windows.Cast<Window>().FirstOrDefault(p => p.Tag is not null && Convert.ToInt16(p.Tag) == roomNo);
+            if (roomWin is not null)
+            {
+                roomWin.Activate();
+            }
+            else
+            {
+                var roomView = new RoomView();
+                roomView.Tag = roomNo;
+                roomView.DataContext = new RoomViewModel(roomNo, _userService, _chatService);
+                roomView.Show();
+            }
         }
 
         public ICommand GotoUserCommand { get; set; }
