@@ -265,6 +265,10 @@ namespace talk2.ViewModels
                         Align = "Center",
                     });
                     break; */
+                case ChatState.ChatReload:
+                    ChatViewModel chatViewModel = (ChatViewModel)App.Current.Services.GetService(typeof(ChatViewModel))!;
+                    chatViewModel.Reload();
+                    break;
                 default:
                     // User me = _loginService.UserInfo;
                     /* _chats.Add(new Chat()
