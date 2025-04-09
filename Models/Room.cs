@@ -16,7 +16,7 @@ namespace talk2.Models
 
         public string Layout
         {
-            get => $"{Title} {Chat} {RgtDtm}";
+            get => $"{Title}\n{Chat} ({RgtDtm})";
         }
     }
 }
