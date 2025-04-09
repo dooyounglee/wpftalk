@@ -47,6 +47,12 @@ namespace talk2.ViewModels
             }
         }
 
+        public void Reload()
+        {
+            ChatList = new List<Room>();
+            ChatList = _chatService.getChatList(_userService.Me.UsrNo);
+        }
+
         private void GotoUser(object _)
         {
             var _mainViewModel = (MainViewModel)App.Current.Services.GetService(typeof(MainViewModel))!;
