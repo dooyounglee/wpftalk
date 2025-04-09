@@ -28,6 +28,8 @@ namespace talk2.Views
             InitializeComponent();
             // var chatViewModel = this.DataContext as ChatViewModel;
             this.Closed += new EventHandler(OnClose);
+
+            scroll.ScrollToBottom();
         }
 
         private void OnClose(object sender, EventArgs e)
