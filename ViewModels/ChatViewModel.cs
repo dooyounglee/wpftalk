@@ -70,7 +70,7 @@ namespace talk2.ViewModels
             Debug.WriteLine("chat");
             Debug.WriteLine(roomNo);
             var roomView = new RoomView();
-            roomView.DataContext = new RoomViewModel(roomNo, _userService);
+            roomView.DataContext = new RoomViewModel(roomNo, _userService, _chatService);
             roomView.Show();
         }
 

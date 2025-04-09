@@ -19,15 +19,17 @@ namespace talk2.ViewModels
     public class RoomViewModel : ObservableObject
     {
         private IUserService _userService;
+        private IChatService _chatService;
 
         private ChatClient _client;
         private ClientHandler? _clientHandler;
         private int _roomNo;
 
         public int RoomNo { get => _roomNo; }
-        public RoomViewModel(int roomNo, IUserService userService)
+        public RoomViewModel(int roomNo, IUserService userService, IChatService chatService)
         {
             _userService = userService;
+            _chatService = chatService;
             _msgs = new ObservableCollection<string>();
             _roomNo = roomNo;
 
@@ -40,6 +42,12 @@ namespace talk2.ViewModels
             Connect();
 
             _chats = new ObservableCollection<Chat>();
+            var chats = _chatService.SelectChats(_roomNo).Reverse<Chat>();
+            foreach (var chat in chats)
+            {
+                chat.Align = chat.UsrNo == _userService.Me.UsrNo ? "Right" : "Left";
+                _chats.Add(chat);
+            }
         }
 
         private string _msg;
@@ -104,7 +112,7 @@ namespace talk2.ViewModels
                 UsrNo = _userService.Me.UsrNo,
                 Message = Msg,
             });
-            // _chatService.InsertChat(_chatId, Msg);
+            _chatService.InsertChat(_roomNo, _userService.Me.UsrNo, Msg);
             Msg = "";
         }
 
