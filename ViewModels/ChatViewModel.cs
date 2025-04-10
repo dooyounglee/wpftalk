@@ -28,6 +28,7 @@ namespace talk2.ViewModels
             GotoChatCommand = new RelayCommand<object>(GotoChat);
             GotoSettingCommand = new RelayCommand<object>(GotoSetting);
             ChatCommand = new RelayCommand<int>(Chat);
+            ToCreateRoom = new RelayCommand<object>(CreateRoom);
 
             Init();
         }
@@ -90,9 +91,17 @@ namespace talk2.ViewModels
             }
         }
 
+        private void CreateRoom(object _)
+        {
+            var userPopupView = new UserPopupView();
+            userPopupView.DataContext = new UserPopupViewModel(_userService);
+            userPopupView.ShowDialog();
+        }
+
         public ICommand GotoUserCommand { get; set; }
         public ICommand GotoChatCommand { get; set; }
         public ICommand GotoSettingCommand { get; set; }
         public ICommand ChatCommand { get; set; }
+        public ICommand ToCreateRoom { get; set; }
     }
 }
