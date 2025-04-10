@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OTILib.Util;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -94,8 +95,9 @@ namespace talk2.ViewModels
         private void CreateRoom(object _)
         {
             var userPopupView = new UserPopupView();
-            userPopupView.DataContext = new UserPopupViewModel(_userService);
-            userPopupView.ShowDialog();
+            userPopupView.DataContext = new UserPopupViewModel(userPopupView, _userService);
+            var result = userPopupView.ShowDialog();
+            // ((UserPopupViewModel)userPopupView.DataContext).SelectedList 에 담겨있음
         }
 
         public ICommand GotoUserCommand { get; set; }

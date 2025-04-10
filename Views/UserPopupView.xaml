@@ -7,12 +7,21 @@
         mc:Ignorable="d"
         Title="UserPopupView" Height="450" Width="300">
     <Grid>
-        <ListBox ItemsSource="{Binding UserList}" SelectionMode="Multiple">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+
+        <ListBox Grid.Row="2" ItemsSource="{Binding UserList}" SelectionMode="Multiple" SelectionChanged="ListBox_SelectionChanged">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Layout}" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+
+        <Button Grid.Row="3" Content="선택" Command="{Binding CloseCommand}" />
     </Grid>
 </Window>

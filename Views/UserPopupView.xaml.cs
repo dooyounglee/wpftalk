@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OTILib.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using talk2.Models;
+using talk2.ViewModels;
 
 namespace talk2.Views
 {
@@ -22,6 +25,14 @@ namespace talk2.Views
         public UserPopupView()
         {
             InitializeComponent();
+        }
+
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            foreach (var x in e.AddedItems)
+            {
+                ((UserPopupViewModel)this.DataContext).SelectedList.Add((User)x);
+            }
         }
     }
 }
