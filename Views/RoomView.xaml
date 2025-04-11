@@ -8,11 +8,20 @@
         Title="RoomView" Height="450" Width="300">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="1" Content="초대" Command="{Binding InviteCommand}"/>
+        </Grid>
+        <Grid Grid.Row="1">
             <!-- <ListBox x:Name="lbxMsg" ItemsSource="{Binding Chats, UpdateSourceTrigger=PropertyChanged}" ItemBindingGroup="{Binding Chat}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -33,7 +42,7 @@
             </ScrollViewer>
         </Grid>
         
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="2">
             <TextBox KeyDown="TextBox_KeyDown" TextWrapping="Wrap"
              Text="{Binding Msg, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>

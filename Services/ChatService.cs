@@ -15,6 +15,7 @@ namespace talk2.Services
         public void InsertChat(int roomNo, int usrNo, string type, string msg);
         public List<Chat> SelectChats(int roomNo);
         public int CreateRoom(List<User> userList);
+        public string Invite(int roomNo, List<User> userList);
     }
 
     public class ChatService : IChatService
@@ -81,6 +82,28 @@ namespace talk2.Services
             InsertChat(newRoomNo, _userService.Me.UsrNo, "B", $"{_userService.Me.UsrNm}님이 방을 만들었다");
 
             return newRoomNo;
+        }
+
+        public string Invite(int roomNo, List<User> userList)
+        {
+            string invitedUsers = string.Join(",", userList.Select(u => u.UsrNm));
+
+            // 방-유저 연결하기
+            foreach (User user in userList)
+            {
+                _chatRepository.AddRoomUser(new Room()
+                {
+                    RoomNo = roomNo,
+                    UsrNo = user.UsrNo,
+                    Title = $"{_userService.Me.UsrNm},{invitedUsers}",
+                });
+            }
+
+            var msg = $"{_userService.Me.UsrNm}님이 {invitedUsers}님을 초대했다";
+
+            InsertChat(roomNo, _userService.Me.UsrNo, "C", msg);
+
+            return msg;
         }
     }
 }

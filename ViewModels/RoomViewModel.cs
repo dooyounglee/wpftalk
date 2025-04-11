@@ -13,6 +13,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 using talk2.Models;
 using talk2.Services;
+using System.Windows.Input;
+using talk2.Commands;
+using talk2.Views;
 
 namespace talk2.ViewModels
 {
@@ -33,6 +36,8 @@ namespace talk2.ViewModels
             _msgs = new ObservableCollection<string>();
             _roomNo = roomNo;
 
+            InviteCommand = new RelayCommand<object>(Invite);
+
             _client = new ChatClient(IPAddress.Parse(_userService.Me.Ip), _userService.Me.Port);
             _client.Connected += Connected;
             _client.Disconnected += Disconnected;
@@ -48,7 +53,8 @@ namespace talk2.ViewModels
                 switch (chat.ChatFg)
                 {
                     case "A": chat.Align = chat.UsrNo == _userService.Me.UsrNo ? "Right" : "Left"; break;
-                    case "B": chat.Align = "Center"; break;
+                    case "B": 
+                    case "C": chat.Align = "Center"; break;
                 }
                 _chats.Add(chat);
             }
@@ -73,6 +79,25 @@ namespace talk2.ViewModels
         {
             get => _chats;
             set => SetProperty(ref _chats, value);
+        }
+
+        public ICommand InviteCommand { get; set; }
+        private void Invite(object _)
+        {
+            var userPopupView = new UserPopupView();
+            userPopupView.DataContext = new UserPopupViewModel(userPopupView, _userService);
+            if (userPopupView.ShowDialog() == true)
+            {
+                var userList = ((UserPopupViewModel)userPopupView.DataContext).SelectedList;
+                string msg = _chatService.Invite(_roomNo, userList);
+
+                _clientHandler?.Send(new ChatHub
+                {
+                    RoomId = _roomNo,
+                    UsrNo = _userService.Me.UsrNo,
+                    Message = msg,
+                });
+            }
         }
 
         #region socket
