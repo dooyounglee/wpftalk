@@ -14,9 +14,10 @@ namespace talk2.Repositories
         public List<Room>? GetRoomList(int usrNo);
         public int GetRoomNo();
         public void AddRoom(Room room);
+        public void AddRoomUser(Room room);
         public void LeaveRoom(int roomNo, int usrNo);
         public void UpdateTitle(int? roomNo, int usrNo, string title);
-        public void InsertChat(int roomNo, int usrNo, string msg);
+        public void InsertChat(int roomNo, int usrNo, string type, string msg);
         public List<Chat> SelectChats(int roomNo);
     }
 
@@ -80,6 +81,13 @@ namespace talk2.Repositories
             Query.insert(sql);
         }
 
+        public void AddRoomUser(Room room)
+        {
+            string sql = @$"INSERT INTO talk.chatuser (ROOM_NO,USR_NO,TITLE) VALUES
+                           ('{room.RoomNo}',{room.UsrNo},'{room.Title}')";
+            Query.insert(sql);
+        }
+
         public void LeaveRoom(int roomNo, int usrNo)
         {
             string sql = @$"DELETE FROM talk.room
@@ -99,12 +107,12 @@ namespace talk2.Repositories
             Query.insert(sql);
         }
 
-        public void InsertChat(int roomNo, int usrNo, string msg)
+        public void InsertChat(int roomNo, int usrNo, string type, string msg)
         {
             string sql = @$"INSERT INTO talk.chat
                             (CHAT_NO,ROOM_NO,USR_NO,CHAT_FG,CHAT,RGT_DTM) VALUES
                             ((SELECT COALESCE(MAX(chat_no),0)+1 FROM talk.chat),
-                            '{roomNo}',{usrNo},'A','{msg}',to_char(now(),'YYYYMMDDHH24MISS'))"
+                            '{roomNo}',{usrNo},'{type}','{msg}',to_char(now(),'YYYYMMDDHH24MISS'))"
                          ;
             Query.insert(sql);
         }
