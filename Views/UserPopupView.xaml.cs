@@ -33,6 +33,10 @@ namespace talk2.Views
             {
                 ((UserPopupViewModel)this.DataContext).SelectedList.Add((User)x);
             }
+            foreach (var x in e.RemovedItems)
+            {
+                ((UserPopupViewModel)this.DataContext).SelectedList.Remove((User)x);
+            }
         }
     }
 }
