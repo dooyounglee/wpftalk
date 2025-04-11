@@ -206,6 +206,11 @@ namespace talk2.ViewModels
             Msg = "";
         }
 
+        public ClientHandler getClientHandler()
+        {
+            return _clientHandler;
+        }
+
         private void Received(object? sender, OTILib.Events.ChatEventArgs e)
         {
             ChatHub hub = e.Hub;
