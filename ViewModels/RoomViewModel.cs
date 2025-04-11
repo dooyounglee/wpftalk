@@ -112,7 +112,7 @@ namespace talk2.ViewModels
                 UsrNo = _userService.Me.UsrNo,
                 Message = Msg,
             });
-            _chatService.InsertChat(_roomNo, _userService.Me.UsrNo, Msg);
+            _chatService.InsertChat(_roomNo, _userService.Me.UsrNo, "A", Msg);
             Msg = "";
         }
 
