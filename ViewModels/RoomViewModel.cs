@@ -45,7 +45,11 @@ namespace talk2.ViewModels
             var chats = _chatService.SelectChats(_roomNo).Reverse<Chat>();
             foreach (var chat in chats)
             {
-                chat.Align = chat.UsrNo == _userService.Me.UsrNo ? "Right" : "Left";
+                switch (chat.ChatFg)
+                {
+                    case "A": chat.Align = chat.UsrNo == _userService.Me.UsrNo ? "Right" : "Left"; break;
+                    case "B": chat.Align = "Center"; break;
+                }
                 _chats.Add(chat);
             }
         }

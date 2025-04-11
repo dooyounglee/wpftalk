@@ -122,6 +122,7 @@ namespace talk2.Repositories
             string sql = @$"SELECT a.chat_no
                                  , a.chat
                                  , a.usr_no
+                                 , a.chat_fg
                               FROM talk.chat a
                              where a.room_no = {roomNo}
                              order by chat_no desc
@@ -136,6 +137,7 @@ namespace talk2.Repositories
                     ChatNo = (int)(long)dt.Rows[i]["chat_no"],
                     UsrNo = (int)(long)dt.Rows[i]["usr_no"],
                     chat = dt.Rows[i].IsNull("chat") ? "" : (string)dt.Rows[i]["chat"],
+                    ChatFg = (string)dt.Rows[i]["chat_fg"],
                 });
             };
 
