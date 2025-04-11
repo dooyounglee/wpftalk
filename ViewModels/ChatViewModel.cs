@@ -1,4 +1,5 @@
-﻿using OTILib.Util;
+﻿using OTILib.Models;
+using OTILib.Util;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Interop;
 using talk2.Commands;
 using talk2.Models;
 using talk2.Services;
@@ -96,8 +98,21 @@ namespace talk2.ViewModels
         {
             var userPopupView = new UserPopupView();
             userPopupView.DataContext = new UserPopupViewModel(userPopupView, _userService);
-            var result = userPopupView.ShowDialog();
-            // ((UserPopupViewModel)userPopupView.DataContext).SelectedList 에 담겨있음
+            if (userPopupView.ShowDialog() == true)
+            {
+                var userList = ((UserPopupViewModel)userPopupView.DataContext).SelectedList;
+                var newRoomNo = _chatService.CreateRoom(userList);
+            
+                if (newRoomNo > 0)
+                {
+                    var _clientHandler = ((UserViewModel)App.Current.Services.GetService(typeof(UserViewModel))!).getClientHandler();
+                    _clientHandler?.Send(new ChatHub
+                    {
+                        RoomId = 0,
+                        State = ChatState.ChatReload,
+                    });
+                }
+            }
         }
 
         public ICommand GotoUserCommand { get; set; }
