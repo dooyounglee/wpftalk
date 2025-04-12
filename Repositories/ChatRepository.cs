@@ -18,7 +18,7 @@ namespace talk2.Repositories
         public void LeaveRoom(int roomNo, int usrNo);
         public void UpdateTitle(int? roomNo, int usrNo, string title);
         public void InsertChat(int roomNo, int usrNo, string type, string msg);
-        public List<Chat> SelectChats(int roomNo);
+        public List<Chat> SelectChats(int roomNo, int usrNo);
     }
 
     internal class ChatRepository : IChatRepository
@@ -83,8 +83,9 @@ namespace talk2.Repositories
 
         public void AddRoomUser(Room room)
         {
-            string sql = @$"INSERT INTO talk.chatuser (ROOM_NO,USR_NO,TITLE) VALUES
-                           ('{room.RoomNo}',{room.UsrNo},'{room.Title}')";
+            string sql = @$"INSERT INTO talk.chatuser (ROOM_NO,USR_NO,TITLE,CHAT_NO) VALUES
+                           ({room.RoomNo},{room.UsrNo},(SELECT TITLE FROM talk.room where ROOM_NO = {room.RoomNo}),
+                            (SELECT coalesce(MAX(CHAT_NO),0) FROM talk.chat WHERE ROOM_NO = {room.RoomNo}))";
             Query.insert(sql);
         }
 
@@ -117,7 +118,7 @@ namespace talk2.Repositories
             Query.insert(sql);
         }
 
-        public List<Chat> SelectChats(int roomNo)
+        public List<Chat> SelectChats(int roomNo, int usrNo)
         {
             string sql = @$"SELECT a.chat_no
                                  , a.chat
@@ -125,6 +126,10 @@ namespace talk2.Repositories
                                  , a.chat_fg
                               FROM talk.chat a
                              where a.room_no = {roomNo}
+                               and a.chat_no > (select chat_no
+                                                  from talk.chatuser
+                                                 where room_no = {roomNo}
+                                                   and usr_no = {usrNo})
                              order by chat_no desc
                              limit 10";
             DataTable? dt = Query.select1(sql);

@@ -41,7 +41,7 @@ namespace talk2.Services
 
         public List<Chat> SelectChats(int roomNo)
         {
-            return _chatRepository.SelectChats(roomNo);
+            return _chatRepository.SelectChats(roomNo, _userService.Me.UsrNo);
         }
 
         public int CreateRoom(List<User> userList)
