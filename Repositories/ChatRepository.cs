@@ -26,7 +26,7 @@ namespace talk2.Repositories
         public List<Room>? GetRoomList(int usrNo)
         {
             string sql = @$"SELECT a.room_no
-                                 , a.title
+                                 , b.title
                                  , c.chat
                                  , coalesce(c.rgt_dtm, a.rgt_dtm) as rgt_dtm
                               FROM talk.room a
