@@ -16,6 +16,7 @@ namespace talk2.Services
         public List<Chat> SelectChats(int roomNo);
         public int CreateRoom(List<User> userList);
         public string Invite(int roomNo, List<User> userList);
+        public string Leave(int roomNo, int usrNo);
     }
 
     public class ChatService : IChatService
@@ -102,6 +103,17 @@ namespace talk2.Services
             var msg = $"{_userService.Me.UsrNm}님이 {invitedUsers}님을 초대했다";
 
             InsertChat(roomNo, _userService.Me.UsrNo, "C", msg);
+
+            return msg;
+        }
+
+        public string Leave(int roomNo, int usrNo)
+        {
+            _chatRepository.LeaveRoom(roomNo, usrNo);
+
+            var msg = $"{_userService.Me.UsrNm}님이 나갔다";
+
+            InsertChat(roomNo, _userService.Me.UsrNo, "D", msg);
 
             return msg;
         }

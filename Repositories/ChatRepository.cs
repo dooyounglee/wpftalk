@@ -91,7 +91,7 @@ namespace talk2.Repositories
 
         public void LeaveRoom(int roomNo, int usrNo)
         {
-            string sql = @$"DELETE FROM talk.room
+            string sql = @$"DELETE FROM talk.chatuser
                              WHERE ROOM_NO = {roomNo}
                                AND USR_NO = {usrNo}"
                          ;

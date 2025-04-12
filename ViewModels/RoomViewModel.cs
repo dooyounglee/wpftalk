@@ -16,6 +16,7 @@ using talk2.Services;
 using System.Windows.Input;
 using talk2.Commands;
 using talk2.Views;
+using System.Windows;
 
 namespace talk2.ViewModels
 {
@@ -37,6 +38,7 @@ namespace talk2.ViewModels
             _roomNo = roomNo;
 
             InviteCommand = new RelayCommand<object>(Invite);
+            LeaveCommand = new RelayCommand<object>(Leave);
 
             _client = new ChatClient(IPAddress.Parse(_userService.Me.Ip), _userService.Me.Port);
             _client.Connected += Connected;
@@ -81,6 +83,7 @@ namespace talk2.ViewModels
             set => SetProperty(ref _chats, value);
         }
 
+        #region Command
         public ICommand InviteCommand { get; set; }
         private void Invite(object _)
         {
@@ -100,6 +103,27 @@ namespace talk2.ViewModels
                 });
             }
         }
+        public ICommand LeaveCommand { get; set; }
+        private void Leave(object _)
+        {
+            // TODO confirm창 띄워서 ok일때만 돌게
+            // room-user연결 끊기
+            string msg =_chatService.Leave(_roomNo, _userService.Me.UsrNo);
+
+            // 채팅방에 나갔다고 알리기
+            _clientHandler?.Send(new ChatHub
+            {
+                RoomId = _roomNo,
+                UsrNo = _userService.Me.UsrNo,
+                Message = msg,
+                State = ChatState.Leave
+            });
+
+            // 창 찾아서 닫기
+            var roomWin = Application.Current.Windows.Cast<Window>().FirstOrDefault(p => p.Tag is not null && Convert.ToInt16(p.Tag) == _roomNo);
+            roomWin.Close();
+        }
+        #endregion Command
 
         #region socket
         private async void Connect()
@@ -161,6 +185,14 @@ namespace talk2.ViewModels
                 case ChatState.Connect: break;
                 case ChatState.Disconnect: break;
                 case ChatState.Invite:
+                    _chats.Add(new Chat()
+                    {
+                        UsrNo = hub.UsrNo,
+                        chat = hub.Message,
+                        Align = "Center",
+                    });
+                    break;
+                case ChatState.Leave:
                     _chats.Add(new Chat()
                     {
                         UsrNo = hub.UsrNo,

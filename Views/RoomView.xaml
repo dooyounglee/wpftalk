@@ -17,9 +17,11 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <Button Grid.Column="1" Content="초대" Command="{Binding InviteCommand}"/>
+            <Button Grid.Column="2" Content="나가기" Command="{Binding LeaveCommand}"/>
         </Grid>
         <Grid Grid.Row="1">
             <!-- <ListBox x:Name="lbxMsg" ItemsSource="{Binding Chats, UpdateSourceTrigger=PropertyChanged}" ItemBindingGroup="{Binding Chat}">
