@@ -136,13 +136,13 @@ namespace talk2.ViewModels
 
         public void SendMsg()
         {
+            _chatService.InsertChat(_roomNo, _userService.Me.UsrNo, "A", Msg);
             _clientHandler?.Send(new ChatHub
             {
                 RoomId = _roomNo,
                 UsrNo = _userService.Me.UsrNo,
                 Message = Msg,
             });
-            _chatService.InsertChat(_roomNo, _userService.Me.UsrNo, "A", Msg);
             Msg = "";
         }
 
