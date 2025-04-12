@@ -96,6 +96,7 @@ namespace talk2.ViewModels
                     RoomId = _roomNo,
                     UsrNo = _userService.Me.UsrNo,
                     Message = msg,
+                    State = ChatState.Invite,
                 });
             }
         }
@@ -162,8 +163,8 @@ namespace talk2.ViewModels
                 case ChatState.Invite:
                     _chats.Add(new Chat()
                     {
-                        UsrNo = 0,
-                        chat = $"{hub.inviter}님이 {hub.invitee}를 초대했습니다.",
+                        UsrNo = hub.UsrNo,
+                        chat = hub.Message,
                         Align = "Center",
                     });
                     break;
