@@ -29,7 +29,7 @@ namespace talk2.Repositories
                                  , a.usr_nm
                                  , a.div_no
                                  , b.div_nm
-                              FROM talk.""USER"" a
+                              FROM talk.""user"" a
                                  , talk.div b
                              where a.div_no = b.div_no
                                and a.usr_id = '{usrId}'"
@@ -57,7 +57,7 @@ namespace talk2.Repositories
                                 , a.usr_nm
                                 , a.div_no
                                 , b.div_nm
-                             FROM talk.""USER"" a
+                             FROM talk.""user"" a
                                 , talk.div b
                             where a.div_no = b.div_no
                             order by 1";
@@ -86,7 +86,7 @@ namespace talk2.Repositories
                                  , a.usr_nm
                                  , a.div_no
                                  , b.div_nm
-                              FROM talk.""USER"" a
+                              FROM talk.""user"" a
                                  , talk.div b
                              where a.div_no = b.div_no
                                and a.usr_no = {usrNo}"
@@ -108,8 +108,8 @@ namespace talk2.Repositories
 
         public int save(User user)
         {
-            string sql = @$"INSERT INTO talk.""USER"" (USR_NO,USR_NM,DIV_NO,USR_ID,USR_PW) VALUES
-                           ((SELECT MAX(USR_NO)+1 FROM talk.""USER"")
+            string sql = @$"INSERT INTO talk.""user"" (USR_NO,USR_NM,DIV_NO,USR_ID,USR_PW) VALUES
+                           ((SELECT MAX(USR_NO)+1 FROM talk.""user"")
                            ,'{user.UsrNm}',1,'{user.UsrId}','{user.Password1}')";
             return Query.insert(sql);
         }
