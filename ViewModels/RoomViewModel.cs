@@ -38,6 +38,7 @@ namespace talk2.ViewModels
             _roomNo = roomNo;
 
             InviteCommand = new RelayCommand<object>(Invite);
+            RoomUserCommand = new RelayCommand<object>(RoomUser);
             LeaveCommand = new RelayCommand<object>(Leave);
 
             _client = new ChatClient(IPAddress.Parse(_userService.Me.Ip), _userService.Me.Port);
@@ -102,6 +103,13 @@ namespace talk2.ViewModels
                     State = ChatState.Invite,
                 });
             }
+        }
+        public ICommand RoomUserCommand { get; set; }
+        private void RoomUser(object _)
+        {
+            var roomUserPopupView = new RoomUserPopupView();
+            roomUserPopupView.DataContext = new RoomUserPopupViewModel(_roomNo, roomUserPopupView, _chatService);
+            roomUserPopupView.ShowDialog();
         }
         public ICommand LeaveCommand { get; set; }
         private void Leave(object _)

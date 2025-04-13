@@ -19,6 +19,7 @@ namespace talk2.Repositories
         public void UpdateTitle(int? roomNo, int usrNo, string title);
         public void InsertChat(int roomNo, int usrNo, string type, string msg);
         public List<Chat> SelectChats(int roomNo, int usrNo);
+        public List<User> SelectRoomUserList(int roomNo);
     }
 
     internal class ChatRepository : IChatRepository
@@ -150,6 +151,32 @@ namespace talk2.Repositories
             };
 
             return chats;
+        }
+
+        public List<User> SelectRoomUserList(int roomNo)
+        {
+            string sql = @$"SELECT b.usr_no
+                                 , b.usr_nm
+                              FROM talk.roomuser a
+                                 , talk.""user"" b
+                             where a.room_no = {roomNo}
+                               and a.usr_no = b.usr_no
+                               and a.del_yn = 'N'
+                             order by usr_nm";
+            DataTable? dt = Query.select1(sql);
+
+            var userList = new List<User>();
+            for (var i = 0; i < dt.Rows.Count; i++)
+            {
+                userList.Add(new User()
+                {
+                    UsrNo = (int)(long)dt.Rows[i]["usr_no"],
+                    UsrNm = (string)dt.Rows[i]["usr_nm"],
+                });
+            }
+            ;
+
+            return userList;
         }
     }
 }
