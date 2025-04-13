@@ -16,6 +16,7 @@ namespace talk2.ViewModels
     {
         private readonly IUserService _userService;
         private readonly Window _userPopupView;
+        public event EventHandler<EventArgs>? Validate;
 
         public UserPopupViewModel(Window userPopupView, IUserService userService)
         {
@@ -39,8 +40,11 @@ namespace talk2.ViewModels
         public ICommand CloseCommand { get; set; }
         private void Select(object _)
         {
-            _userPopupView.DialogResult = true;
-            _userPopupView.Close();
+            Validate?.Invoke(this, new EventArgs());
+            if (_userPopupView.DialogResult == true)
+            {
+                _userPopupView.Close();
+            }
         }
 
         private void Close(object _)

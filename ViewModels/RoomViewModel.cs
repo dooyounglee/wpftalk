@@ -25,6 +25,8 @@ namespace talk2.ViewModels
         private IUserService _userService;
         private IChatService _chatService;
 
+        public event EventHandler<object>? validate;
+
         private ChatClient _client;
         private ClientHandler? _clientHandler;
         private int _roomNo;
@@ -85,34 +87,62 @@ namespace talk2.ViewModels
         }
 
         #region Command
+        private Window _userPopupView;
         public ICommand InviteCommand { get; set; }
         private void Invite(object _)
         {
-            var userPopupView = new UserPopupView();
-            userPopupView.DataContext = new UserPopupViewModel(userPopupView, _userService);
-            if (userPopupView.ShowDialog() == true)
-            {
-                var userList = ((UserPopupViewModel)userPopupView.DataContext).SelectedList;
-
-                // 중복 초대 체크
-                bool IsThereSomeoneinRoom = _chatService.IsThereSomeoneinRoom(_roomNo, userList);
-                if (IsThereSomeoneinRoom)
-                {
-                    MessageBox.Show("이미 있는사람을 추가했는뎁쇼?");
-                    return;
-                }
-
-                string msg = _chatService.Invite(_roomNo, userList);
-                
-                _clientHandler?.Send(new ChatHub
-                {
-                    RoomId = _roomNo,
-                    UsrNo = _userService.Me.UsrNo,
-                    Message = msg,
-                    State = ChatState.Invite,
-                });
-            }
+            _userPopupView = new UserPopupView();
+            _userPopupView.DataContext = new UserPopupViewModel(_userPopupView, _userService);
+            ((UserPopupViewModel)_userPopupView.DataContext).Validate += Validate;
+            _userPopupView.ShowDialog();
+            // if (userPopupView.ShowDialog() == true)
+            // {
+            //     var userList = ((UserPopupViewModel)userPopupView.DataContext).SelectedList;
+            // 
+            //     // 중복 초대 체크
+            //     bool IsThereSomeoneinRoom = _chatService.IsThereSomeoneinRoom(_roomNo, userList);
+            //     if (IsThereSomeoneinRoom)
+            //     {
+            //         MessageBox.Show("이미 있는사람을 추가했는뎁쇼?");
+            //         return;
+            //     }
+            // 
+            //     string msg = _chatService.Invite(_roomNo, userList);
+            //     
+            //     _clientHandler?.Send(new ChatHub
+            //     {
+            //         RoomId = _roomNo,
+            //         UsrNo = _userService.Me.UsrNo,
+            //         Message = msg,
+            //         State = ChatState.Invite,
+            //     });
+            // }
         }
+        private void Validate(object? sender, EventArgs e)
+        {
+            var userList = ((UserPopupViewModel)_userPopupView.DataContext).SelectedList;
+
+            // 중복 초대 체크
+            bool IsThereSomeoneinRoom = _chatService.IsThereSomeoneinRoom(_roomNo, userList);
+            if (IsThereSomeoneinRoom)
+            {
+                MessageBox.Show("이미 있는사람을 추가했는뎁쇼?");
+                return;
+            }
+
+            string msg = _chatService.Invite(_roomNo, userList);
+
+            _clientHandler?.Send(new ChatHub
+            {
+                RoomId = _roomNo,
+                UsrNo = _userService.Me.UsrNo,
+                Message = msg,
+                State = ChatState.Invite,
+            });
+
+            _userPopupView.DialogResult = true;
+        }
+
         public ICommand RoomUserCommand { get; set; }
         private void RoomUser(object _)
         {
