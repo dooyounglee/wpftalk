@@ -187,11 +187,14 @@ namespace talk2.Repositories
                               FROM (SELECT room_no
                                          , count(*) as cnt
                                       FROM talk.roomuser
-                                     GROUP BY room_no) A
+                                     WHERE DEL_YN = 'N'
+                                     GROUP BY room_no
+                                    HAVING count(*) = 2) A
                                  , (SELECT room_no
                                          , count(*) as cnt
                                       FROM talk.roomuser
                                      WHERE usr_no in ({myUsrNo},{usrNo})
+                                       AND DEL_YN = 'N'
                                      GROUP BY room_no) B
                              where A.room_no = B.room_no
                                and A.cnt = B.cnt";
