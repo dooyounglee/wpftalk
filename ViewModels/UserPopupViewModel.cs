@@ -26,6 +26,7 @@ namespace talk2.ViewModels
             CloseCommand = new RelayCommand<object>(Close);
 
             _userList = _userService.getUserList();
+            _userList = _userList.Where(u => u.UsrNo != _userService.Me.UsrNo).ToList();
         }
 
         private List<User> _userList;

@@ -63,6 +63,7 @@ namespace talk2.ViewModels
 
             _me = _userService.Me;
             UserList = _userService.getUserList();
+            UserList = UserList.Where(u => u.UsrNo != _me.UsrNo).ToList();
         }
 
         public List<User> UserList
