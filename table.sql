@@ -31,14 +31,14 @@ CREATE TABLE talk.chat (
 	CONSTRAINT chat_pk PRIMARY KEY (chat_no)
 );
 
--- DROP TABLE talk.chatuser;
-CREATE TABLE talk.chatuser (
+-- DROP TABLE talk.roomuser;
+CREATE TABLE talk.roomuser (
 	room_no int8 NOT NULL,
 	usr_no int8 NOT NULL,
 	chat_no int8,
 	title varchar NOT NULL,
 	del_yn char(1) NOT NULL,
-	CONSTRAINT chatuser_pk PRIMARY KEY (room_no,usr_no,chat_no)
+	CONSTRAINT roomuser_pk PRIMARY KEY (room_no,usr_no,chat_no)
 );
 
 -- DROP TABLE talk.room;

@@ -30,7 +30,7 @@ namespace talk2.Repositories
                                  , c.chat
                                  , coalesce(c.rgt_dtm, a.rgt_dtm) as rgt_dtm
                               FROM talk.room a
-                             inner join talk.chatuser b on (a.room_no = b.room_no)
+                             inner join talk.roomuser b on (a.room_no = b.room_no)
                               left join (select room_no
                                               , chat
                                               , rgt_dtm
@@ -84,7 +84,7 @@ namespace talk2.Repositories
 
         public void AddRoomUser(Room room)
         {
-            string sql = @$"INSERT INTO talk.chatuser (ROOM_NO,USR_NO,TITLE,CHAT_NO,DEL_YN) VALUES
+            string sql = @$"INSERT INTO talk.roomuser (ROOM_NO,USR_NO,TITLE,CHAT_NO,DEL_YN) VALUES
                            ({room.RoomNo},{room.UsrNo},(SELECT TITLE FROM talk.room where ROOM_NO = {room.RoomNo}),
                             (SELECT coalesce(MAX(CHAT_NO),0) FROM talk.chat WHERE ROOM_NO = {room.RoomNo}),'N')";
             Query.insert(sql);
@@ -92,7 +92,7 @@ namespace talk2.Repositories
 
         public void LeaveRoom(int roomNo, int usrNo)
         {
-            string sql = @$"UPDATE talk.chatuser
+            string sql = @$"UPDATE talk.roomuser
                                SET DEL_YN = 'Y'
                              WHERE ROOM_NO = {roomNo}
                                AND USR_NO = {usrNo}"
@@ -129,7 +129,7 @@ namespace talk2.Repositories
                               FROM talk.chat a
                              where a.room_no = {roomNo}
                                and a.chat_no > (select chat_no
-                                                  from talk.chatuser
+                                                  from talk.roomuser
                                                  where room_no = {roomNo}
                                                    and usr_no = {usrNo}
                                                    and del_yn = 'N')
