@@ -41,6 +41,7 @@ namespace talk2.Repositories
                                         ) c
                                 on (a.room_no = c.room_no)
                              where b.usr_no = {usrNo}
+                               and b.del_yn = 'N'
                              order by rgt_dtm desc";
             DataTable? dt = Query.select1(sql);
 
@@ -83,15 +84,16 @@ namespace talk2.Repositories
 
         public void AddRoomUser(Room room)
         {
-            string sql = @$"INSERT INTO talk.chatuser (ROOM_NO,USR_NO,TITLE,CHAT_NO) VALUES
+            string sql = @$"INSERT INTO talk.chatuser (ROOM_NO,USR_NO,TITLE,CHAT_NO,DEL_YN) VALUES
                            ({room.RoomNo},{room.UsrNo},(SELECT TITLE FROM talk.room where ROOM_NO = {room.RoomNo}),
-                            (SELECT coalesce(MAX(CHAT_NO),0) FROM talk.chat WHERE ROOM_NO = {room.RoomNo}))";
+                            (SELECT coalesce(MAX(CHAT_NO),0) FROM talk.chat WHERE ROOM_NO = {room.RoomNo}),'N')";
             Query.insert(sql);
         }
 
         public void LeaveRoom(int roomNo, int usrNo)
         {
-            string sql = @$"DELETE FROM talk.chatuser
+            string sql = @$"UPDATE talk.chatuser
+                               SET DEL_YN = 'Y'
                              WHERE ROOM_NO = {roomNo}
                                AND USR_NO = {usrNo}"
                          ;
@@ -129,7 +131,8 @@ namespace talk2.Repositories
                                and a.chat_no > (select chat_no
                                                   from talk.chatuser
                                                  where room_no = {roomNo}
-                                                   and usr_no = {usrNo})
+                                                   and usr_no = {usrNo}
+                                                   and del_yn = 'N')
                              order by chat_no desc
                              limit 10";
             DataTable? dt = Query.select1(sql);

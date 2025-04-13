@@ -35,9 +35,10 @@ CREATE TABLE talk.chat (
 CREATE TABLE talk.chatuser (
 	room_no int8 NOT NULL,
 	usr_no int8 NOT NULL,
-	title varchar NOT NULL,
 	chat_no int8,
-	CONSTRAINT chatuser_pk PRIMARY KEY (room_no,usr_no)
+	title varchar NOT NULL,
+	del_yn char(1) NOT NULL,
+	CONSTRAINT chatuser_pk PRIMARY KEY (room_no,usr_no,chat_no)
 );
 
 -- DROP TABLE talk.room;
