@@ -93,8 +93,17 @@ namespace talk2.ViewModels
             if (userPopupView.ShowDialog() == true)
             {
                 var userList = ((UserPopupViewModel)userPopupView.DataContext).SelectedList;
-                string msg = _chatService.Invite(_roomNo, userList);
 
+                // 중복 초대 체크
+                bool IsThereSomeoneinRoom = _chatService.IsThereSomeoneinRoom(_roomNo, userList);
+                if (IsThereSomeoneinRoom)
+                {
+                    MessageBox.Show("이미 있는사람을 추가했는뎁쇼?");
+                    return;
+                }
+
+                string msg = _chatService.Invite(_roomNo, userList);
+                
                 _clientHandler?.Send(new ChatHub
                 {
                     RoomId = _roomNo,

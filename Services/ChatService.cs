@@ -18,6 +18,8 @@ namespace talk2.Services
         public string Invite(int roomNo, List<User> userList);
         public string Leave(int roomNo, int usrNo);
         public List<User> RoomUserList(int roomNo);
+        public int CountRoomWithMe(int usrNo);
+        public bool IsThereSomeoneinRoom(int roomNo, List<User> userList);
     }
 
     public class ChatService : IChatService
@@ -122,6 +124,26 @@ namespace talk2.Services
         public List<User> RoomUserList(int roomNo)
         {
             return _chatRepository.SelectRoomUserList(roomNo);
+        }
+
+        public int CountRoomWithMe(int usrNo)
+        {
+            return _chatRepository.CountRoomWithMe(_userService.Me.UsrNo, usrNo);
+        }
+
+        public bool IsThereSomeoneinRoom(int roomNo, List<User> userList)
+        {
+            bool result = false;
+            foreach(var u in userList)
+            {
+                int countHeinRoom = _chatRepository.CountHeinRoom(roomNo, u.UsrNo);
+                if (countHeinRoom > 0)
+                {
+                    result = true;
+                    break;
+                }
+            }
+            return result;
         }
     }
 }

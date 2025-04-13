@@ -101,8 +101,20 @@ namespace talk2.ViewModels
             if (userPopupView.ShowDialog() == true)
             {
                 var userList = ((UserPopupViewModel)userPopupView.DataContext).SelectedList;
+
+                // 1:1방을 만들때는 이미 있는지 확인
+                if (userList.Count == 1)
+                {
+                    bool hasRoom = _chatService.CountRoomWithMe(userList[0].UsrNo) > 0 ? true : false;
+                    if (hasRoom)
+                    {
+                        MessageBox.Show("이미 있는 방인뎁쇼?");
+                        return;
+                    }
+                }
+
+                // 새로운방번호
                 var newRoomNo = _chatService.CreateRoom(userList);
-            
                 if (newRoomNo > 0)
                 {
                     var _clientHandler = ((UserViewModel)App.Current.Services.GetService(typeof(UserViewModel))!).getClientHandler();

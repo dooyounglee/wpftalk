@@ -20,6 +20,8 @@ namespace talk2.Repositories
         public void InsertChat(int roomNo, int usrNo, string type, string msg);
         public List<Chat> SelectChats(int roomNo, int usrNo);
         public List<User> SelectRoomUserList(int roomNo);
+        public int CountRoomWithMe(int myUsrNo, int usrNo);
+        public int CountHeinRoom(int roomNo, int usrNo);
     }
 
     internal class ChatRepository : IChatRepository
@@ -177,6 +179,47 @@ namespace talk2.Repositories
             ;
 
             return userList;
+        }
+
+        public int CountRoomWithMe(int myUsrNo, int usrNo)
+        {
+            string sql = @$"SELECT count(*) as cnt
+                              FROM (SELECT room_no
+                                         , count(*) as cnt
+                                      FROM talk.roomuser
+                                     GROUP BY room_no) A
+                                 , (SELECT room_no
+                                         , count(*) as cnt
+                                      FROM talk.roomuser
+                                     WHERE usr_no in ({myUsrNo},{usrNo})
+                                     GROUP BY room_no) B
+                             where A.room_no = B.room_no
+                               and A.cnt = B.cnt";
+            DataTable? dt = Query.select1(sql);
+
+            int result = -1;
+            for (var i = 0; i < dt.Rows.Count; i++)
+            {
+                result = (int)(long)dt.Rows[i]["cnt"];
+            }
+            return result;
+        }
+
+        public int CountHeinRoom(int roomNo, int usrNo)
+        {
+            string sql = @$"SELECT count(*) as cnt
+                              FROM talk.roomuser
+                             where room_no = {roomNo}
+                               and usr_no = {usrNo}
+                               and del_yn = 'N'";
+            DataTable? dt = Query.select1(sql);
+
+            int result = -1;
+            for (var i = 0; i < dt.Rows.Count; i++)
+            {
+                result = (int)(long)dt.Rows[i]["cnt"];
+            }
+            return result;
         }
     }
 }
