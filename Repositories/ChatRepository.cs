@@ -11,6 +11,7 @@ namespace talk2.Repositories
 {
     public interface IChatRepository
     {
+        public Room GetRoom(int roomNo, int usrNo);
         public List<Room>? GetRoomList(int usrNo);
         public int GetRoomNo();
         public void AddRoom(Room room);
@@ -22,10 +23,30 @@ namespace talk2.Repositories
         public List<User> SelectRoomUserList(int roomNo);
         public int CountRoomWithMe(int myUsrNo, int usrNo);
         public int CountHeinRoom(int roomNo, int usrNo);
+        public int UpdateTitle(int roomNo, int usrNo, string title);
     }
 
     internal class ChatRepository : IChatRepository
     {
+        public Room GetRoom(int roomNo, int usrNo)
+        {
+            string sql = @$"SELECT a.room_no
+                                 , b.title
+                              FROM talk.room a 
+                                 , talk.roomuser b
+                             where a.room_no = b.room_no
+                               and a.room_no = {roomNo}
+                               and b.usr_no = {usrNo}
+                               and b.del_yn = 'N'";
+            DataTable? dt = Query.select1(sql);
+
+            return new Room()
+            {
+                RoomNo = (int)(long)dt.Rows[0]["room_no"],
+                Title = (string)dt.Rows[0]["title"],
+            };
+        }
+
         public List<Room>? GetRoomList(int usrNo)
         {
             string sql = @$"SELECT a.room_no
@@ -223,6 +244,16 @@ namespace talk2.Repositories
                 result = (int)(long)dt.Rows[i]["cnt"];
             }
             return result;
+        }
+
+        public int UpdateTitle(int roomNo, int usrNo, string title)
+        {
+            string sql = @$"UPDATE talk.roomuser
+                               SET TITLE = '{title}'
+                             WHERE ROOM_NO = {roomNo}
+                               AND USR_NO = {usrNo}
+                               AND DEL_YN = 'N'";
+            return Query.insert(sql);
         }
     }
 }

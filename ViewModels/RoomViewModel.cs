@@ -30,6 +30,7 @@ namespace talk2.ViewModels
         private ChatClient _client;
         private ClientHandler? _clientHandler;
         private int _roomNo;
+        private Room Room { get; set; }
 
         public int RoomNo { get => _roomNo; }
         public RoomViewModel(int roomNo, IUserService userService, IChatService chatService)
@@ -42,6 +43,9 @@ namespace talk2.ViewModels
             InviteCommand = new RelayCommand<object>(Invite);
             RoomUserCommand = new RelayCommand<object>(RoomUser);
             LeaveCommand = new RelayCommand<object>(Leave);
+            SaveTitleCommand = new RelayCommand<object>(SaveTitle);
+            EditTitleCommand = new RelayCommand<object>(EditTitle);
+            CancleTitleCommand = new RelayCommand<object>(CancleTitle);
 
             _client = new ChatClient(IPAddress.Parse(_userService.Me.Ip), _userService.Me.Port);
             _client.Connected += Connected;
@@ -51,18 +55,11 @@ namespace talk2.ViewModels
 
             Connect();
 
-            _chats = new ObservableCollection<Chat>();
-            var chats = _chatService.SelectChats(_roomNo).Reverse<Chat>();
-            foreach (var chat in chats)
-            {
-                switch (chat.ChatFg)
-                {
-                    case "A": chat.Align = chat.UsrNo == _userService.Me.UsrNo ? "Right" : "Left"; break;
-                    case "B": 
-                    case "C": chat.Align = "Center"; break;
-                }
-                _chats.Add(chat);
-            }
+            Room = _chatService.getChat(_roomNo);
+            Title = Room.Title;
+            TitleReadonly = false;
+
+            ReloadChats();
         }
 
         private string _msg;
@@ -84,6 +81,22 @@ namespace talk2.ViewModels
         {
             get => _chats;
             set => SetProperty(ref _chats, value);
+        }
+
+        private void ReloadChats()
+        {
+            _chats = new ObservableCollection<Chat>();
+            var chats = _chatService.SelectChats(_roomNo).Reverse<Chat>();
+            foreach (var chat in chats)
+            {
+                switch (chat.ChatFg)
+                {
+                    case "A": chat.Align = chat.UsrNo == _userService.Me.UsrNo ? "Right" : "Left"; break;
+                    case "B":
+                    case "C": chat.Align = "Center"; break;
+                }
+                _chats.Add(chat);
+            }
         }
 
         #region Command
@@ -169,6 +182,34 @@ namespace talk2.ViewModels
             // 창 찾아서 닫기
             var roomWin = Application.Current.Windows.Cast<Window>().FirstOrDefault(p => p.Tag is not null && Convert.ToInt16(p.Tag) == _roomNo);
             roomWin.Close();
+        }
+
+        private bool _titleReadonly;
+        public bool TitleReadonly
+        {
+            get => _titleReadonly;
+            set => SetProperty(ref _titleReadonly, value);
+        }
+        public string Title { get; set; }
+        public ICommand SaveTitleCommand { get; set; }
+        private void SaveTitle(object _)
+        {
+            _chatService.EditTitle(_roomNo, _userService.Me.UsrNo, Title);
+            TitleReadonly = false;
+
+            // 채팅방목록 새로고침
+            ChatViewModel chatViewModel = (ChatViewModel)App.Current.Services.GetService(typeof(ChatViewModel))!;
+            chatViewModel.Reload();
+        }
+        public ICommand EditTitleCommand { get; set; }
+        private void EditTitle(object _)
+        {
+            TitleReadonly = true;
+        }
+        public ICommand CancleTitleCommand { get; set; }
+        private void CancleTitle(object _)
+        {
+            TitleReadonly = false;
         }
         #endregion Command
 
