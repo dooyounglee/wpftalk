@@ -13,7 +13,7 @@ namespace talk2.Services
     {
         public Room getChat(int roomNo);
         public List<Room> getChatList(int usrNo);
-        public void InsertChat(int roomNo, int usrNo, string type, string msg);
+        public int InsertChat(int roomNo, int usrNo, string type, string msg);
         public List<Chat> SelectChats(int roomNo);
         public int CreateRoom(List<User> userList);
         public string Invite(int roomNo, List<User> userList);
@@ -22,6 +22,7 @@ namespace talk2.Services
         public int CountRoomWithMe(int usrNo);
         public bool IsThereSomeoneinRoom(int roomNo, List<User> userList);
         public void EditTitle(int roomNo, int usrNo, string title);
+        public void ReadChat(int roomNo, int usrNo);
     }
 
     public class ChatService : IChatService
@@ -45,9 +46,12 @@ namespace talk2.Services
             return _chatRepository.GetRoomList(usrNo);
         }
 
-        public void InsertChat(int roomNo, int usrNo, string type, string msg)
+        public int InsertChat(int roomNo, int usrNo, string type, string msg)
         {
-            _chatRepository.InsertChat(roomNo, usrNo, type, msg);
+            int newChatNo = _chatRepository.getNewChatNo();
+            _chatRepository.InsertChat(newChatNo, roomNo, usrNo, type, msg);
+            _chatRepository.InsertChatUserExceptMe(roomNo, _userService.Me.UsrNo, newChatNo);
+            return newChatNo;
         }
 
         public List<Chat> SelectChats(int roomNo)
@@ -156,6 +160,11 @@ namespace talk2.Services
         public void EditTitle(int roomNo, int usrNo, string title)
         {
             _chatRepository.UpdateTitle(roomNo, usrNo, title);
+        }
+
+        public void ReadChat(int roomNo, int usrNo)
+        {
+            _chatRepository.ReadChat(roomNo, usrNo);
         }
     }
 }

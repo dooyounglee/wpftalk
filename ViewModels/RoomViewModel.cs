@@ -59,6 +59,11 @@ namespace talk2.ViewModels
             Title = Room.Title;
             TitleReadonly = false;
 
+            // 않읽은 채팅 읽기
+            _chatService.ReadChat(_roomNo, _userService.Me.UsrNo);
+            ReloadChatList();
+
+            // 이전채팅(10개) 불러오기
             ReloadChats();
         }
 
@@ -97,6 +102,13 @@ namespace talk2.ViewModels
                 }
                 _chats.Add(chat);
             }
+        }
+
+        private void ReloadChatList()
+        {
+            // 채팅방목록 새로고침
+            ChatViewModel chatViewModel = (ChatViewModel)App.Current.Services.GetService(typeof(ChatViewModel))!;
+            chatViewModel.Reload();
         }
 
         #region Command
@@ -198,8 +210,7 @@ namespace talk2.ViewModels
             TitleReadonly = false;
 
             // 채팅방목록 새로고침
-            ChatViewModel chatViewModel = (ChatViewModel)App.Current.Services.GetService(typeof(ChatViewModel))!;
-            chatViewModel.Reload();
+            ReloadChatList();
         }
         public ICommand EditTitleCommand { get; set; }
         private void EditTitle(object _)
@@ -289,6 +300,7 @@ namespace talk2.ViewModels
                     });
                     break;
                 default:
+                    _chatService.ReadChat(_roomNo, _userService.Me.UsrNo);
                     _chats.Add(new Chat()
                     {
                         UsrNo = hub.UsrNo,

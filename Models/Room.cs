@@ -13,10 +13,11 @@ namespace talk2.Models
         public string Title { get; set; }
         public string Chat { get; set; }
         public string RgtDtm { get; set; }
+        public int CntUnread { get; set; }
 
         public string Layout
         {
-            get => $"{Title}\n{Chat} ({RgtDtm})";
+            get => $"{Title} {CntUnread}개 안읽음\n{Chat} ({RgtDtm})";
         }
     }
 }

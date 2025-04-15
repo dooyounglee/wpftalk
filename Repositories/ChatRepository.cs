@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using talk2.Models;
 using OTILib.DB;
+using System.Windows.Interop;
 
 namespace talk2.Repositories
 {
@@ -18,12 +19,15 @@ namespace talk2.Repositories
         public void AddRoomUser(Room room);
         public void LeaveRoom(int roomNo, int usrNo);
         public void UpdateTitle(int? roomNo, int usrNo, string title);
-        public void InsertChat(int roomNo, int usrNo, string type, string msg);
+        public int getNewChatNo();
+        public void InsertChat(int newChatNo, int roomNo, int usrNo, string type, string msg);
         public List<Chat> SelectChats(int roomNo, int usrNo);
         public List<User> SelectRoomUserList(int roomNo);
         public int CountRoomWithMe(int myUsrNo, int usrNo);
         public int CountHeinRoom(int roomNo, int usrNo);
         public int UpdateTitle(int roomNo, int usrNo, string title);
+        public void InsertChatUserExceptMe(int roomNo, int myUsrNo, int chatNo);
+        public void ReadChat(int roomNo, int usrNo);
     }
 
     internal class ChatRepository : IChatRepository
@@ -53,6 +57,10 @@ namespace talk2.Repositories
                                  , b.title
                                  , c.chat
                                  , coalesce(c.rgt_dtm, a.rgt_dtm) as rgt_dtm
+                                 , (SELECT COUNT(*)
+                                      FROM talk.chatuser
+                                     WHERE ROOM_NO = a.room_no
+                                       AND USR_NO = b.usr_no) as cnt_unread
                               FROM talk.room a
                              inner join talk.roomuser b on (a.room_no = b.room_no)
                               left join (select room_no
@@ -78,6 +86,7 @@ namespace talk2.Repositories
                     Title = (string)dt.Rows[i]["title"],
                     Chat = dt.Rows[i].IsNull("chat") ? "" : (string)dt.Rows[i]["chat"],
                     RgtDtm = dt.Rows[i].IsNull("rgt_dtm") ? "" : (string)dt.Rows[i]["rgt_dtm"],
+                    CntUnread = (int)(long)dt.Rows[i]["cnt_unread"],
                 });
             };
 
@@ -134,12 +143,19 @@ namespace talk2.Repositories
             Query.insert(sql);
         }
 
-        public void InsertChat(int roomNo, int usrNo, string type, string msg)
+        public int getNewChatNo()
+        {
+            string sql = @$"SELECT COALESCE(MAX(chat_no),0)+1 as chat_no FROM talk.chat";
+            DataTable? dt = Query.select1(sql);
+
+            return (int)(long)dt.Rows[0]["chat_no"];
+        }
+
+        public void InsertChat(int newChatNo, int roomNo, int usrNo, string type, string msg)
         {
             string sql = @$"INSERT INTO talk.chat
                             (CHAT_NO,ROOM_NO,USR_NO,CHAT_FG,CHAT,RGT_DTM) VALUES
-                            ((SELECT COALESCE(MAX(chat_no),0)+1 FROM talk.chat),
-                            '{roomNo}',{usrNo},'{type}','{msg}',to_char(now(),'YYYYMMDDHH24MISS'))"
+                            ({newChatNo},'{roomNo}',{usrNo},'{type}','{msg}',to_char(now(),'YYYYMMDDHH24MISS'))"
                          ;
             Query.insert(sql);
         }
@@ -254,6 +270,27 @@ namespace talk2.Repositories
                                AND USR_NO = {usrNo}
                                AND DEL_YN = 'N'";
             return Query.insert(sql);
+        }
+
+        public void InsertChatUserExceptMe(int roomNo, int myUsrNo, int chatNo)
+        {
+            string sql = @$"INSERT INTO talk.chatuser (ROOM_NO,CHAT_NO,USR_NO)
+                            SELECT {roomNo}, {chatNo}, USR_NO
+                              FROM talk.roomuser
+                             WHERE ROOM_NO = {roomNo}
+                               AND USR_NO != {myUsrNo}
+                               AND DEL_YN = 'N'"
+                         ;
+            Query.insert(sql);
+        }
+
+        public void ReadChat(int roomNo, int usrNo)
+        {
+            string sql = @$"DELETE FROM talk.chatuser
+                             WHERE ROOM_NO = {roomNo}
+                               AND USR_NO = {usrNo}"
+                         ;
+            Query.insert(sql);
         }
     }
 }
