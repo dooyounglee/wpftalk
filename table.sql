@@ -20,15 +20,13 @@ CREATE TABLE talk.div (
 	CONSTRAINT div_pk PRIMARY KEY (div_no)
 );
 
--- DROP TABLE talk.chat;
-CREATE TABLE talk.chat (
-	chat_no int8 NOT NULL,
-	chat text NULL,
-	chat_fg varchar NOT NULL,
+-- DROP TABLE talk.room;
+CREATE TABLE talk.room (
 	room_no int8 NOT NULL,
 	usr_no int8 NOT NULL,
+	title varchar NOT NULL,
 	rgt_dtm varchar NULL,
-	CONSTRAINT chat_pk PRIMARY KEY (chat_no)
+	CONSTRAINT room_pk PRIMARY KEY (room_no)
 );
 
 -- DROP TABLE talk.roomuser;
@@ -41,11 +39,21 @@ CREATE TABLE talk.roomuser (
 	CONSTRAINT roomuser_pk PRIMARY KEY (room_no,usr_no,chat_no)
 );
 
--- DROP TABLE talk.room;
-CREATE TABLE talk.room (
+-- DROP TABLE talk.chat;
+CREATE TABLE talk.chat (
+	chat_no int8 NOT NULL,
+	chat text NULL,
+	chat_fg varchar NOT NULL,
 	room_no int8 NOT NULL,
 	usr_no int8 NOT NULL,
-	title varchar NOT NULL,
 	rgt_dtm varchar NULL,
-	CONSTRAINT room_pk PRIMARY KEY (room_no)
+	CONSTRAINT chat_pk PRIMARY KEY (chat_no)
+);
+
+-- DROP TABLE talk.chatuser;
+CREATE TABLE talk.chatuser (
+	room_no int8 NOT NULL,
+	usr_no int8 NOT NULL,
+	chat_no int8 NOT NULL,
+	CONSTRAINT chatuser_pk PRIMARY KEY (room_no, usr_no, chat_no)
 );
