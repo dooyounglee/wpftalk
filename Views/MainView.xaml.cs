@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using talk2.Models;
 
 namespace talk2.Views
 {
@@ -24,6 +26,17 @@ namespace talk2.Views
         public MainView()
         {
             InitializeComponent();
+        }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            var roomWin = Application.Current.Windows.Cast<Window>().FirstOrDefault(p => p.Tag is not null && Convert.ToInt16(p.Tag) > 0);
+            if (roomWin is not null)
+            {
+                MessageBox.Show("열린 채팅창이 있어요");
+                roomWin.Activate();
+                e.Cancel = true;
+            }
         }
     }
 }

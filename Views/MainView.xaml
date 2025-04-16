@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:talk2.Views"
         xmlns:viewmodels="clr-namespace:talk2.ViewModels"
         mc:Ignorable="d" 
-        Title="MainView" Height="450" Width="300">
+        Title="MainView" Height="450" Width="300" Closing="Window_Closing">
     <Window.Resources>
         <DataTemplate DataType="{x:Type viewmodels:LoginViewModel}">
             <local:LoginView />
