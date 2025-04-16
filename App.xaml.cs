@@ -49,6 +49,10 @@ public partial class App : Application
 
     public App()
     {
+        // [중복실행 방지1]
+        // string applicationName = Process.GetCurrentProcess().ProcessName;
+        // Duplicate_execution(applicationName);
+
         Services = ConfigureServices();
 
         var mainView = Services.GetRequiredService<MainView>();
@@ -56,5 +60,31 @@ public partial class App : Application
     }
 
     public IServiceProvider Services { get; }
+
+    // [중복실행 방지1]
+    /// <summary>
+    /// 중복실행방지
+    /// </summary>
+    /// <param name="mutexName"></param>
+    Mutex mutex = null;
+    private void Duplicate_execution(string mutexName)
+    {
+        try
+        {
+            mutex = new Mutex(false, mutexName);
+        }
+        catch (Exception ex)
+        {
+            Application.Current.Shutdown();
+        }
+        if (mutex.WaitOne(0, false))
+        {
+            // InitializeComponent();
+        }
+        else
+        {
+            Application.Current.Shutdown();
+        }
+    }
 }
 

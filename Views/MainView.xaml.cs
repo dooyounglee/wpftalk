@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,9 +24,17 @@ namespace talk2.Views
     /// </summary>
     public partial class MainView : Window
     {
+        // [중복실행 방지2]이중실행 방지를 위한 DLL import
+        [DllImportAttribute("user32.dll", EntryPoint = "FindWindow")]
+        public static extern int FindWindow(string clsName, string wndName);
+
         public MainView()
         {
             InitializeComponent();
+
+            // [중복실행 방지2]
+            // this.Title = "dlendud";
+            // if (FindWindow(null, Title) > 1) Application.Current.Shutdown();
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
