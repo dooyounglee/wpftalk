@@ -30,7 +30,7 @@
                 <ItemsControl ItemsSource="{Binding ChatList}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Layout}">
+                            <TextBlock Text="{Binding Layout}" Background="{Binding ColorUnreadChat}">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Setter Property= "Foreground" Value="Black"/>

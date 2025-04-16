@@ -14,6 +14,7 @@ namespace talk2.Models
         public string Chat { get; set; }
         public string RgtDtm { get; set; }
         public int CntUnread { get; set; }
+        public string ColorUnreadChat { get => CntUnread > 0 ? "skyblue" : "white"; }
 
         public string Layout
         {
