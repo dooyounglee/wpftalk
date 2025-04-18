@@ -18,7 +18,7 @@ namespace talk2.Models
 
         public string Layout
         {
-            get => $"{Title} {CntUnread}개 안읽음\n{Chat} ({RgtDtm})";
+            get => $"{Title}" + (CntUnread > 0 ? $"[{CntUnread}]" : "") + $"\n{Chat} ({RgtDtm})";
         }
     }
 }
