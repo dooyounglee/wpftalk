@@ -22,7 +22,6 @@ namespace talk2.Views
     /// </summary>
     public partial class RoomView : Window
     {
-        // private FlashWindow FlashWindow;
         public RoomView()
         {
             InitializeComponent();
