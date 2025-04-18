@@ -60,6 +60,7 @@ namespace talk2.Repositories
                              FROM talk.""user"" a
                                 , talk.div b
                             where a.div_no = b.div_no
+                              and a.usr_no > 0
                             order by 1";
             DataTable? dt = Query.select1(sql);
 
