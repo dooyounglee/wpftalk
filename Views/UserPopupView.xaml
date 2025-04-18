@@ -14,7 +14,7 @@
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
 
-        <ListBox Grid.Row="2" ItemsSource="{Binding UserList}" SelectionMode="Multiple" SelectionChanged="ListBox_SelectionChanged">
+        <ListBox Grid.Row="2" ItemsSource="{Binding UserList}" SelectionMode="Extended" SelectionChanged="ListBox_SelectionChanged">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Layout}" />
