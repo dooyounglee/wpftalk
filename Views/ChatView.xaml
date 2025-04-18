@@ -30,10 +30,10 @@
                 <ItemsControl ItemsSource="{Binding ChatList}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Layout}" Background="{Binding ColorUnreadChat}">
+                            <TextBlock Text="{Binding Layout}">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property= "Foreground" Value="Black"/>
+                                        <Setter Property= "Foreground" Value="{Binding ColorUnreadChat}"/>
                                         <Style.Triggers>
                                             <Trigger Property ="IsMouseOver" Value="True">
                                                 <Setter Property= "Background" Value="Red"/>
