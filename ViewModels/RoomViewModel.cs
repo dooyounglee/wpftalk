@@ -31,6 +31,8 @@ namespace talk2.ViewModels
         private ClientHandler? _clientHandler;
         private int _roomNo;
         private Room Room { get; set; }
+        private Window _roomWindow;
+        private FlashWindow _flashWindow;
 
         public int RoomNo { get => _roomNo; }
         public RoomViewModel(int roomNo, IUserService userService, IChatService chatService)
@@ -39,6 +41,8 @@ namespace talk2.ViewModels
             _chatService = chatService;
             _msgs = new ObservableCollection<string>();
             _roomNo = roomNo;
+            _roomWindow = Application.Current.Windows.Cast<Window>().FirstOrDefault(p => p.Tag is not null && Convert.ToInt16(p.Tag) == _roomNo);
+            _flashWindow = new FlashWindow(_roomWindow);
 
             InviteCommand = new RelayCommand<object>(Invite);
             RoomUserCommand = new RelayCommand<object>(RoomUser);
@@ -307,6 +311,10 @@ namespace talk2.ViewModels
                         chat = hub.Message,
                         Align = hub.UsrNo == _userService.Me.UsrNo ? "Right" : "Left",
                     });
+
+                    // 일단 무조건 깜빡이도록 하지만, 활성화 상태면 안깜빡일꺼고, 비활성화 상태면 깜빡일꺼임
+                    _flashWindow.FlashApplicationWindow();
+
                     break;
             }
 
