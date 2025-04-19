@@ -22,6 +22,8 @@ namespace talk2.Repositories
         public int getNewChatNo();
         public void InsertChat(int newChatNo, int roomNo, int usrNo, string type, string msg);
         public List<Chat> SelectChats(int roomNo, int usrNo);
+        public List<Chat> SelectChats(int roomNo, int usrNo, int page);
+        public int CountChats(int roomNo);
         public List<User> SelectRoomUserList(int roomNo);
         public int CountRoomWithMe(int myUsrNo, int usrNo);
         public int CountHeinRoom(int roomNo, int usrNo);
@@ -32,6 +34,7 @@ namespace talk2.Repositories
 
     internal class ChatRepository : IChatRepository
     {
+        private readonly int pageSize = 10;
         public Room GetRoom(int roomNo, int usrNo)
         {
             string sql = @$"SELECT a.room_no
@@ -190,6 +193,50 @@ namespace talk2.Repositories
             };
 
             return chats;
+        }
+
+        public List<Chat> SelectChats(int roomNo, int usrNo, int page)
+        {
+            string sql = @$"SELECT ROW_NUMBER() OVER(ORDER BY a.chat_no desc) as rownum
+                                 , a.chat_no
+                                 , a.chat
+                                 , a.usr_no
+                                 , a.chat_fg
+                              FROM talk.chat a
+                             where a.room_no = {roomNo}
+                               and a.chat_no > (select chat_no
+                                                  from talk.roomuser
+                                                 where room_no = {roomNo}
+                                                   and usr_no = {usrNo}
+                                                   and del_yn = 'N')
+                             order by chat_no desc";
+            sql = $@"SELECT * FROM ({sql})
+                      WHERE rownum between {(page - 1) * pageSize + 1} and {page * pageSize}";
+            DataTable? dt = Query.select1(sql);
+
+            var chats = new List<Chat>();
+            for (var i = 0; i < dt.Rows.Count; i++)
+            {
+                chats.Add(new Chat()
+                {
+                    ChatNo = (int)(long)dt.Rows[i]["chat_no"],
+                    UsrNo = (int)(long)dt.Rows[i]["usr_no"],
+                    chat = dt.Rows[i].IsNull("chat") ? "" : (string)dt.Rows[i]["chat"],
+                    ChatFg = (string)dt.Rows[i]["chat_fg"],
+                });
+            };
+
+            return chats;
+        }
+
+        public int CountChats(int roomNo)
+        {
+            string sql = @$"SELECT COUNT(*) as cnt
+                              FROM talk.chat
+                             where room_no = {roomNo}";
+            DataTable? dt = Query.select1(sql);
+
+            return (int)(long)dt.Rows[0]["cnt"];
         }
 
         public List<User> SelectRoomUserList(int roomNo)

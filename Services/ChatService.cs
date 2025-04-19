@@ -15,6 +15,8 @@ namespace talk2.Services
         public List<Room> getChatList(int usrNo);
         public int InsertChat(int roomNo, int usrNo, string type, string msg);
         public List<Chat> SelectChats(int roomNo);
+        public List<Chat> SelectChats(int roomNo, int page);
+        public int CountChats(int roomNo);
         public int CreateRoom(List<User> userList);
         public string Invite(int roomNo, List<User> userList);
         public string Leave(int roomNo, int usrNo);
@@ -57,6 +59,14 @@ namespace talk2.Services
         public List<Chat> SelectChats(int roomNo)
         {
             return _chatRepository.SelectChats(roomNo, _userService.Me.UsrNo);
+        }
+        public List<Chat> SelectChats(int roomNo, int page)
+        {
+            return _chatRepository.SelectChats(roomNo, _userService.Me.UsrNo, page);
+        }
+        public int CountChats(int roomNo)
+        {
+            return _chatRepository.CountChats(roomNo);
         }
 
         public int CreateRoom(List<User> userList)
