@@ -93,6 +93,8 @@ namespace talk2.ViewModels
             set => SetProperty(ref _chats, value);
         }
 
+        public bool IsSave { get; set; } = true;
+
         private void ReloadChats()
         {
             _chats = new ObservableCollection<Chat>();
@@ -271,7 +273,10 @@ namespace talk2.ViewModels
 
         public void SendMsg()
         {
-            _chatService.InsertChat(_roomNo, _userService.Me.UsrNo, "A", Msg);
+            if (IsSave)
+            {
+                _chatService.InsertChat(_roomNo, _userService.Me.UsrNo, "A", Msg);
+            }
             _clientHandler?.Send(new ChatHub
             {
                 RoomId = _roomNo,
