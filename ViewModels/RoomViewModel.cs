@@ -47,6 +47,7 @@ namespace talk2.ViewModels
             InviteCommand = new RelayCommand<object>(Invite);
             RoomUserCommand = new RelayCommand<object>(RoomUser);
             LeaveCommand = new RelayCommand<object>(Leave);
+            AllChatCommand = new RelayCommand<object>(AllChat);
             SaveTitleCommand = new RelayCommand<object>(SaveTitle);
             EditTitleCommand = new RelayCommand<object>(EditTitle);
             CancleTitleCommand = new RelayCommand<object>(CancleTitle);
@@ -198,6 +199,13 @@ namespace talk2.ViewModels
             // 창 찾아서 닫기
             var roomWin = Application.Current.Windows.Cast<Window>().FirstOrDefault(p => p.Tag is not null && Convert.ToInt16(p.Tag) == _roomNo);
             roomWin.Close();
+        }
+        public ICommand AllChatCommand { get; set; }
+        private void AllChat(object _)
+        {
+            Window roomAllChatView = new RoomAllChatView();
+            roomAllChatView.DataContext = new RoomAllChatViewModel(_roomNo, roomAllChatView, _userService, _chatService);
+            roomAllChatView.ShowDialog();
         }
 
         private bool _titleReadonly;
