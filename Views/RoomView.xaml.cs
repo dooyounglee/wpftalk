@@ -46,5 +46,21 @@ namespace talk2.Views
                 scroll.ScrollToBottom();
             }
         }
+
+        private void TextBox_PreviewDragOver(object sender, DragEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void TextBox_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                var roomViewModel = this.DataContext as RoomViewModel;
+                roomViewModel.Send(files);
+            }
+        }
     }
 }

@@ -69,7 +69,8 @@
         
         <Grid Grid.Row="3">
             <TextBox KeyDown="TextBox_KeyDown" TextWrapping="Wrap"
-             Text="{Binding Msg, UpdateSourceTrigger=PropertyChanged}" />
+             Text="{Binding Msg, UpdateSourceTrigger=PropertyChanged}"
+             AllowDrop="True" PreviewDragOver="TextBox_PreviewDragOver" Drop="TextBox_Drop" />
         </Grid>
     </Grid>
 </Window>

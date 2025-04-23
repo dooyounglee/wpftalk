@@ -17,6 +17,7 @@ using System.Windows.Input;
 using talk2.Commands;
 using talk2.Views;
 using System.Windows;
+using System.IO;
 
 namespace talk2.ViewModels
 {
@@ -338,5 +339,23 @@ namespace talk2.ViewModels
             //ur.GetUserList();
         }
         #endregion socket
+
+        public void Send(string[] files)
+        {
+            byte[] buffer = null;
+            using (FileStream fs = new FileStream(files[0], FileMode.Open, FileAccess.Read))
+            {
+                buffer = new byte[fs.Length];
+                fs.Read(buffer, 0, (int)fs.Length);
+            }
+
+            _clientHandler?.Send(new ChatHub
+            {
+                RoomId = _roomNo,
+                UsrNo = _userService.Me.UsrNo,
+                Message = "file이요",
+                Data2 = buffer,
+            });
+        }
     }
 }
