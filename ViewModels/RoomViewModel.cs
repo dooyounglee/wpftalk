@@ -18,6 +18,12 @@ using talk2.Commands;
 using talk2.Views;
 using System.Windows;
 using System.IO;
+using talkLib.Util;
+using Microsoft.Win32;
+using System.Windows.Media.Imaging;
+using System.Globalization;
+using System.Windows.Data;
+using OTILib.Util;
 
 namespace talk2.ViewModels
 {
@@ -52,6 +58,8 @@ namespace talk2.ViewModels
             SaveTitleCommand = new RelayCommand<object>(SaveTitle);
             EditTitleCommand = new RelayCommand<object>(EditTitle);
             CancleTitleCommand = new RelayCommand<object>(CancleTitle);
+            
+            DownloadCommand = new RelayCommand<Chat>(Download);
 
             _client = new ChatClient(IPAddress.Parse(_userService.Me.Ip), _userService.Me.Port);
             _client.Connected += Connected;
@@ -106,7 +114,14 @@ namespace talk2.ViewModels
                 {
                     case "A": chat.Align = chat.UsrNo == _userService.Me.UsrNo ? "Right" : "Left"; break;
                     case "B":
-                    case "C": chat.Align = "Center"; break;
+                    case "C":
+                    case "D": chat.Align = "Center"; break;
+                    case "E": 
+                        chat.Align = chat.UsrNo == _userService.Me.UsrNo ? "Right" : "Left";
+                        chat.Image = new BitmapImage(new Uri("http://localhost:8686/file/" + chat.FileNo));
+                        chat.isImage = "Visible";
+                        break;
+
                 }
                 _chats.Add(chat);
             }
@@ -237,6 +252,34 @@ namespace talk2.ViewModels
         {
             TitleReadonly = false;
         }
+
+        public ICommand DownloadCommand { get; set; }
+        private void Download(Chat chat)
+        {
+            var ext = chat.chat.IndexOf(".") == -1 ? "*" : chat.chat.Substring(chat.chat.LastIndexOf(".") + 1);
+            SaveFileDialog saveFileDialog = new SaveFileDialog()
+            {
+                FileName = chat.chat + ("*".Equals(ext) ? "" : "." + ext),
+                Filter = $"{("*".Equals(ext) ? "모든" : ext)} 파일 (*.{ext})|*.{ext}",
+                // Filter = "모든 파일 (*.*)|*.*",
+            };
+            bool? isOk = saveFileDialog.ShowDialog();
+
+            if ((bool)isOk)
+            {
+                if (chat.FileNo > 0)
+                {
+                    WebClient wc = new WebClient();
+                    wc.DownloadFile("http://localhost:8686/file/" + chat.FileNo, saveFileDialog.FileName);
+                }
+                else
+                {
+                FileStream file = new FileStream(saveFileDialog.FileName, FileMode.Create);
+                file.Write(chat.FileBuffer, 0, chat.FileBuffer.Length);
+                file.Close();
+                }
+            }
+        }
         #endregion Command
 
         #region socket
@@ -317,6 +360,19 @@ namespace talk2.ViewModels
                         Align = "Center",
                     });
                     break;
+                case ChatState.File:
+                    _chatService.ReadChat(_roomNo, _userService.Me.UsrNo);
+                    _chats.Add(new Chat()
+                    {
+                        UsrNo = hub.UsrNo,
+                        chat = hub.Message,
+                        Align = hub.UsrNo == _userService.Me.UsrNo ? "Right" : "Left",
+                        FileBuffer = hub.Data2,
+                        isFile = hub.Data2 is not null ? "Visible" : "Collapsed",
+                        isImage = ImageUtil.IsImage(hub.Data2) ? "Visible" : "Collapsed",
+                        Image = ImageUtil.IsImage(hub.Data2) ? byteToBitmapImage(hub.Data2) : null,
+                    });
+                    break;
                 default:
                     _chatService.ReadChat(_roomNo, _userService.Me.UsrNo);
                     _chats.Add(new Chat()
@@ -342,20 +398,53 @@ namespace talk2.ViewModels
 
         public void Send(string[] files)
         {
-            byte[] buffer = null;
-            using (FileStream fs = new FileStream(files[0], FileMode.Open, FileAccess.Read))
+            foreach (var file in files)
             {
-                buffer = new byte[fs.Length];
-                fs.Read(buffer, 0, (int)fs.Length);
-            }
+                // byte[] buffer = null;
+                FileInfo fi = new FileInfo(file);
+                Models.File f = new Models.File()
+                {
+                    FilePath = $"D:/temp/{DateUtil.now("yyyyMMdd")}/",
+                    FileName = $"OTI{DateUtil.now("yyyyMMddHHmmddfffffff")}_{NumberUtil.random(1,999)}",
+                    FileExt = fi.Extension,
+                    OriginName = fi.Name,
+                    Buffer = System.IO.File.ReadAllBytes(file),
+                };
+                // byte[] buffer = new byte[fs.Length];
+                // fs.Read(buffer, 0, (int)fs.Length);
+                if (IsSave)
+                {
+                    _chatService.InsertChat(_roomNo, _userService.Me.UsrNo, "E", f);
+                }
 
-            _clientHandler?.Send(new ChatHub
+                _clientHandler?.Send(new ChatHub
+                {
+                    RoomId = _roomNo,
+                    UsrNo = _userService.Me.UsrNo,
+                    Message = f.OriginName,
+                    State = ChatState.File,
+                    Data = new Dictionary<int, object>
+                    {
+                        {1, f.FilePath },
+                        {2, f.FileName },
+                    },
+                    Data2 = f.Buffer,
+                });
+            }
+            Msg = "";
+        }
+
+        public static BitmapImage byteToBitmapImage(byte[] array)
+        {
+            using (var ms = new System.IO.MemoryStream(array))
             {
-                RoomId = _roomNo,
-                UsrNo = _userService.Me.UsrNo,
-                Message = "file이요",
-                Data2 = buffer,
-            });
+                var image = new BitmapImage();
+                image.BeginInit();
+                image.CacheOption = BitmapCacheOption.OnLoad; // here
+                image.StreamSource = ms;
+                image.EndInit();
+                return image;
+            }
         }
     }
 }
