@@ -1,6 +1,8 @@
-﻿using System;
+﻿using OTILib.Util;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -57,10 +59,11 @@ namespace talk2.Views
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-
                 var roomViewModel = this.DataContext as RoomViewModel;
                 roomViewModel.Send(files);
             }
+
+            scroll.ScrollToBottom();
         }
     }
 }
