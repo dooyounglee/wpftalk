@@ -46,6 +46,7 @@ CREATE TABLE talk.chat (
 	chat_fg varchar NOT NULL,
 	room_no int8 NOT NULL,
 	usr_no int8 NOT NULL,
+	file_no int8,
 	rgt_dtm varchar NULL,
 	CONSTRAINT chat_pk PRIMARY KEY (chat_no)
 );
@@ -56,4 +57,14 @@ CREATE TABLE talk.chatuser (
 	usr_no int8 NOT NULL,
 	chat_no int8 NOT NULL,
 	CONSTRAINT chatuser_pk PRIMARY KEY (room_no, usr_no, chat_no)
+);
+
+-- DROP TABLE talk.chatfile;
+CREATE TABLE talk.chatfile (
+	file_no int8 NOT NULL,
+	file_path varchar NOT NULL,
+	file_name varchar NOT NULL,
+	file_ext varchar NOT NULL,
+	origin_name varchar NOT NULL,
+	CONSTRAINT chatfile_pk PRIMARY KEY (file_no)
 );
