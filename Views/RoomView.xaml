@@ -60,7 +60,15 @@
                 <ItemsControl ItemsSource="{Binding Chats}" >
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <TextBox Text="{Binding Path=Layout, Mode=OneWay}" HorizontalAlignment="{Binding Align}" TextWrapping="Wrap" IsReadOnly="True" MaxWidth="160" Background="#FFFFA0A0" SelectionBrush="White" SelectionTextBrush="{x:Null}" BorderBrush="White" Padding="5,5,5,5" />
+                            <StackPanel>
+                                <TextBox Text="{Binding Path=Layout, Mode=OneWay}" HorizontalAlignment="{Binding Align}" TextWrapping="Wrap" IsReadOnly="True" MaxWidth="160" Background="#FFFFA0A0" SelectionBrush="White" SelectionTextBrush="{x:Null}" BorderBrush="White" Padding="5,5,5,5" />
+                                <Image Source="{Binding Image}" HorizontalAlignment="{Binding Align}" Visibility="{Binding isImage}" MaxWidth="160" />
+                                <Button Content="저장" HorizontalAlignment="{Binding Align}" MaxWidth="160" Background="AntiqueWhite" BorderBrush="White" Padding="5,5,5,5" Visibility="{Binding isFile}" Command="{Binding DataContext.DownloadCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" >
+                                    <Button.CommandParameter>
+                                            <Binding Path="." />
+                                    </Button.CommandParameter>
+                                </Button>
+                            </StackPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
