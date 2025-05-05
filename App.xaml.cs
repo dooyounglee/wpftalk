@@ -28,9 +28,11 @@ public partial class App : Application
 
         services.AddSingleton<IUserService, UserService>();
         services.AddSingleton<IChatService, ChatService>();
+        services.AddSingleton<IFileService, FileService>();
 
         services.AddSingleton<IUserRepository, UserRepository>();
         services.AddSingleton<IChatRepository, ChatRepository>();
+        services.AddSingleton<IFileRepository, FileRepository>();
 
         services.AddSingleton<MainViewModel>();
         services.AddSingleton<LoginViewModel>();
