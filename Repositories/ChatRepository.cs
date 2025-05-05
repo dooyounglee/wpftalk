@@ -21,6 +21,7 @@ namespace talk2.Repositories
         public void UpdateTitle(int? roomNo, int usrNo, string title);
         public int getNewChatNo();
         public void InsertChat(int newChatNo, int roomNo, int usrNo, string type, string msg);
+        public void InsertChat(int newChatNo, int roomNo, int usrNo, string type, string msg, int fileNo);
         public List<Chat> SelectChats(int roomNo, int usrNo);
         public List<Chat> SelectChats(int roomNo, int usrNo, int page);
         public int CountChats(int roomNo);
@@ -162,6 +163,14 @@ namespace talk2.Repositories
                          ;
             Query.insert(sql);
         }
+        public void InsertChat(int newChatNo, int roomNo, int usrNo, string type, string msg, int fileNo)
+        {
+            string sql = @$"INSERT INTO talk.chat
+                            (CHAT_NO,ROOM_NO,USR_NO,CHAT_FG,CHAT, FILE_NO ,RGT_DTM) VALUES
+                            ({newChatNo},'{roomNo}',{usrNo},'{type}','{msg}',{fileNo}, to_char(now(),'YYYYMMDDHH24MISS'))"
+                         ;
+            Query.insert(sql);
+        }
 
         public List<Chat> SelectChats(int roomNo, int usrNo)
         {
@@ -169,6 +178,7 @@ namespace talk2.Repositories
                                  , a.chat
                                  , a.usr_no
                                  , a.chat_fg
+                                 , coalesce(a.file_no, 0) as file_no
                               FROM talk.chat a
                              where a.room_no = {roomNo}
                                and a.chat_no > (select chat_no
@@ -189,6 +199,7 @@ namespace talk2.Repositories
                     UsrNo = (int)(long)dt.Rows[i]["usr_no"],
                     chat = dt.Rows[i].IsNull("chat") ? "" : (string)dt.Rows[i]["chat"],
                     ChatFg = (string)dt.Rows[i]["chat_fg"],
+                    FileNo = (int)(long)dt.Rows[i]["file_no"],
                 });
             };
 

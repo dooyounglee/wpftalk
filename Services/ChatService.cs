@@ -14,6 +14,7 @@ namespace talk2.Services
         public Room getChat(int roomNo);
         public List<Room> getChatList(int usrNo);
         public int InsertChat(int roomNo, int usrNo, string type, string msg);
+        public int InsertChat(int roomNo, int usrNo, string type, File file);
         public List<Chat> SelectChats(int roomNo);
         public List<Chat> SelectChats(int roomNo, int page);
         public int CountChats(int roomNo);
@@ -31,11 +32,13 @@ namespace talk2.Services
     {
         private readonly IChatRepository? _chatRepository;
         private readonly IUserService _userService;
+        private readonly IFileService _fileService;
 
-        public ChatService(IChatRepository? chatRepository, IUserService userService)
+        public ChatService(IChatRepository? chatRepository, IUserService userService, IFileService fileService)
         {
             _chatRepository = chatRepository;
             _userService = userService;
+            _fileService = fileService;
         }
 
         public Room getChat(int roomNo)
@@ -52,6 +55,16 @@ namespace talk2.Services
         {
             int newChatNo = _chatRepository.getNewChatNo();
             _chatRepository.InsertChat(newChatNo, roomNo, usrNo, type, msg);
+            _chatRepository.InsertChatUserExceptMe(roomNo, _userService.Me.UsrNo, newChatNo);
+            return newChatNo;
+        }
+
+        public int InsertChat(int roomNo, int usrNo, string type, File file)
+        {
+            int fileNo = _fileService.saveFile(file);
+
+            int newChatNo = _chatRepository.getNewChatNo();
+            _chatRepository.InsertChat(newChatNo, roomNo, usrNo, type, file.OriginName, fileNo);
             _chatRepository.InsertChatUserExceptMe(roomNo, _userService.Me.UsrNo, newChatNo);
             return newChatNo;
         }
