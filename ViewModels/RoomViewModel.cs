@@ -118,8 +118,9 @@ namespace talk2.ViewModels
                     case "D": chat.Align = "Center"; break;
                     case "E": 
                         chat.Align = chat.UsrNo == _userService.Me.UsrNo ? "Right" : "Left";
-                        chat.Image = new BitmapImage(new Uri("http://localhost:8686/file/" + chat.FileNo));
-                        chat.isImage = "Visible";
+                        chat.Image = ImageUtil.IsImage(chat.chat) ? new BitmapImage(new Uri("http://localhost:8686/file/" + chat.FileNo)) : null;
+                        chat.isImage = ImageUtil.IsImage(chat.chat) ? "Visible" : "Collapsed";
+                        chat.isFile = "Visible";
                         break;
 
                 }
