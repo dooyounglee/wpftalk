@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:talk2.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="300">
+             d:DesignHeight="450" d:DesignWidth="300"
+             x:Name="root">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
@@ -31,8 +32,8 @@
                                     </Style>
                                 </TextBlock.Style>
                                 <TextBlock.InputBindings>
-                                    <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DataContext.UserInfoCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}" CommandParameter="{Binding UsrNo}"/>
-                                    <MouseBinding Gesture="RightClick" Command="{Binding DataContext.UserContextmenuCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
+                                    <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DataContext.UserInfoCommand, Source={x:Reference root}}" CommandParameter="{Binding UsrNo}"/>
+                                    <MouseBinding Gesture="RightClick" Command="{Binding DataContext.UserContextmenuCommand, Source={x:Reference root}}"/>
                                 </TextBlock.InputBindings>
                             </TextBlock>
                         </DataTemplate>

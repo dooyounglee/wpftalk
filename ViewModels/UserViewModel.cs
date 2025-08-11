@@ -43,7 +43,7 @@ namespace talk2.ViewModels
             Init();
         }
 
-        public void Init()
+        public async void Init()
         {
             LogoutCommand = new RelayCommand<object>(GoToLogout);
             CreateUserCommand = new RelayCommand<object>(GoToCreateUser);
@@ -62,7 +62,7 @@ namespace talk2.ViewModels
             Connect();
 
             _me = _userService.Me;
-            UserList = _userService.getUserList();
+            UserList = await _userService.getUserList();
             UserList = UserList.Where(u => u.UsrNo != _me.UsrNo).ToList();
         }
 
@@ -122,7 +122,9 @@ namespace talk2.ViewModels
         private void GoToUserInfo(int usrNo)
         {
             var userInfoView = new NewUserView();
-            userInfoView.DataContext = new NewUserViewModel(userInfoView, _userService, usrNo);
+            var vm = new NewUserViewModel(userInfoView, _userService);
+            userInfoView.DataContext = vm;
+            vm.InitAsync(usrNo);
             // userInfoView.DataContext = new UserInfoViewModel(userInfoView, _userService, usrNo);
             userInfoView.ShowDialog();
         }

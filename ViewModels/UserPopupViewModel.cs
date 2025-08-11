@@ -25,8 +25,11 @@ namespace talk2.ViewModels
 
             SelectCommand = new RelayCommand<object>(Select);
             CloseCommand = new RelayCommand<object>(Close);
+        }
 
-            _userList = _userService.getUserList();
+        public async Task InitAsync()
+        {
+            _userList = await _userService.getUserList();
             _userList = _userList.Where(u => u.UsrNo != _userService.Me.UsrNo).ToList();
         }
 

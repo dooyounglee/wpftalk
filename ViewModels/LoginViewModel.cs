@@ -25,9 +25,9 @@ namespace talk2.ViewModels
             LoginCommand = new RelayCommand<object>(DoLogin);
         }
 
-        private void DoLogin(object _)
+        private async void DoLogin(object _)
         {
-            User user = _userService.login(Id, Pw);
+            User user = await _userService.login(Id, Pw);
             if (user is null) return;
 
             var _mainViewModel = (MainViewModel)App.Current.Services.GetService(typeof(MainViewModel))!;
