@@ -6,16 +6,18 @@ using System.Threading.Tasks;
 using System.Windows.Interop;
 using talk2.Models;
 using talk2.Repositories;
+using talkLib.Util;
+using static talk2.Dto.RequestDto;
 
 namespace talk2.Services
 {
     public interface IChatService
     {
-        public Room getChat(int roomNo);
-        public List<Room> getChatList(int usrNo);
-        public int InsertChat(int roomNo, int usrNo, string type, string msg);
-        public int InsertChat(int roomNo, int usrNo, string type, File file);
-        public List<Chat> SelectChats(int roomNo);
+        public Task<Room> getRoom(int roomNo);
+        public Task<List<Room>> getChatList(int usrNo);
+        public Task<int> InsertChat(int roomNo, int usrNo, string type, string msg);
+        public Task<int> InsertChat(int roomNo, int usrNo, string type, File file);
+        public Task<List<Chat>> SelectChats(int roomNo);
         public List<Chat> SelectChats(int roomNo, int page);
         public int CountChats(int roomNo);
         public int CreateRoom(List<User> userList);
@@ -25,7 +27,7 @@ namespace talk2.Services
         public int CountRoomWithMe(int usrNo);
         public bool IsThereSomeoneinRoom(int roomNo, List<User> userList);
         public void EditTitle(int roomNo, int usrNo, string title);
-        public void ReadChat(int roomNo, int usrNo);
+        public Task ReadChat(int roomNo, int usrNo);
     }
 
     public class ChatService : IChatService
@@ -41,37 +43,60 @@ namespace talk2.Services
             _fileService = fileService;
         }
 
-        public Room getChat(int roomNo)
+        public async Task<Room> getRoom(int roomNo)
         {
-            return _chatRepository.GetRoom(roomNo, _userService.Me.UsrNo);
+            // return _chatRepository.GetRoom(roomNo, _userService.Me.UsrNo);
+            string responseBody = await HttpUtil.Get($"/room/{roomNo}?usrNo={_userService.Me.UsrNo}");
+            return JsonUtil.StringToObject<Room>(responseBody);
         }
 
-        public List<Room> getChatList(int usrNo)
+        public async Task<List<Room>> getChatList(int usrNo)
         {
-            return _chatRepository.GetRoomList(usrNo);
+            // return _chatRepository.GetRoomList(usrNo);
+            string responseBody = await HttpUtil.Get($"/room/list?usrNo={usrNo}");
+            return JsonUtil.StringToObject<List<Room>>(responseBody);
         }
 
-        public int InsertChat(int roomNo, int usrNo, string type, string msg)
+        public async Task<int> InsertChat(int roomNo, int usrNo, string type, string msg)
         {
-            int newChatNo = _chatRepository.getNewChatNo();
-            _chatRepository.InsertChat(newChatNo, roomNo, usrNo, type, msg);
-            _chatRepository.InsertChatUserExceptMe(roomNo, _userService.Me.UsrNo, newChatNo);
-            return newChatNo;
+            // int newChatNo = _chatRepository.getNewChatNo();
+            // _chatRepository.InsertChat(newChatNo, roomNo, usrNo, type, msg);
+            // _chatRepository.InsertChatUserExceptMe(roomNo, _userService.Me.UsrNo, newChatNo);
+            // return newChatNo;
+            var dto = new
+            {
+                roomNo = roomNo,
+                usrNo = usrNo,
+                type = type,
+                msg = msg,
+            };
+            string responseBody = await HttpUtil.Post($"/chat/insert", dto);
+            return JsonUtil.StringToObject<int>(responseBody);
         }
 
-        public int InsertChat(int roomNo, int usrNo, string type, File file)
+        public async Task<int> InsertChat(int roomNo, int usrNo, string type, File file)
         {
-            int fileNo = _fileService.saveFile(file);
+            // int fileNo = _fileService.saveFile(file);
 
-            int newChatNo = _chatRepository.getNewChatNo();
-            _chatRepository.InsertChat(newChatNo, roomNo, usrNo, type, file.OriginName, fileNo);
-            _chatRepository.InsertChatUserExceptMe(roomNo, _userService.Me.UsrNo, newChatNo);
-            return newChatNo;
+            // int newChatNo = _chatRepository.getNewChatNo();
+            // _chatRepository.InsertChat(newChatNo, roomNo, usrNo, type, file.OriginName, fileNo);
+            // _chatRepository.InsertChatUserExceptMe(roomNo, _userService.Me.UsrNo, newChatNo);
+            // return newChatNo;
+            var dto = new InsertChatDto
+            {
+                roomNo = roomNo,
+                usrNo = usrNo,
+                type = type,
+            };
+            string responseBody = await HttpUtil.Post($"/chat/insert1", dto, file.Buffer, file.OriginName);
+            return JsonUtil.StringToObject<int>(responseBody);
         }
 
-        public List<Chat> SelectChats(int roomNo)
+        public async Task<List<Chat>> SelectChats(int roomNo)
         {
-            return _chatRepository.SelectChats(roomNo, _userService.Me.UsrNo);
+            // return _chatRepository.SelectChats(roomNo, _userService.Me.UsrNo);
+            string responseBody = await HttpUtil.Get($"/chat/list/{roomNo}?usrNo={_userService.Me.UsrNo}");
+            return JsonUtil.StringToObject<List<Chat>>(responseBody);
         }
         public List<Chat> SelectChats(int roomNo, int page)
         {
@@ -185,9 +210,10 @@ namespace talk2.Services
             _chatRepository.UpdateTitle(roomNo, usrNo, title);
         }
 
-        public void ReadChat(int roomNo, int usrNo)
+        public async Task ReadChat(int roomNo, int usrNo)
         {
-            _chatRepository.ReadChat(roomNo, usrNo);
+            // _chatRepository.ReadChat(roomNo, usrNo);
+            await HttpUtil.Get($"/chat/read/{roomNo}?usrNo={usrNo}");
         }
     }
 }

@@ -36,10 +36,10 @@ namespace talk2.ViewModels
             Init();
         }
 
-        private void Init()
+        private async void Init()
         {
             Debug.WriteLine("chat init");
-            ChatList = _chatService.getChatList(_userService.Me.UsrNo);
+            ChatList = await _chatService.getChatList(_userService.Me.UsrNo);
         }
 
         public List<Room> ChatList
@@ -52,12 +52,12 @@ namespace talk2.ViewModels
             }
         }
 
-        public void Reload()
+        public async Task Reload()
         {
             ChatList = new List<Room>();
-            ChatList = _chatService.getChatList(_userService.Me.UsrNo);
+            ChatList = await _chatService.getChatList(_userService.Me.UsrNo);
             ChatList = new List<Room>();
-            ChatList = _chatService.getChatList(_userService.Me.UsrNo);
+            ChatList = await _chatService.getChatList(_userService.Me.UsrNo);
         }
 
         private void GotoUser(object _)
@@ -89,17 +89,21 @@ namespace talk2.ViewModels
             {
                 var roomView = new RoomView();
                 roomView.Tag = roomNo;
-                roomView.DataContext = new RoomViewModel(roomNo, _userService, _chatService);
+                var vm = new RoomViewModel(roomNo, _userService, _chatService);
+                roomView.DataContext = vm;
+                vm.InitAsync();
                 roomView.Show();
             }
         }
 
         private Window _userPopupView;
-        private void CreateRoom(object _)
+        private async void CreateRoom(object _)
         {
             _userPopupView = new UserPopupView();
-            _userPopupView.DataContext = new UserPopupViewModel(_userPopupView, _userService);
-            ((UserPopupViewModel)_userPopupView.DataContext).Validate += Validate;
+            var vm = new UserPopupViewModel(_userPopupView, _userService);
+            _userPopupView.DataContext = vm;
+            await vm.InitAsync();
+            vm.Validate += Validate;
             _userPopupView.ShowDialog();
             // if (userPopupView.ShowDialog() == true)
             // {

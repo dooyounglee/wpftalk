@@ -69,16 +69,31 @@ namespace talk2.ViewModels
 
             Connect();
 
-            Room = _chatService.getChat(_roomNo);
+            // Room = _chatService.getRoom(_roomNo);
+            // Title = Room.Title;
+            // TitleReadonly = false;
+
+            // 않읽은 채팅 읽기
+            // _chatService.ReadChat(_roomNo, _userService.Me.UsrNo);
+            // ReloadChatList();
+
+            // 이전채팅(10개) 불러오기
+            // ReloadChats();
+        }
+
+        public async void InitAsync()
+        {
+            Room = await _chatService.getRoom(_roomNo);
             Title = Room.Title;
             TitleReadonly = false;
 
             // 않읽은 채팅 읽기
-            _chatService.ReadChat(_roomNo, _userService.Me.UsrNo);
-            ReloadChatList();
+            // _chatService.ReadChat(_roomNo, _userService.Me.UsrNo);
+            await _chatService.ReadChat(_roomNo, _userService.Me.UsrNo);
+            await ReloadChatList();
 
             // 이전채팅(10개) 불러오기
-            ReloadChats();
+            await ReloadChats();
         }
 
         private string _msg;
@@ -104,10 +119,11 @@ namespace talk2.ViewModels
 
         public bool IsSave { get; set; } = true;
 
-        private void ReloadChats()
+        private async Task ReloadChats()
         {
             _chats = new ObservableCollection<Chat>();
-            var chats = _chatService.SelectChats(_roomNo).Reverse<Chat>();
+            var chats = await _chatService.SelectChats(_roomNo);
+            chats.Reverse<Chat>();
             foreach (var chat in chats)
             {
                 switch (chat.ChatFg)
@@ -128,11 +144,11 @@ namespace talk2.ViewModels
             }
         }
 
-        private void ReloadChatList()
+        private async Task ReloadChatList()
         {
             // 채팅방목록 새로고침
             ChatViewModel chatViewModel = (ChatViewModel)App.Current.Services.GetService(typeof(ChatViewModel))!;
-            chatViewModel.Reload();
+            await chatViewModel.Reload();
         }
 
         #region Command
