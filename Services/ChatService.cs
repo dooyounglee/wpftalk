@@ -22,10 +22,13 @@ namespace talk2.Services
         public int CountChats(int roomNo);
         public int CreateRoom(List<User> userList);
         public string Invite(int roomNo, List<User> userList);
+        public Task<string> Invite(int roomNo, List<int> userList, string invitedUsers);
         public string Leave(int roomNo, int usrNo);
         public List<User> RoomUserList(int roomNo);
         public int CountRoomWithMe(int usrNo);
+        [Obsolete]
         public bool IsThereSomeoneinRoom(int roomNo, List<User> userList);
+        public Task<bool> IsThereSomeoneinRoom(int roomNo, List<int> userList);
         public void EditTitle(int roomNo, int usrNo, string title);
         public Task ReadChat(int roomNo, int usrNo);
     }
@@ -169,6 +172,30 @@ namespace talk2.Services
             return msg;
         }
 
+        public async Task<string> Invite(int roomNo, List<int> usrNoList, string invitedUsers)
+        {
+
+            // // 방-유저 연결하기
+            // foreach (int usrNo in userList)
+            // {
+            //     _chatRepository.AddRoomUser(new Room()
+            //     {
+            //         RoomNo = roomNo,
+            //         UsrNo = usrNo,
+            //         Title = $"{_userService.Me.UsrNm},{invitedUsers}",
+            //     });
+            // }
+            // 
+            // var msg = $"{_userService.Me.UsrNm}님이 {invitedUsers}님을 초대했다";
+            // 
+            // InsertChat(roomNo, _userService.Me.UsrNo, "C", msg);
+            // 
+            // return msg;
+            var usrNoListString = string.Join(",", usrNoList);
+            string responseBody = await HttpUtil.Get($"/chat/invite/{roomNo}?usrNos={usrNoListString}&usrNms={invitedUsers}");
+            return JsonUtil.StringToObject<string>(responseBody);
+        }
+
         public string Leave(int roomNo, int usrNo)
         {
             _chatRepository.LeaveRoom(roomNo, usrNo);
@@ -203,6 +230,12 @@ namespace talk2.Services
                 }
             }
             return result;
+        }
+        public async Task<bool> IsThereSomeoneinRoom(int roomNo, List<int> usrNoList)
+        {
+            var usrNoListString = string.Join(",", usrNoList);
+            string responseBody = await HttpUtil.Get($"/chat/isThereTheyinRoom/{roomNo}?usrNos={usrNoListString}");
+            return JsonUtil.StringToObject<bool>(responseBody);
         }
 
         public void EditTitle(int roomNo, int usrNo, string title)

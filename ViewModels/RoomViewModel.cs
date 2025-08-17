@@ -183,19 +183,22 @@ namespace talk2.ViewModels
             //     });
             // }
         }
-        private void Validate(object? sender, EventArgs e)
+        private async void Validate(object? sender, EventArgs e)
         {
             var userList = ((UserPopupViewModel)_userPopupView.DataContext).SelectedList;
+            var usrNoList = userList.Select(x => x.UsrNo).ToList();
 
             // 중복 초대 체크
-            bool IsThereSomeoneinRoom = _chatService.IsThereSomeoneinRoom(_roomNo, userList);
+            // bool IsThereSomeoneinRoom = _chatService.IsThereSomeoneinRoom(_roomNo, userList);
+            bool IsThereSomeoneinRoom = await _chatService.IsThereSomeoneinRoom(_roomNo, usrNoList);
             if (IsThereSomeoneinRoom)
             {
                 MessageBox.Show("이미 있는사람을 추가했는뎁쇼?");
                 return;
             }
 
-            string msg = _chatService.Invite(_roomNo, userList);
+            string invitedUsers = string.Join(",", userList.Select(u => u.UsrNm));
+            string msg = await _chatService.Invite(_roomNo, usrNoList, invitedUsers);
 
             _clientHandler?.Send(new ChatHub
             {
