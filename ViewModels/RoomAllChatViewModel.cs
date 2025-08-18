@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,27 +8,28 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using talk2.Commands;
 using talk2.Models;
 using talk2.Services;
+using talkLib.Util;
 
 namespace talk2.ViewModels
 {
-    public class RoomAllChatViewModel : ObservableObject
+    public partial class RoomAllChatViewModel : ObservableObject
     {
         private readonly IUserService _userService;
         private readonly IChatService _chatService;
 
         private Window _roomAllChatView;
         private int _roomNo;
-        private int _page = 1;
-        public int Page
-        {
-            get => _page;
-            set => SetProperty(ref _page, value);
-        }
-        private int _totalCnt = 0;
-        public int TotalCnt { get => (int)Math.Ceiling(_totalCnt/10d); }
+        [ObservableProperty]
+        public int page = 1;
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(PageCnt))]
+        public int totalCnt;
+        public int PageCnt => (int)Math.Ceiling(totalCnt / 10d);
 
         public RoomAllChatViewModel(int roomNo, Window roomAllChatView, IUserService userService, IChatService chatService)
         {
@@ -36,29 +38,23 @@ namespace talk2.ViewModels
 
             _roomNo = roomNo;
             _roomAllChatView = roomAllChatView;
-
-            PrevCommand = new RelayCommand<object>(Prev);
-            NextCommand = new RelayCommand<object>(Next);
-
-            SelectChats();
         }
 
-        public ObservableCollection<Chat> _chats;
-        public ObservableCollection<Chat> Chats
+        public async Task InitAsync()
         {
-            get => _chats;
-            set => SetProperty(ref _chats, value);
+            await LoadChatsAsync();
         }
-        private async void SelectChats()
+
+        public ObservableCollection<Chat> Chats { get; } = new();
+        private async Task LoadChatsAsync()
         {
             // 전체페이지 목록만들기
-            _totalCnt = _chatService.CountChats(_roomNo);
+            TotalCnt = await _chatService.CountChats(_roomNo);
 
             // 채팅목록 뿌리기
-            var chats = await _chatService.SelectChats(_roomNo, _page);
+            var chats = await _chatService.SelectChats(_roomNo, Page);
             chats.Reverse<Chat>();
-
-            Chats = new ObservableCollection<Chat>();
+            Chats.Clear();
             foreach (var chat in chats)
             {
                 switch (chat.ChatFg)
@@ -66,25 +62,32 @@ namespace talk2.ViewModels
                     case "A": chat.Align = chat.UsrNo == _userService.Me.UsrNo ? "Right" : "Left"; break;
                     case "B":
                     case "C": chat.Align = "Center"; break;
+                    case "D": chat.Align = "Center"; break;
+                    case "E":
+                        chat.Align = chat.UsrNo == _userService.Me.UsrNo ? "Right" : "Left";
+                        chat.Image = ImageUtil.IsImage(chat.chat) ? new BitmapImage(new Uri("http://localhost:8686/file/" + chat.FileNo)) : null;
+                        chat.isImage = ImageUtil.IsImage(chat.chat) ? "Visible" : "Collapsed";
+                        chat.isFile = "Visible";
+                        break;
                 }
-                _chats.Add(chat);
+                Chats.Add(chat);
             }
         }
 
         #region Command
-        public ICommand PrevCommand { get; set; }
-        private void Prev(object _)
+        [RelayCommand]
+        private async Task Prev()
         {
-            if (_page >= TotalCnt) return;
+            if (Page >= PageCnt) return;
             Page++;
-            SelectChats();
+            await LoadChatsAsync();
         }
-        public ICommand NextCommand { get; set; }
-        private void Next(object _)
+        [RelayCommand]
+        private async Task Next()
         {
-            if (_page - 1 <= 0) return;
+            if (Page - 1 <= 0) return;
             Page--;
-            SelectChats();
+            await LoadChatsAsync();
         }
         #endregion Command
     }

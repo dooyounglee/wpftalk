@@ -236,7 +236,9 @@ namespace talk2.ViewModels
         private void AllChat(object _)
         {
             Window roomAllChatView = new RoomAllChatView();
-            roomAllChatView.DataContext = new RoomAllChatViewModel(_roomNo, roomAllChatView, _userService, _chatService);
+            var vm = new RoomAllChatViewModel(_roomNo, roomAllChatView, _userService, _chatService);
+            roomAllChatView.DataContext = vm;
+            vm.InitAsync();
             roomAllChatView.ShowDialog();
         }
 
