@@ -110,18 +110,12 @@ namespace talk2.ViewModels
             set => SetProperty(ref _msgs, value);
         }
 
-        public ObservableCollection<Chat> _chats;
-        public ObservableCollection<Chat> Chats
-        {
-            get => _chats;
-            set => SetProperty(ref _chats, value);
-        }
+        public ObservableCollection<Chat> Chats { get; } = new();
 
         public bool IsSave { get; set; } = true;
 
         private async Task ReloadChats()
         {
-            _chats = new ObservableCollection<Chat>();
             var chats = await _chatService.SelectChats(_roomNo);
             chats.Reverse<Chat>();
             foreach (var chat in chats)
@@ -140,7 +134,7 @@ namespace talk2.ViewModels
                         break;
 
                 }
-                _chats.Add(chat);
+                Chats.Add(chat);
             }
         }
 
@@ -365,7 +359,7 @@ namespace talk2.ViewModels
                 case ChatState.Connect: break;
                 case ChatState.Disconnect: break;
                 case ChatState.Invite:
-                    _chats.Add(new Chat()
+                    Chats.Add(new Chat()
                     {
                         UsrNo = hub.UsrNo,
                         chat = hub.Message,
@@ -373,7 +367,7 @@ namespace talk2.ViewModels
                     });
                     break;
                 case ChatState.Leave:
-                    _chats.Add(new Chat()
+                    Chats.Add(new Chat()
                     {
                         UsrNo = hub.UsrNo,
                         chat = hub.Message,
@@ -382,7 +376,7 @@ namespace talk2.ViewModels
                     break;
                 case ChatState.File:
                     _chatService.ReadChat(_roomNo, _userService.Me.UsrNo);
-                    _chats.Add(new Chat()
+                    Chats.Add(new Chat()
                     {
                         UsrNo = hub.UsrNo,
                         chat = hub.Message,
@@ -395,7 +389,7 @@ namespace talk2.ViewModels
                     break;
                 default:
                     _chatService.ReadChat(_roomNo, _userService.Me.UsrNo);
-                    _chats.Add(new Chat()
+                    Chats.Add(new Chat()
                     {
                         UsrNo = hub.UsrNo,
                         chat = hub.Message,

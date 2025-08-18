@@ -49,13 +49,14 @@ namespace talk2.ViewModels
             get => _chats;
             set => SetProperty(ref _chats, value);
         }
-        private void SelectChats()
+        private async void SelectChats()
         {
             // 전체페이지 목록만들기
             _totalCnt = _chatService.CountChats(_roomNo);
 
             // 채팅목록 뿌리기
-            var chats = _chatService.SelectChats(_roomNo, _page).Reverse<Chat>().ToList();
+            var chats = await _chatService.SelectChats(_roomNo, _page);
+            chats.Reverse<Chat>();
 
             Chats = new ObservableCollection<Chat>();
             foreach (var chat in chats)

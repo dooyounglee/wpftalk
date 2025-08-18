@@ -18,7 +18,7 @@ namespace talk2.Services
         public Task<int> InsertChat(int roomNo, int usrNo, string type, string msg);
         public Task<int> InsertChat(int roomNo, int usrNo, string type, File file);
         public Task<List<Chat>> SelectChats(int roomNo);
-        public List<Chat> SelectChats(int roomNo, int page);
+        public Task<List<Chat>> SelectChats(int roomNo, int page);
         public int CountChats(int roomNo);
         public int CreateRoom(List<User> userList);
         public string Invite(int roomNo, List<User> userList);
@@ -98,12 +98,14 @@ namespace talk2.Services
         public async Task<List<Chat>> SelectChats(int roomNo)
         {
             // return _chatRepository.SelectChats(roomNo, _userService.Me.UsrNo);
-            string responseBody = await HttpUtil.Get($"/chat/list/{roomNo}?usrNo={_userService.Me.UsrNo}");
+            string responseBody = await HttpUtil.Get($"/chat/list?roomNo={roomNo}&usrNo={_userService.Me.UsrNo}");
             return JsonUtil.StringToObject<List<Chat>>(responseBody);
         }
-        public List<Chat> SelectChats(int roomNo, int page)
+        public async Task<List<Chat>> SelectChats(int roomNo, int page)
         {
-            return _chatRepository.SelectChats(roomNo, _userService.Me.UsrNo, page);
+            // return _chatRepository.SelectChats(roomNo, _userService.Me.UsrNo, page);
+            string responseBody = await HttpUtil.Get($"/chat/list?roomNo={roomNo}&usrNo={_userService.Me.UsrNo}&page={page}");
+            return JsonUtil.StringToObject<List<Chat>>(responseBody);
         }
         public int CountChats(int roomNo)
         {
