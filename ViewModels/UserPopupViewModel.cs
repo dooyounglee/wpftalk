@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,12 +30,18 @@ namespace talk2.ViewModels
 
         public async Task InitAsync()
         {
-            _userList = await _userService.getUserList();
-            _userList = _userList.Where(u => u.UsrNo != _userService.Me.UsrNo).ToList();
+            var users = await _userService.getUserList();
+            var filteredUsers = users.Where(u => u.UsrNo != _userService.Me.UsrNo).ToList();
+            UserList.Clear();
+            foreach (var user in filteredUsers)
+            {
+                UserList.Add(user);
+            }
         }
 
-        private List<User> _userList;
-        public List<User> UserList { get => _userList; }
+        // private List<User> _userList;
+        // public List<User> UserList { get => _userList; }
+        public ObservableCollection<User> UserList { get; } = new();
 
         public List<User> _selectedList = new List<User>();
         public List<User> SelectedList { get => _selectedList; }

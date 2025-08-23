@@ -24,5 +24,11 @@ namespace talk2.Dto
             public string type { get; set; }
             public File file { get; set; }
         }
+
+        public class CreateRoomDto
+        {
+            public List<User> userList { get; set; }
+            public User me { get; set; }
+        }
     }
 }

@@ -20,7 +20,7 @@ namespace talk2.Services
         public Task<List<Chat>> SelectChats(int roomNo);
         public Task<List<Chat>> SelectChats(int roomNo, int page);
         public Task<int> CountChats(int roomNo);
-        public int CreateRoom(List<User> userList);
+        public Task<int> CreateRoom(List<User> userList);
         public string Invite(int roomNo, List<User> userList);
         public Task<string> Invite(int roomNo, List<int> userList, string invitedUsers);
         public string Leave(int roomNo, int usrNo);
@@ -72,6 +72,7 @@ namespace talk2.Services
                 usrNo = usrNo,
                 type = type,
                 msg = msg,
+                meUsrNo = _userService.Me.UsrNo
             };
             string responseBody = await HttpUtil.Post($"/chat/insert", dto);
             return JsonUtil.StringToObject<int>(responseBody);
@@ -85,11 +86,11 @@ namespace talk2.Services
             // _chatRepository.InsertChat(newChatNo, roomNo, usrNo, type, file.OriginName, fileNo);
             // _chatRepository.InsertChatUserExceptMe(roomNo, _userService.Me.UsrNo, newChatNo);
             // return newChatNo;
-            var dto = new InsertChatDto
-            {
+            var dto = new {
                 roomNo = roomNo,
                 usrNo = usrNo,
                 type = type,
+                meUsrNo = _userService.Me.UsrNo
             };
             string responseBody = await HttpUtil.Post($"/chat/insert1", dto, file.Buffer, file.OriginName);
             return JsonUtil.StringToObject<int>(responseBody);
@@ -114,44 +115,46 @@ namespace talk2.Services
             return JsonUtil.StringToObject<int>(responseBody);
         }
 
-        public int CreateRoom(List<User> userList)
+        public async Task<int> CreateRoom(List<User> userList)
         {
-            int newRoomNo = _chatRepository.GetRoomNo();
-            
-            string title = _userService.Me.UsrNm;
-            foreach (User u in userList)
-            {
-                if (_userService.Me.UsrNo != u.UsrNo)
-                {
-                    title += "," + u.UsrNm;
-                }
-            }
-
-            userList.Add(_userService.Me);
-
-            // 방만들기
-            _chatRepository.AddRoom(new Room()
-            {
-                RoomNo = newRoomNo,
-                UsrNo = _userService.Me.UsrNo,
-                Title = title,
-            });
-
-            // 방-유저 연결하기
-            foreach (User user in userList)
-            {
-                _chatRepository.AddRoomUser(new Room()
-                {
-                    RoomNo = newRoomNo,
-                    UsrNo = user.UsrNo,
-                    Title = title,
-                });
-            }
-
-            // 방만들었따는 채팅
-            InsertChat(newRoomNo, _userService.Me.UsrNo, "B", $"{_userService.Me.UsrNm}님이 방을 만들었다");
-
-            return newRoomNo;
+            // int newRoomNo = _chatRepository.GetRoomNo();
+            // 
+            // string title = _userService.Me.UsrNm;
+            // foreach (User u in userList)
+            // {
+            //     if (_userService.Me.UsrNo != u.UsrNo)
+            //     {
+            //         title += "," + u.UsrNm;
+            //     }
+            // }
+            // 
+            // userList.Add(_userService.Me);
+            // 
+            // // 방만들기
+            // _chatRepository.AddRoom(new Room()
+            // {
+            //     RoomNo = newRoomNo,
+            //     UsrNo = _userService.Me.UsrNo,
+            //     Title = title,
+            // });
+            // 
+            // // 방-유저 연결하기
+            // foreach (User user in userList)
+            // {
+            //     _chatRepository.AddRoomUser(new Room()
+            //     {
+            //         RoomNo = newRoomNo,
+            //         UsrNo = user.UsrNo,
+            //         Title = title,
+            //     });
+            // }
+            // 
+            // // 방만들었따는 채팅
+            // InsertChat(newRoomNo, _userService.Me.UsrNo, "B", $"{_userService.Me.UsrNm}님이 방을 만들었다");
+            // 
+            // return newRoomNo;
+            string responseBody = await HttpUtil.Post($"/room/create", new { userList=userList, me= _userService.Me });
+            return JsonUtil.StringToObject<int>(responseBody);
         }
 
         public string Invite(int roomNo, List<User> userList)
@@ -196,7 +199,7 @@ namespace talk2.Services
             // 
             // return msg;
             var usrNoListString = string.Join(",", usrNoList);
-            string responseBody = await HttpUtil.Get($"/chat/invite/{roomNo}?usrNos={usrNoListString}&usrNms={invitedUsers}");
+            string responseBody = await HttpUtil.Get($"/chat/invite/{roomNo}?usrNos={usrNoListString}&usrNms={invitedUsers}&meNo={_userService.Me.UsrNo}&meNm={_userService.Me.UsrNm}");
             return JsonUtil.StringToObject<string>(responseBody);
         }
 
