@@ -133,7 +133,7 @@ namespace talk2.ViewModels
             //     }
             // }
         }
-        private void Validate(object? sender, EventArgs e)
+        private async void Validate(object? sender, EventArgs e)
         {
             var userList = ((UserPopupViewModel)_userPopupView.DataContext).SelectedList;
 
@@ -149,7 +149,7 @@ namespace talk2.ViewModels
             }
 
             // 새로운방번호
-            var newRoomNo = _chatService.CreateRoom(userList);
+            var newRoomNo = await _chatService.CreateRoom(userList);
             if (newRoomNo > 0)
             {
                 var _clientHandler = ((UserViewModel)App.Current.Services.GetService(typeof(UserViewModel))!).getClientHandler();
