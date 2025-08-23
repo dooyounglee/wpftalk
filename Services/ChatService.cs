@@ -21,15 +21,14 @@ namespace talk2.Services
         public Task<List<Chat>> SelectChats(int roomNo, int page);
         public Task<int> CountChats(int roomNo);
         public Task<int> CreateRoom(List<User> userList);
-        public string Invite(int roomNo, List<User> userList);
+        [Obsolete]  public string Invite(int roomNo, List<User> userList);
         public Task<string> Invite(int roomNo, List<int> userList, string invitedUsers);
-        public string Leave(int roomNo, int usrNo);
+        public Task<string> Leave(int roomNo, int usrNo);
         public List<User> RoomUserList(int roomNo);
         public int CountRoomWithMe(int usrNo);
-        [Obsolete]
-        public bool IsThereSomeoneinRoom(int roomNo, List<User> userList);
+        [Obsolete] public bool IsThereSomeoneinRoom(int roomNo, List<User> userList);
         public Task<bool> IsThereSomeoneinRoom(int roomNo, List<int> userList);
-        public void EditTitle(int roomNo, int usrNo, string title);
+        public Task EditTitle(int roomNo, int usrNo, string title);
         public Task ReadChat(int roomNo, int usrNo);
     }
 
@@ -203,14 +202,18 @@ namespace talk2.Services
             return JsonUtil.StringToObject<string>(responseBody);
         }
 
-        public string Leave(int roomNo, int usrNo)
+        public async Task<string> Leave(int roomNo, int usrNo)
         {
-            _chatRepository.LeaveRoom(roomNo, usrNo);
+            // _chatRepository.LeaveRoom(roomNo, usrNo);
 
+            // var msg = $"{_userService.Me.UsrNm}님이 나갔다";
+
+            // InsertChat(roomNo, _userService.Me.UsrNo, "D", msg);
+
+            // return msg;
             var msg = $"{_userService.Me.UsrNm}님이 나갔다";
-
-            InsertChat(roomNo, _userService.Me.UsrNo, "D", msg);
-
+            string responseBody = await HttpUtil.Post($"/room/leave", new { roomNo = roomNo, usrNo = usrNo, msg = msg });
+            JsonUtil.StringToObject<string>(responseBody);
             return msg;
         }
 
@@ -224,7 +227,7 @@ namespace talk2.Services
             return _chatRepository.CountRoomWithMe(_userService.Me.UsrNo, usrNo);
         }
 
-        public bool IsThereSomeoneinRoom(int roomNo, List<User> userList)
+        [Obsolete] public bool IsThereSomeoneinRoom(int roomNo, List<User> userList)
         {
             bool result = false;
             foreach(var u in userList)
@@ -245,9 +248,10 @@ namespace talk2.Services
             return JsonUtil.StringToObject<bool>(responseBody);
         }
 
-        public void EditTitle(int roomNo, int usrNo, string title)
+        public async Task EditTitle(int roomNo, int usrNo, string title)
         {
-            _chatRepository.UpdateTitle(roomNo, usrNo, title);
+            // _chatRepository.UpdateTitle(roomNo, usrNo, title);
+            await HttpUtil.Put($"/room/title", new { roomNo=roomNo, usrNo=usrNo, title=title });
         }
 
         public async Task ReadChat(int roomNo, int usrNo)

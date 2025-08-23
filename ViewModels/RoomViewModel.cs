@@ -213,11 +213,11 @@ namespace talk2.ViewModels
             roomUserPopupView.ShowDialog();
         }
         public ICommand LeaveCommand { get; set; }
-        private void Leave(object _)
+        private async void Leave(object _)
         {
             // TODO confirm창 띄워서 ok일때만 돌게
             // room-user연결 끊기
-            string msg =_chatService.Leave(_roomNo, _userService.Me.UsrNo);
+            string msg = await _chatService.Leave(_roomNo, _userService.Me.UsrNo);
 
             // 채팅방에 나갔다고 알리기
             _clientHandler?.Send(new ChatHub
@@ -250,9 +250,9 @@ namespace talk2.ViewModels
         }
         public string Title { get; set; }
         public ICommand SaveTitleCommand { get; set; }
-        private void SaveTitle(object _)
+        private async void SaveTitle(object _)
         {
-            _chatService.EditTitle(_roomNo, _userService.Me.UsrNo, Title);
+            await _chatService.EditTitle(_roomNo, _userService.Me.UsrNo, Title);
             TitleReadonly = false;
 
             // 채팅방목록 새로고침
