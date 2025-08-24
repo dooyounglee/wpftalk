@@ -64,6 +64,7 @@ namespace talk2.ViewModels
             _me = _userService.Me;
             UserList = await _userService.getUserList();
             UserList = UserList.Where(u => u.UsrNo != _me.UsrNo).ToList();
+            SelectedConnState = "Online"; // 로그인 시, 첫 상태는 Online(비동기로 가져오느라, Socket Connect랑 순서가 꼬임)
         }
 
         public List<User> UserList
