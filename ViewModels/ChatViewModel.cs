@@ -140,7 +140,7 @@ namespace talk2.ViewModels
             // 1:1방을 만들때는 이미 있는지 확인
             if (userList.Count == 1)
             {
-                bool hasRoom = _chatService.CountRoomWithMe(userList[0].UsrNo) > 0 ? true : false;
+                bool hasRoom = await _chatService.CountRoomWithMe(userList[0].UsrNo) > 0 ? true : false;
                 if (hasRoom)
                 {
                     MessageBox.Show("이미 있는 방인뎁쇼?");

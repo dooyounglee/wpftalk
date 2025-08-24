@@ -148,10 +148,12 @@ namespace talk2.ViewModels
         #region Command
         private Window _userPopupView;
         public ICommand InviteCommand { get; set; }
-        private void Invite(object _)
+        private async void Invite(object _)
         {
             _userPopupView = new UserPopupView();
-            _userPopupView.DataContext = new UserPopupViewModel(_userPopupView, _userService);
+            var vm = new UserPopupViewModel(_userPopupView, _userService);
+            _userPopupView.DataContext = vm;
+            await vm.InitAsync();
             ((UserPopupViewModel)_userPopupView.DataContext).Validate += Validate;
             _userPopupView.ShowDialog();
             // if (userPopupView.ShowDialog() == true)
@@ -209,7 +211,9 @@ namespace talk2.ViewModels
         private void RoomUser(object _)
         {
             var roomUserPopupView = new RoomUserPopupView();
-            roomUserPopupView.DataContext = new RoomUserPopupViewModel(_roomNo, roomUserPopupView, _chatService);
+            var vm = new RoomUserPopupViewModel(_roomNo, roomUserPopupView, _chatService);
+            roomUserPopupView.DataContext = vm;
+            vm.InitAsync();
             roomUserPopupView.ShowDialog();
         }
         public ICommand LeaveCommand { get; set; }

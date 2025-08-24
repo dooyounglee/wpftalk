@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,11 +22,18 @@ namespace talk2.ViewModels
             _chatService = chatService;
             _roomUserPopupView = roomUserPopupView;
             _roomNo = roomNo;
-
-            _userList = _chatService.RoomUserList(_roomNo);
         }
 
-        private List<User> _userList;
-        public List<User> UserList { get => _userList; }
+        public async void InitAsync()
+        {
+            var users = await _chatService.RoomUserList(_roomNo);
+            UserList.Clear();
+            foreach (var user in users)
+            {
+                UserList.Add(user);
+            }
+        }
+
+        public ObservableCollection<User> UserList { get; } = new();
     }
 }

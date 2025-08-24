@@ -24,8 +24,8 @@ namespace talk2.Services
         [Obsolete]  public string Invite(int roomNo, List<User> userList);
         public Task<string> Invite(int roomNo, List<int> userList, string invitedUsers);
         public Task<string> Leave(int roomNo, int usrNo);
-        public List<User> RoomUserList(int roomNo);
-        public int CountRoomWithMe(int usrNo);
+        public Task<List<User>> RoomUserList(int roomNo);
+        public Task<int> CountRoomWithMe(int usrNo);
         [Obsolete] public bool IsThereSomeoneinRoom(int roomNo, List<User> userList);
         public Task<bool> IsThereSomeoneinRoom(int roomNo, List<int> userList);
         public Task EditTitle(int roomNo, int usrNo, string title);
@@ -217,14 +217,18 @@ namespace talk2.Services
             return msg;
         }
 
-        public List<User> RoomUserList(int roomNo)
+        public async Task<List<User>> RoomUserList(int roomNo)
         {
-            return _chatRepository.SelectRoomUserList(roomNo);
+            // return _chatRepository.SelectRoomUserList(roomNo);
+            string responseBody = await HttpUtil.Get($"/room/users?roomNo={roomNo}");
+            return JsonUtil.StringToObject<List<User>>(responseBody);
         }
 
-        public int CountRoomWithMe(int usrNo)
+        public async Task<int> CountRoomWithMe(int usrNo)
         {
-            return _chatRepository.CountRoomWithMe(_userService.Me.UsrNo, usrNo);
+            // return _chatRepository.CountRoomWithMe(_userService.Me.UsrNo, usrNo);
+            string responseBody = await HttpUtil.Get($"/room/count?usrNo={usrNo}&meNo={_userService.Me.UsrNo}");
+            return JsonUtil.StringToObject<int>(responseBody);
         }
 
         [Obsolete] public bool IsThereSomeoneinRoom(int roomNo, List<User> userList)
