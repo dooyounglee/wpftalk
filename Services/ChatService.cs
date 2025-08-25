@@ -213,7 +213,7 @@ namespace talk2.Services
             // return msg;
             var msg = $"{_userService.Me.UsrNm}님이 나갔다";
             string responseBody = await HttpUtil.Post($"/room/leave", new { roomNo = roomNo, usrNo = usrNo, msg = msg });
-            JsonUtil.StringToObject<string>(responseBody);
+            // JsonUtil.StringToObject<string>(responseBody);
             return msg;
         }
 
