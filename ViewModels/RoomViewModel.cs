@@ -117,7 +117,7 @@ namespace talk2.ViewModels
         private async Task ReloadChats()
         {
             var chats = await _chatService.SelectChats(_roomNo);
-            chats.Reverse<Chat>();
+            chats = chats.Reverse<Chat>().ToList();
             foreach (var chat in chats)
             {
                 switch (chat.ChatFg)
