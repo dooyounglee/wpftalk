@@ -30,7 +30,17 @@ namespace talk2.Models
         public string isImage { get; set; } = "Collapsed";
         public string Layout
         {
-            get => $"{UsrNo}: {chat}";
+            get
+            {
+                switch (ChatFg)
+                {
+                    case "B":
+                    case "C":
+                    case "D": return $"{chat}";
+                    default: return $"{UsrNo}: {chat}";
+                }
+                ;
+            }
         }
     }
 }
