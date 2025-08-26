@@ -54,10 +54,10 @@ namespace talk2.ViewModels
 
         public async Task Reload()
         {
-            ChatList = new List<Room>();
+            // ChatList = new List<Room>();
             ChatList = await _chatService.getChatList(_userService.Me.UsrNo);
-            ChatList = new List<Room>();
-            ChatList = await _chatService.getChatList(_userService.Me.UsrNo);
+            // ChatList = new List<Room>();
+            // ChatList = await _chatService.getChatList(_userService.Me.UsrNo);
         }
 
         private void GotoUser(object _)
