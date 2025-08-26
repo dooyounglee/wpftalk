@@ -30,8 +30,8 @@ namespace talk2.ViewModels
             User user = await _userService.login(Id, Pw);
             if (user is null) return;
 
-            var _mainViewModel = (MainViewModel)App.Current.Services.GetService(typeof(MainViewModel))!;
-            _mainViewModel.changeViewModel(NaviType.UserView);
+            // var _mainViewModel = (MainViewModel)App.Current.Services.GetService(typeof(MainViewModel))!;
+            // _mainViewModel.changeViewModel(NaviType.UserView);
             GoToUser(_);
         }
 
@@ -39,6 +39,8 @@ namespace talk2.ViewModels
         {
             var _mainViewModel = (MainViewModel)App.Current.Services.GetService(typeof(MainViewModel))!;
             _mainViewModel.changeViewModel(NaviType.UserView);
+            var CurrentViewModel = (UserViewModel)App.Current.Services.GetService(typeof(UserViewModel))!;
+            ((UserViewModel)CurrentViewModel).Init();
         }
 
         private string _id = "";
