@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.Input;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -10,32 +11,28 @@ using System.Windows.Navigation;
 using talk2.Commands;
 using talk2.Models;
 using talk2.Services;
-// using talk2.Services;
 
 namespace talk2.ViewModels
 {
-    public class LoginViewModel : ViewModelBase
+    public partial class LoginViewModel : ViewModelBase
     {
         private readonly IUserService _userService;
 
         public LoginViewModel(IUserService userService)
         {
             _userService = userService;
-
-            LoginCommand = new RelayCommand<object>(DoLogin);
         }
 
-        private async void DoLogin(object _)
+        [RelayCommand]
+        private async Task Login()
         {
             User user = await _userService.login(Id, Pw);
             if (user is null) return;
 
-            // var _mainViewModel = (MainViewModel)App.Current.Services.GetService(typeof(MainViewModel))!;
-            // _mainViewModel.changeViewModel(NaviType.UserView);
-            GoToUser(_);
+            GoToUser();
         }
 
-        private void GoToUser(object _)
+        private void GoToUser()
         {
             var _mainViewModel = (MainViewModel)App.Current.Services.GetService(typeof(MainViewModel))!;
             _mainViewModel.changeViewModel(NaviType.UserView);
@@ -51,7 +48,5 @@ namespace talk2.ViewModels
         public string Ip { get => _ip; set { _ip = value; } }
         private string _port;
         public string Port { get => _port; set { _port = value; } }
-
-        public ICommand LoginCommand { get; set; }
     }
 }
