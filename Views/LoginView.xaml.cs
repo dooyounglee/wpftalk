@@ -23,5 +23,20 @@ namespace talk2.Views
         {
             InitializeComponent();
         }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            Id.Focus();
+        }
+
+        private void Id_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            Id.SelectAll();  // 전체 텍스트 선택
+        }
+
+        private void Pw_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            Pw.SelectAll();  // 전체 텍스트 선택
+        }
     }
 }
