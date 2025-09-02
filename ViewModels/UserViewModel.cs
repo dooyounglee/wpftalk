@@ -274,9 +274,10 @@ namespace talk2.ViewModels
                         Align = "Center",
                     });
                     break; */
-                case ChatState.ChatReload:
+                case ChatState.ChatReload: // 서버 전파 받고 채팅목록 최신화
+                    ChatHub data = ChatHub.Parse(hub.Data1);
                     ChatViewModel chatViewModel = (ChatViewModel)App.Current.Services.GetService(typeof(ChatViewModel))!;
-                    chatViewModel.Reload();
+                    chatViewModel.Reload(data.RoomId, data.UsrNo, data.Message);
                     break;
                 default:
                     // User me = _loginService.UserInfo;

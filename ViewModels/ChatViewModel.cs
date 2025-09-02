@@ -2,17 +2,20 @@
 using OTILib.Util;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Interop;
 using talk2.Commands;
 using talk2.Models;
 using talk2.Services;
 using talk2.Views;
+using talkLib.Util;
 
 namespace talk2.ViewModels
 {
@@ -39,25 +42,42 @@ namespace talk2.ViewModels
         private async void Init()
         {
             Debug.WriteLine("chat init");
-            ChatList = await _chatService.getChatList(_userService.Me.UsrNo);
-        }
-
-        public List<Room> ChatList
-        {
-            get => _chatList;
-            set
+            var chats = await _chatService.getChatList(_userService.Me.UsrNo);
+            foreach (var chat in chats)
             {
-                _chatList = value;
-                OnPropertyChanged();
+                ChatList.Add(chat);
             }
         }
+
+        public ObservableCollection<Room> ChatList { get; } = new();
 
         public async Task Reload()
         {
             // ChatList = new List<Room>();
-            ChatList = await _chatService.getChatList(_userService.Me.UsrNo);
+            // ChatList = await _chatService.getChatList(_userService.Me.UsrNo);
             // ChatList = new List<Room>();
             // ChatList = await _chatService.getChatList(_userService.Me.UsrNo);
+        }
+
+        public async Task Reload(int roomNo, int usrNo, string msg)
+        {
+            for (int i=0; i < ChatList.Count; i++)
+            {
+                var chat = ChatList[i];
+                if (chat.RoomNo == roomNo)
+                {
+                    Room removed = ChatList[i];
+                    ChatList.RemoveAt(i);
+                    if (_userService.Me.UsrNo != usrNo)
+                    {
+                        removed.CntUnread++;
+                    }
+                    removed.Chat = msg;
+                    removed.RgtDtm = DateUtil.now("yyyyMMddHHmm");
+                    ChatList.Insert(0, removed);
+                    break;
+                }
+            }
         }
 
         private void GotoUser(object _)
