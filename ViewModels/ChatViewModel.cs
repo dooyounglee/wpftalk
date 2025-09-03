@@ -68,7 +68,8 @@ namespace talk2.ViewModels
                 {
                     Room removed = ChatList[i];
                     ChatList.RemoveAt(i);
-                    if (_userService.Me.UsrNo != usrNo)
+                    var roomWin = Application.Current.Windows.Cast<Window>().FirstOrDefault(p => p.Tag is not null && Convert.ToInt16(p.Tag) == roomNo);
+                    if (roomWin is null)
                     {
                         removed.CntUnread++;
                     }
