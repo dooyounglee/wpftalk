@@ -114,6 +114,20 @@ namespace talk2.ViewModels
                 roomView.DataContext = vm;
                 vm.InitAsync();
                 roomView.Show();
+
+                // unreadcnt=0
+                for (int i = 0; i < ChatList.Count; i++)
+                {
+                    var chat = ChatList[i];
+                    if (chat.RoomNo == roomNo)
+                    {
+                        Room removed = ChatList[i];
+                        ChatList.RemoveAt(i);
+                        removed.CntUnread = 0;
+                        ChatList.Insert(0, removed);
+                        break;
+                    }
+                }
             }
         }
 
