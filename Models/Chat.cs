@@ -24,10 +24,12 @@ namespace talk2.Models
         public int FileNo { get; set; }
         public byte[] FileBuffer { get; set; }
         public BitmapImage Image { get; set; }
+        public string ProfileImage { get; set; } = "C:\\Users\\doo\\Pictures\\small.jpg";
 
         // public string isFile { get => FileNo > 0 || FileBuffer != null ? "Visible" : "Collapsed"; }
         public string isFile { get; set; } = "Collapsed";
         public string isImage { get; set; } = "Collapsed";
+        public bool IsMine { get; set; }
         public string Layout
         {
             get
