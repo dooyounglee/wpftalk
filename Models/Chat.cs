@@ -14,6 +14,7 @@ namespace talk2.Models
         public int ChatNo { get; set; }
         [JsonPropertyName("usrNo")]
         public int UsrNo { get; set; }
+        public string UsrNm { get; set; }
         [JsonPropertyName("chat")]
         public string chat { get; set; }
         [JsonPropertyName("align")]

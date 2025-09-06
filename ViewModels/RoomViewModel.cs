@@ -24,6 +24,7 @@ using System.Windows.Media.Imaging;
 using System.Globalization;
 using System.Windows.Data;
 using OTILib.Util;
+using talk2.Util;
 
 namespace talk2.ViewModels
 {
@@ -121,6 +122,7 @@ namespace talk2.ViewModels
             foreach (var chat in chats)
             {
                 chat.IsMine = chat.UsrNo == _userService.Me.UsrNo;
+                chat.UsrNm = UserUtil.getUsrNm(chat.UsrNo);
                 switch (chat.ChatFg)
                 {
                     case "A":
