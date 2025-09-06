@@ -7,98 +7,13 @@
         mc:Ignorable="d"
         Title="RoomView" Height="450" Width="300">
     <Window.Resources>
-        <!-- 상대방 메시지 템플릿 -->
-        <DataTemplate x:Key="OtherMessageTemplate">
-            <StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0,0,4,4">
-                    <Border Width="40" Height="40"
-                        CornerRadius="20"
-                        Background="White"
-                        ClipToBounds="True"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center">
-                        <Image Source="{Binding ProfileImage}"
-                           Stretch="Uniform"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"/>
-                    </Border>
-                    <StackPanel>
-                    <TextBlock Text="{Binding UsrNm}"
-                        FontWeight="Bold"
-                        Foreground="Gray"
-                        Margin="0,0,0,2"/>
-                        <Border Background="#FFE0E0E0"
-                    CornerRadius="10"
-                    Padding="10"
-                    MaxWidth="300">
-                            <TextBlock Text="{Binding chat}"
-                            TextWrapping="Wrap"
-                            Foreground="Black"/>
-                        </Border>
-                    </StackPanel>
-                </StackPanel>
-                <StackPanel>
-                    <Image Source="{Binding Image}" HorizontalAlignment="{Binding Align}" Visibility="{Binding isImage}" MaxWidth="160" />
-                    <Button Content="저장" HorizontalAlignment="{Binding Align}" MaxWidth="160" Background="AntiqueWhite" BorderBrush="White" Padding="5,5,5,5" Visibility="{Binding isFile}" Command="{Binding DataContext.DownloadCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" >
-                        <Button.CommandParameter>
-                            <Binding Path="." />
-                        </Button.CommandParameter>
-                    </Button>
-                </StackPanel>
-            </StackPanel>
-        </DataTemplate>
-
-        <!-- 내 메시지 템플릿 -->
-        <DataTemplate x:Key="MyMessageTemplate">
-            <StackPanel>
-                <StackPanel Orientation="Horizontal"
-                    HorizontalAlignment="Right"
-                    Margin="0,0,4,4">
-                    <Border Background="#FFDCF8C6"
-                CornerRadius="10"
-                Padding="10"
-                MaxWidth="300">
-                        <TextBlock Text="{Binding chat}"
-                        TextWrapping="Wrap"
-                        Foreground="Black"/>
-                    </Border>
-                </StackPanel>
-                <StackPanel>
-                <Image Source="{Binding Image}" HorizontalAlignment="{Binding Align}" Visibility="{Binding isImage}" MaxWidth="160" />
-                <Button Content="저장" HorizontalAlignment="{Binding Align}" MaxWidth="160" Background="AntiqueWhite" BorderBrush="White" Padding="5,5,5,5" Visibility="{Binding isFile}" Command="{Binding DataContext.DownloadCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" >
-                    <Button.CommandParameter>
-                        <Binding Path="." />
-                    </Button.CommandParameter>
-                </Button>
-                </StackPanel>
-            </StackPanel>
-        </DataTemplate>
-
-        <!-- 공지 메시지 템플릿 -->
-        <DataTemplate x:Key="NoticeMessageTemplate">
-            <StackPanel>
-                <StackPanel Orientation="Horizontal"
-            HorizontalAlignment="Center"
-            Margin="0,0,4,4">
-                    <Border Background="#FFDCF8C6"
-        CornerRadius="10"
-        Padding="10"
-        MaxWidth="300">
-                        <TextBlock Text="{Binding chat}"
-                TextWrapping="Wrap"
-                Foreground="Black"/>
-                    </Border>
-                </StackPanel>
-            </StackPanel>
-        </DataTemplate>
-
-        <local:ChatMessageTemplateSelector x:Key="MessageTemplateSelector"
-                                MyMessageTemplate="{StaticResource MyMessageTemplate}"
-                                OtherMessageTemplate="{StaticResource OtherMessageTemplate}"
-                                NoticeMessageTemplate="{StaticResource NoticeMessageTemplate}" />
-
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Templates/ChatsTemplate.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
