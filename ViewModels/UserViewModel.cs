@@ -17,6 +17,7 @@ using System.Windows.Interop;
 using talk2.Commands;
 using talk2.Models;
 using talk2.Services;
+using talk2.Util;
 using talk2.Views;
 using talkLib.Util;
 
@@ -39,11 +40,9 @@ namespace talk2.ViewModels
             _mainViewModel = (MainViewModel)App.Current.Services.GetService(typeof(MainViewModel))!;
 
             _userService = userService;
-
-            Init();
         }
 
-        public async void Init()
+        public async void InitAsync()
         {
             LogoutCommand = new RelayCommand<object>(GoToLogout);
             CreateUserCommand = new RelayCommand<object>(GoToCreateUser);
@@ -63,6 +62,7 @@ namespace talk2.ViewModels
 
             _me = _userService.Me;
             UserList = await _userService.getUserList();
+            UserUtil.setUsers(UserList); // cache에 users 담기
             UserList = UserList.Where(u => u.UsrNo != _me.UsrNo).ToList();
             SelectedConnState = "Online"; // 로그인 시, 첫 상태는 Online(비동기로 가져오느라, Socket Connect랑 순서가 꼬임)
         }
