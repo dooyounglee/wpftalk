@@ -118,12 +118,7 @@ namespace talk2.ViewModels
         private async Task ReloadChats()
         {
             var chats = await _chatService.SelectChats(_roomNo);
-            chats = chats.Reverse<Chat>().ToList();
-            foreach (var chat in chats)
-            {
-                ChatUtil.Chats(chat, _userService.Me.UsrNo);
-                Chats.Add(chat);
-            }
+            ChatUtil.Chats(Chats, chats, _userService.Me.UsrNo);
         }
 
         private async Task ReloadChatList()

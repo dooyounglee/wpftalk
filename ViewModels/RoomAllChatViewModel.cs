@@ -54,13 +54,7 @@ namespace talk2.ViewModels
 
             // 채팅목록 뿌리기
             var chats = await _chatService.SelectChats(_roomNo, Page);
-            chats = chats.Reverse<Chat>().ToList();
-            Chats.Clear();
-            foreach (var chat in chats)
-            {
-                ChatUtil.Chats(chat, _userService.Me.UsrNo);
-                Chats.Add(chat);
-            }
+            ChatUtil.Chats(Chats, chats, _userService.Me.UsrNo);
         }
 
         #region Command
