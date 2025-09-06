@@ -54,25 +54,11 @@ namespace talk2.ViewModels
 
             // 채팅목록 뿌리기
             var chats = await _chatService.SelectChats(_roomNo, Page);
-            chats.Reverse<Chat>();
+            chats = chats.Reverse<Chat>().ToList();
             Chats.Clear();
             foreach (var chat in chats)
             {
-                chat.IsMine = chat.UsrNo == _userService.Me.UsrNo;
-                chat.UsrNm = UserUtil.getUsrNm(chat.UsrNo);
-                switch (chat.ChatFg)
-                {
-                    case "A": /*chat.Align = chat.UsrNo == _userService.Me.UsrNo ? "Right" : "Left";*/ break;
-                    case "B":
-                    case "C": /*chat.Align = "Center";*/ break;
-                    case "D": /*chat.Align = "Center";*/ break;
-                    case "E":
-                        // chat.Align = chat.UsrNo == _userService.Me.UsrNo ? "Right" : "Left";
-                        chat.Image = ImageUtil.IsImage(chat.chat) ? new BitmapImage(ImageUtil.getImage(chat.FileNo)) : null;
-                        chat.isImage = ImageUtil.IsImage(chat.chat) ? "Visible" : "Collapsed";
-                        chat.isFile = "Visible";
-                        break;
-                }
+                ChatUtil.Chats(chat, _userService.Me.UsrNo);
                 Chats.Add(chat);
             }
         }
