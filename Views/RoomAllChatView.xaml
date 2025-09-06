@@ -6,6 +6,15 @@
         xmlns:local="clr-namespace:talk2.Views"
         mc:Ignorable="d"
         Title="RoomAllChatView" Height="450" Width="300">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Templates/ChatsTemplate.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
@@ -31,13 +40,7 @@
 
         <Grid Grid.Row="2">
             <ScrollViewer x:Name="scroll">
-                <ItemsControl ItemsSource="{Binding Chats}" >
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <TextBox Text="{Binding Path=Layout, Mode=OneWay}" HorizontalAlignment="{Binding Align}" TextWrapping="Wrap" IsReadOnly="True" MaxWidth="160" Background="#FFFFA0A0" SelectionBrush="White" SelectionTextBrush="{x:Null}" BorderBrush="White" Padding="5,5,5,5" />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                <ItemsControl ItemsSource="{Binding Chats}" ItemTemplateSelector="{StaticResource MessageTemplateSelector}"/>
             </ScrollViewer>
         </Grid>
     </Grid>
