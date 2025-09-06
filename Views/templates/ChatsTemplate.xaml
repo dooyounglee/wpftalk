@@ -33,8 +33,8 @@
                 </StackPanel>
             </StackPanel>
             <StackPanel>
-                <Image Source="{Binding Image}" HorizontalAlignment="{Binding Align}" Visibility="{Binding isImage}" MaxWidth="160" />
-                <Button Content="저장" HorizontalAlignment="{Binding Align}" MaxWidth="160" Background="AntiqueWhite" BorderBrush="White" Padding="5,5,5,5" Visibility="{Binding isFile}" Command="{Binding DataContext.DownloadCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" >
+                <Image Source="{Binding Image}" HorizontalAlignment="Left" Visibility="{Binding isImage}" MaxWidth="160" />
+                <Button Content="저장" HorizontalAlignment="Left" MaxWidth="160" Background="AntiqueWhite" BorderBrush="White" Padding="5,5,5,5" Visibility="{Binding isFile}" Command="{Binding DataContext.DownloadCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" >
                     <Button.CommandParameter>
                         <Binding Path="." />
                     </Button.CommandParameter>
@@ -59,8 +59,8 @@
                 </Border>
             </StackPanel>
             <StackPanel>
-                <Image Source="{Binding Image}" HorizontalAlignment="{Binding Align}" Visibility="{Binding isImage}" MaxWidth="160" />
-                <Button Content="저장" HorizontalAlignment="{Binding Align}" MaxWidth="160" Background="AntiqueWhite" BorderBrush="White" Padding="5,5,5,5" Visibility="{Binding isFile}" Command="{Binding DataContext.DownloadCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" >
+                <Image Source="{Binding Image}" HorizontalAlignment="Right" Visibility="{Binding isImage}" MaxWidth="160" />
+                <Button Content="저장" HorizontalAlignment="Right" MaxWidth="160" Background="AntiqueWhite" BorderBrush="White" Padding="5,5,5,5" Visibility="{Binding isFile}" Command="{Binding DataContext.DownloadCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" >
                     <Button.CommandParameter>
                         <Binding Path="." />
                     </Button.CommandParameter>

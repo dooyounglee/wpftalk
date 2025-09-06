@@ -126,13 +126,13 @@ namespace talk2.ViewModels
                 switch (chat.ChatFg)
                 {
                     case "A":
-                        chat.Align = chat.IsMine ? "Right" : "Left";
+                        // chat.Align = chat.IsMine ? "Right" : "Left";
                         break;
                     case "B":
                     case "C":
-                    case "D": chat.Align = "Center"; break;
+                    case "D": /*chat.Align = "Center";*/ break;
                     case "E": 
-                        chat.Align = chat.IsMine ? "Right" : "Left";
+                        // chat.Align = chat.IsMine ? "Right" : "Left";
                         chat.Image = ImageUtil.IsImage(chat.chat) ? new BitmapImage(ImageUtil.getImage(chat.FileNo)) : null;
                         chat.isImage = ImageUtil.IsImage(chat.chat) ? "Visible" : "Collapsed";
                         chat.isFile = "Visible";

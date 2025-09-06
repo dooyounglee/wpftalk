@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using talk2.Commands;
 using talk2.Models;
 using talk2.Services;
+using talk2.Util;
 using talkLib.Util;
 
 namespace talk2.ViewModels
@@ -57,15 +58,17 @@ namespace talk2.ViewModels
             Chats.Clear();
             foreach (var chat in chats)
             {
+                chat.IsMine = chat.UsrNo == _userService.Me.UsrNo;
+                chat.UsrNm = UserUtil.getUsrNm(chat.UsrNo);
                 switch (chat.ChatFg)
                 {
-                    case "A": chat.Align = chat.UsrNo == _userService.Me.UsrNo ? "Right" : "Left"; break;
+                    case "A": /*chat.Align = chat.UsrNo == _userService.Me.UsrNo ? "Right" : "Left";*/ break;
                     case "B":
-                    case "C": chat.Align = "Center"; break;
-                    case "D": chat.Align = "Center"; break;
+                    case "C": /*chat.Align = "Center";*/ break;
+                    case "D": /*chat.Align = "Center";*/ break;
                     case "E":
-                        chat.Align = chat.UsrNo == _userService.Me.UsrNo ? "Right" : "Left";
-                        chat.Image = ImageUtil.IsImage(chat.chat) ? new BitmapImage(new Uri("http://localhost:8686/file/" + chat.FileNo)) : null;
+                        // chat.Align = chat.UsrNo == _userService.Me.UsrNo ? "Right" : "Left";
+                        chat.Image = ImageUtil.IsImage(chat.chat) ? new BitmapImage(ImageUtil.getImage(chat.FileNo)) : null;
                         chat.isImage = ImageUtil.IsImage(chat.chat) ? "Visible" : "Collapsed";
                         chat.isFile = "Visible";
                         break;
