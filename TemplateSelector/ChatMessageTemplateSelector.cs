@@ -14,13 +14,20 @@ namespace talk2.Views
         public DataTemplate MyMessageTemplate { get; set; }
         public DataTemplate OtherMessageTemplate { get; set; }
 
+        public DataTemplate NoticeMessageTemplate { get; set; }
+
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
             var message = item as Chat;
             if (message == null)
                 return base.SelectTemplate(item, container);
-
-            return message.IsMine ? MyMessageTemplate : OtherMessageTemplate;
+            switch (message.ChatFg)
+            {
+                case "A":
+                case "E": return message.IsMine ? MyMessageTemplate : OtherMessageTemplate;
+                default: return NoticeMessageTemplate;
+            }
+            
         }
     }
 
