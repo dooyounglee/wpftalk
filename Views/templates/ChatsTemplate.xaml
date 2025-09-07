@@ -12,8 +12,11 @@
             ClipToBounds="True"
             HorizontalAlignment="Center"
             VerticalAlignment="Center">
+                    <Border.Clip>
+                        <EllipseGeometry Center="20,20" RadiusX="20" RadiusY="20"/>
+                    </Border.Clip>
                     <Image Source="{Binding ProfileImage}"
-               Stretch="Uniform"
+               Stretch="UniformToFill"
                HorizontalAlignment="Center"
                VerticalAlignment="Center"/>
                 </Border>
