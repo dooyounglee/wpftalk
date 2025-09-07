@@ -48,5 +48,7 @@ namespace talkLib.Util
 
             return _default;
         }
+
+        public static BitmapImage getDefault() => getDefaultImage();
     }
 }
