@@ -1,20 +1,25 @@
-﻿using OTILib.Util;
+﻿using CommunityToolkit.Mvvm.Input;
+using Microsoft.Win32;
+using OTILib.Util;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using talk2.Commands;
 using talk2.Models;
 using talk2.Services;
 using talk2.Views;
+using talkLib.Util;
 
 namespace talk2.ViewModels
 {
-    public class NewUserViewModel : INotifyPropertyChanged
+    public partial class NewUserViewModel : INotifyPropertyChanged
     {
         private readonly IUserService _userService;
         private readonly Window _userInfoView;
@@ -33,6 +38,17 @@ namespace talk2.ViewModels
             }
         }
 
+        public BitmapImage _profileImage;
+        public BitmapImage ProfileImage
+        {
+            get => _profileImage;
+            set
+            {
+                _profileImage = value;
+                OnPropertyChanged(nameof(ProfileImage));
+            }
+        }
+
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {
@@ -48,22 +64,51 @@ namespace talk2.ViewModels
         public async void InitAsync(int usrNo)
         {
             He = await _userService.getUser(usrNo);
+            ProfileImage = He.ProfileNo > 0 ? new BitmapImage(ImageUtil.getImage(He.ProfileNo)) : ProfileUtil.getDefault();
         }
 
-        public ICommand SaveCommand
+        [RelayCommand]
+        private async Task Save()
         {
-            get => new RelayCommand<object>((_) =>
-            {
-                He.Password1 = "1";
-                _userService.save(He);
-            });
+            He.Password1 = "1";
+            _userService.save(He);
         }
-        public ICommand CloseCommand
+        [RelayCommand]
+        private async Task Close()
         {
-            get => new RelayCommand<object>((_) =>
+            _userInfoView.Close();
+        }
+
+        private string _profilePath;
+        [RelayCommand]
+        private async Task LoadProfile()
+        {
+            var dialog = new OpenFileDialog();
+            dialog.Filter = "Image files (*.*)|*.png|*.bmp|*.jpeg|*.gif|*.tiff";
+            if (dialog.ShowDialog() == true)
             {
-                _userInfoView.Close();
-            });
+                _profilePath = dialog.FileName;
+                ProfileImage = new BitmapImage(new Uri(dialog.FileName));
+            }
+        }
+
+        [RelayCommand]
+        private async Task SaveProfile()
+        {
+            FileInfo fi = new FileInfo(_profilePath);
+            Models.File f = new Models.File()
+            {
+                OriginName = fi.Name,
+                Buffer = System.IO.File.ReadAllBytes(_profilePath),
+            };
+            _userService.saveProfile(f);
+        }
+
+        [RelayCommand]
+        private async Task DeleteProfile()
+        {
+            _userService.deleteProfile();
+            ProfileImage = ProfileUtil.getDefault();
         }
     }
 }

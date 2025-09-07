@@ -14,7 +14,7 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="150"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
@@ -30,6 +30,29 @@
         <Label Grid.Row="3" Grid.Column="0" Content="연락처" />   <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding He.Phone}" IsReadOnly="{Binding IsNotAdmin}"/>
         <Label Grid.Row="4" Grid.Column="0" Content="직급" />     <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding He.Level}" IsReadOnly="{Binding IsNotAdmin}"/>
         <Label Grid.Row="5" Grid.Column="0" Content="내선번호" /> <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding He.Tel}" IsReadOnly="{Binding IsNotAdmin}"/>
+        <Label Grid.Row="5" Grid.Column="0" Content="내선번호" /> <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding He.Tel}" IsReadOnly="{Binding IsNotAdmin}"/>
+        <Label Grid.Row="6" Grid.Column="0" Content="프사" />
+        
+        <Grid Grid.Row="6" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            
+            <Border Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" BorderBrush="Black" BorderThickness="1">
+                <Image Source="{Binding ProfileImage}" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+            <Button Grid.Row="0" Grid.Column="1" Content="불러&#x0a;오기" Command="{Binding LoadProfileCommand}"/>
+            <Button Grid.Row="1" Grid.Column="1" Content="저장" Command="{Binding SaveProfileCommand}" />
+            <Button Grid.Row="2" Grid.Column="1" Content="삭제" Command="{Binding DeleteProfileCommand}" />
+        </Grid>
+
 
         <Button Grid.Row="8" Grid.Column="0" Content="저장" Command="{Binding SaveCommand}" Visibility="{Binding Visibility_save}"/>
         <Button Grid.Row="8" Grid.Column="1" Content="닫기" Command="{Binding CloseCommand}" />

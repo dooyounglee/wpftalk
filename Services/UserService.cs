@@ -20,6 +20,8 @@ namespace talk2.Services
         public User Me { get; }
         public void logout();
         public void save(User user);
+        public void saveProfile(File file);
+        public void deleteProfile();
     }
 
     public class UserService : IUserService
@@ -69,6 +71,20 @@ namespace talk2.Services
             // _userRepository.save(user);
             await HttpUtil.Post("/user/create", user);
             // return JsonUtil.StringToObject<User>(responseBody);
+        }
+
+        public async void saveProfile(File file)
+        {
+            var dto = new
+            {
+                usrNo = Me.UsrNo
+            };
+            await HttpUtil.Post($"/user/profile", dto, file.Buffer, file.OriginName);
+        }
+
+        public async void deleteProfile()
+        {
+            await HttpUtil.Delete("/user/profile", new { usrNo = Me.UsrNo });
         }
     }
 }
