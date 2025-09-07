@@ -9,7 +9,7 @@ namespace talk2.Util
 {
     class UserUtil
     {
-        private static Dictionary<int, User> _cache = new Dictionary<int, User>();
+        private static readonly Dictionary<int, User> _cache = new Dictionary<int, User>();
 
         public static void setUsers(List<User> users)
         {
@@ -22,5 +22,7 @@ namespace talk2.Util
         public static User getUser(int usrNo) => _cache.GetValueOrDefault(usrNo);
 
         public static string getUsrNm(int usrNo) => getUser(usrNo).UsrNm;
+
+        public static void Clear() => _cache.Clear();
     }
 }

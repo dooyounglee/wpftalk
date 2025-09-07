@@ -30,5 +30,7 @@ namespace talkLib.Util
                 return null;
             }
         }
+
+        public static void Clear() => _cache.Clear();
     }
 }
