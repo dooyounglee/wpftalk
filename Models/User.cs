@@ -29,6 +29,8 @@ namespace talk2.Models
         public string Ip { get; set; }
         [JsonPropertyName("port")]
         public int Port { get; set; }
+        [JsonPropertyName("profileNo")]
+        public int ProfileNo { get; set; }
         public ConnState ConnState { get; set; }
         public Boolean IsAdmin { get; set; } = false;
         public string Layout
