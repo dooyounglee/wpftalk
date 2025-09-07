@@ -10,6 +10,7 @@ CREATE TABLE talk."user" (
 	div_no int8 NULL,
 	usr_id varchar NULL,
 	usr_pw varchar NULL,
+	profile_no int8 NULL,
 	CONSTRAINT user_pk PRIMARY KEY (usr_no)
 );
 
