@@ -12,7 +12,7 @@ namespace talk2.Util
 {
     class ChatUtil
     {
-        public static void Chats(ObservableCollection<Chat> Chats, List<Chat> chats, int meNo)
+        public static async void Chats(ObservableCollection<Chat> Chats, List<Chat> chats, int meNo)
         {
             chats = chats.Reverse<Chat>().ToList();
             Chats.Clear();
@@ -20,6 +20,7 @@ namespace talk2.Util
             {
                 chat.IsMine = chat.UsrNo == meNo;
                 chat.UsrNm = UserUtil.getUsrNm(chat.UsrNo);
+                chat.ProfileImage = await ProfileUtil.GetProfileImageAsync(chat.UsrNo);
                 switch (chat.ChatFg)
                 {
                     case "A": /*chat.Align = chat.UsrNo == _userService.Me.UsrNo ? "Right" : "Left";*/ break;
