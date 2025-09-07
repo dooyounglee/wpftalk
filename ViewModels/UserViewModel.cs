@@ -111,6 +111,9 @@ namespace talk2.ViewModels
             _clientHandler = null;
             _userList.Clear();
             _mainViewModel.changeViewModel(NaviType.LoginView);
+
+            ProfileUtil.Clear();
+            UserUtil.Clear();
         }
 
         private void GoToCreateUser(object _)
