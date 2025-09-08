@@ -2,36 +2,46 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:talk2.Views">
 
+    <Style x:Key="ChatStyle" TargetType="TextBox">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="IsReadOnly" Value="True"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="MaxWidth" Value="200"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <!--<Setter Property="Focusable" Value="False"/>-->
+        <!--<Setter Property="Padding" Value="0"/>-->
+        <!--<Setter Property="Margin" Value="0"/>-->
+    </Style>
+    
     <!-- 상대방 메시지 템플릿 -->
     <DataTemplate x:Key="OtherMessageTemplate">
         <StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,0,4,4">
                 <Border Width="40" Height="40"
-            CornerRadius="20"
-            Background="White"
-            ClipToBounds="True"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center">
+                    CornerRadius="20"
+                    Background="White"
+                    ClipToBounds="True"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
                     <Border.Clip>
                         <EllipseGeometry Center="20,20" RadiusX="20" RadiusY="20"/>
                     </Border.Clip>
                     <Image Source="{Binding ProfileImage}"
-               Stretch="UniformToFill"
-               HorizontalAlignment="Center"
-               VerticalAlignment="Center"/>
+                        Stretch="UniformToFill"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"/>
                 </Border>
                 <StackPanel>
                     <TextBlock Text="{Binding UsrNm}"
-            FontWeight="Bold"
-            Foreground="Gray"
-            Margin="0,0,0,2"/>
+                        FontWeight="Bold"
+                        Foreground="Gray"
+                        Margin="0,0,0,2"/>
                     <Border Background="#FFE0E0E0"
-        CornerRadius="10"
-        Padding="10"
-        MaxWidth="300">
-                        <TextBlock Text="{Binding chat}"
-                TextWrapping="Wrap"
-                Foreground="Black"/>
+                        CornerRadius="10"
+                        Padding="10"
+                        MaxWidth="200">
+                        <TextBox Text="{Binding chat}" Style="{StaticResource ChatStyle}"/>
                     </Border>
                 </StackPanel>
             </StackPanel>
@@ -50,15 +60,13 @@
     <DataTemplate x:Key="MyMessageTemplate">
         <StackPanel>
             <StackPanel Orientation="Horizontal"
-        HorizontalAlignment="Right"
-        Margin="0,0,4,4">
+                HorizontalAlignment="Right"
+                Margin="0,0,4,4">
                 <Border Background="#FFDCF8C6"
-    CornerRadius="10"
-    Padding="10"
-    MaxWidth="300">
-                    <TextBlock Text="{Binding chat}"
-            TextWrapping="Wrap"
-            Foreground="Black"/>
+                    CornerRadius="10"
+                    Padding="10"
+                    MaxWidth="200">
+                    <TextBox Text="{Binding chat}" Style="{StaticResource ChatStyle}"/>
                 </Border>
             </StackPanel>
             <StackPanel>
@@ -76,15 +84,13 @@
     <DataTemplate x:Key="NoticeMessageTemplate">
         <StackPanel>
             <StackPanel Orientation="Horizontal"
-    HorizontalAlignment="Center"
-    Margin="0,0,4,4">
+                HorizontalAlignment="Center"
+                Margin="0,0,4,4">
                 <Border Background="#FFDCF8C6"
-CornerRadius="10"
-Padding="10"
-MaxWidth="300">
-                    <TextBlock Text="{Binding chat}"
-        TextWrapping="Wrap"
-        Foreground="Black"/>
+                    CornerRadius="10"
+                    Padding="10"
+                    MaxWidth="200">
+                    <TextBox Text="{Binding chat}" Style="{StaticResource ChatStyle}"/>
                 </Border>
             </StackPanel>
         </StackPanel>
