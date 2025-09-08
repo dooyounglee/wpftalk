@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using OTILib.Util;
 using System;
@@ -19,7 +20,7 @@ using talkLib.Util;
 
 namespace talk2.ViewModels
 {
-    public partial class NewUserViewModel : INotifyPropertyChanged
+    public partial class NewUserViewModel : ObservableObject
     {
         private readonly IUserService _userService;
         private readonly Window _userInfoView;
@@ -27,33 +28,14 @@ namespace talk2.ViewModels
         public string Visibility_save { get => _userService.Me.IsAdmin ? "Visible" : "Hidden"; }
         public Boolean IsNotAdmin { get => !_userService.Me.IsAdmin; }
 
-        private User _he = new User();
-        public User He
-        {
-            get => _he;
-            set
-            {
-                _he = value;
-                OnPropertyChanged(nameof(He));
-            }
-        }
+        [ObservableProperty]
+        private User he = new User();
 
-        public BitmapImage _profileImage;
-        public BitmapImage ProfileImage
-        {
-            get => _profileImage;
-            set
-            {
-                _profileImage = value;
-                OnPropertyChanged(nameof(ProfileImage));
-            }
-        }
+        [ObservableProperty]
+        private BitmapImage profileImage;
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        [ObservableProperty]
+        private string isMe;
 
         public NewUserViewModel(Window userInfoView, IUserService userService)
         {
@@ -65,6 +47,7 @@ namespace talk2.ViewModels
         {
             He = await _userService.getUser(usrNo);
             ProfileImage = He.ProfileNo > 0 ? new BitmapImage(ImageUtil.getImage(He.ProfileNo)) : ProfileUtil.getDefault();
+            IsMe = usrNo == _userService.Me.UsrNo ? "Visible" : "Hidden";
         }
 
         [RelayCommand]
