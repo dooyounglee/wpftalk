@@ -86,7 +86,7 @@
             <StackPanel Orientation="Horizontal"
                 HorizontalAlignment="Center"
                 Margin="0,0,4,4">
-                <Border Background="#FFDCF8C6"
+                <Border Background="#FFD0EBFF"
                     CornerRadius="10"
                     Padding="10"
                     MaxWidth="200">
