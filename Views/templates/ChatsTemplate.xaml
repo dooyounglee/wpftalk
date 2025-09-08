@@ -37,21 +37,29 @@
                         FontWeight="Bold"
                         Foreground="Gray"
                         Margin="0,0,0,2"/>
-                    <Border Background="#FFE0E0E0"
-                        CornerRadius="10"
-                        Padding="10"
-                        MaxWidth="200">
-                        <TextBox Text="{Binding chat}" Style="{StaticResource ChatStyle}"/>
-                    </Border>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Border Grid.Column="0"
+                            Background="#FFE0E0E0"
+                            CornerRadius="10"
+                            Padding="10"
+                            MaxWidth="170">
+                            <TextBox Text="{Binding chat}" Style="{StaticResource ChatStyle}"/>
+                        </Border>
+                        <Button Grid.Column="1" Content="저장" HorizontalAlignment="Left" MaxWidth="160" Background="AntiqueWhite" BorderBrush="White" Padding="5,5,5,5" Visibility="{Binding isFile}" Command="{Binding DataContext.DownloadCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" >
+                            <Button.CommandParameter>
+                                <Binding Path="." />
+                            </Button.CommandParameter>
+                        </Button>
+                    </Grid>
                 </StackPanel>
             </StackPanel>
             <StackPanel>
                 <Image Source="{Binding Image}" HorizontalAlignment="Left" Visibility="{Binding isImage}" MaxWidth="160" />
-                <Button Content="저장" HorizontalAlignment="Left" MaxWidth="160" Background="AntiqueWhite" BorderBrush="White" Padding="5,5,5,5" Visibility="{Binding isFile}" Command="{Binding DataContext.DownloadCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" >
-                    <Button.CommandParameter>
-                        <Binding Path="." />
-                    </Button.CommandParameter>
-                </Button>
             </StackPanel>
         </StackPanel>
     </DataTemplate>
@@ -65,17 +73,17 @@
                 <Border Background="#FFDCF8C6"
                     CornerRadius="10"
                     Padding="10"
-                    MaxWidth="200">
+                    MaxWidth="170">
                     <TextBox Text="{Binding chat}" Style="{StaticResource ChatStyle}"/>
                 </Border>
-            </StackPanel>
-            <StackPanel>
-                <Image Source="{Binding Image}" HorizontalAlignment="Right" Visibility="{Binding isImage}" MaxWidth="160" />
                 <Button Content="저장" HorizontalAlignment="Right" MaxWidth="160" Background="AntiqueWhite" BorderBrush="White" Padding="5,5,5,5" Visibility="{Binding isFile}" Command="{Binding DataContext.DownloadCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" >
                     <Button.CommandParameter>
                         <Binding Path="." />
                     </Button.CommandParameter>
                 </Button>
+            </StackPanel>
+            <StackPanel>
+                <Image Source="{Binding Image}" HorizontalAlignment="Right" Visibility="{Binding isImage}" MaxWidth="160" />
             </StackPanel>
         </StackPanel>
     </DataTemplate>
