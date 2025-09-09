@@ -84,7 +84,11 @@ namespace talk2.ViewModels
                 OriginName = fi.Name,
                 Buffer = System.IO.File.ReadAllBytes(_profilePath),
             };
-            _userService.saveProfile(f);
+            await _userService.saveProfile(f);
+
+            // 프사 바꾼거 전파
+            var UserViewModel = (UserViewModel)App.Current.Services.GetService(typeof(UserViewModel))!;
+            UserViewModel.SendReloadProfile();
         }
 
         [RelayCommand]
@@ -92,6 +96,10 @@ namespace talk2.ViewModels
         {
             _userService.deleteProfile();
             ProfileImage = ProfileUtil.getDefault();
+
+            // 프사 바꾼거 전파
+            var UserViewModel = (UserViewModel)App.Current.Services.GetService(typeof(UserViewModel))!;
+            UserViewModel.SendReloadProfile();
         }
     }
 }

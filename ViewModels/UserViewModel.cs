@@ -168,7 +168,18 @@ namespace talk2.ViewModels
             set => SetProperty(ref _msg, value);
 
         }
+
+        public void SendReloadProfile()
+        {
+            _clientHandler?.Send(new ChatHub
+            {
+                RoomId = 0,
+                UsrNo = _userService.Me.UsrNo,
+                State = ChatState.ProfileReload,
+            });
+        }
         
+        #region socket
         private async void Connect()
         {
             await _client.ConnectAsync(new ConnectionDetails
@@ -178,7 +189,6 @@ namespace talk2.ViewModels
             });
         }
 
-        #region socket
         private void Connected(object? sender, OTILib.Events.ChatEventArgs e)
         {
             _clientHandler = e.ClientHandler;
@@ -218,7 +228,7 @@ namespace talk2.ViewModels
             return _clientHandler;
         }
 
-        private void Received(object? sender, OTILib.Events.ChatEventArgs e)
+        private async void Received(object? sender, OTILib.Events.ChatEventArgs e)
         {
             ChatHub hub = e.Hub;
             // string message = hub.State switch
@@ -281,6 +291,11 @@ namespace talk2.ViewModels
                     ChatHub data = ChatHub.Parse(hub.Data1);
                     ChatViewModel chatViewModel = (ChatViewModel)App.Current.Services.GetService(typeof(ChatViewModel))!;
                     chatViewModel.Reload(data.RoomId, data.UsrNo, data.Message);
+                    break;
+                case ChatState.ProfileReload: // 서버 전파 받고 프로필사진 cache 최신화
+                    var users = await _userService.getUserList();
+                    UserUtil.setUsers(users);
+                    ProfileUtil.clearProfileImage(hub.UsrNo);
                     break;
                 default:
                     // User me = _loginService.UserInfo;
