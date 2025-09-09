@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OTILib.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,7 @@ namespace talk2.Util
 
         public static void setUsers(List<User> users)
         {
+            Clear();
             foreach (var user in users)
             {
                 _cache.Add(user.UsrNo, user);
