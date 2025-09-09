@@ -50,5 +50,10 @@ namespace talkLib.Util
         }
 
         public static BitmapImage getDefault() => getDefaultImage();
+
+        internal static void clearProfileImage(int usrNo)
+        {
+            _cache.Remove(usrNo);
+        }
     }
 }
