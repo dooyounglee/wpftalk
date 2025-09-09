@@ -35,14 +35,13 @@ namespace talk2.ViewModels
             GotoSettingCommand = new RelayCommand<object>(GotoSetting);
             ChatCommand = new RelayCommand<int>(Chat);
             ToCreateRoom = new RelayCommand<object>(CreateRoom);
-
-            Init();
         }
 
-        private async void Init()
+        public async void InitAsync()
         {
             Debug.WriteLine("chat init");
             var chats = await _chatService.getChatList(_userService.Me.UsrNo);
+            ChatList.Clear();
             foreach (var chat in chats)
             {
                 ChatList.Add(chat);

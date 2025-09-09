@@ -38,6 +38,8 @@ namespace talk2.ViewModels
             _mainViewModel.changeViewModel(NaviType.UserView);
             var CurrentViewModel = (UserViewModel)App.Current.Services.GetService(typeof(UserViewModel))!;
             ((UserViewModel)CurrentViewModel).InitAsync();
+            var ChatViewModel = (ChatViewModel)App.Current.Services.GetService(typeof(ChatViewModel))!;
+            ((ChatViewModel)ChatViewModel).InitAsync();
         }
 
         private string _id = "";
