@@ -20,7 +20,7 @@ namespace talk2.Services
         public User Me { get; }
         public void logout();
         public void save(User user);
-        public void saveProfile(File file);
+        public Task saveProfile(File file);
         public void deleteProfile();
     }
 
@@ -73,7 +73,7 @@ namespace talk2.Services
             // return JsonUtil.StringToObject<User>(responseBody);
         }
 
-        public async void saveProfile(File file)
+        public async Task saveProfile(File file)
         {
             var dto = new
             {
