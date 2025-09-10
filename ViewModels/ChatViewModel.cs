@@ -73,7 +73,7 @@ namespace talk2.ViewModels
                         removed.CntUnread++;
                     }
                     removed.Chat = msg;
-                    removed.RgtDtm = DateUtil.now("yyyyMMddHHmm");
+                    removed.RgtDtm = DateUtil.now("yyyyMMddHHmmss");
                     ChatList.Insert(0, removed);
                     break;
                 }
