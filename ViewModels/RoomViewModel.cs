@@ -333,7 +333,7 @@ namespace talk2.ViewModels
             Msg = "";
         }
 
-        private void Received(object? sender, OTILib.Events.ChatEventArgs e)
+        private async void Received(object? sender, OTILib.Events.ChatEventArgs e)
         {
             ChatHub hub = e.Hub;
             // string message = hub.State switch
@@ -352,7 +352,6 @@ namespace talk2.ViewModels
                     {
                         UsrNo = hub.UsrNo,
                         chat = hub.Message,
-                        Align = "Center",
                     });
                     break;
                 case ChatState.Leave:
@@ -360,7 +359,6 @@ namespace talk2.ViewModels
                     {
                         UsrNo = hub.UsrNo,
                         chat = hub.Message,
-                        Align = "Center",
                     });
                     break;
                 case ChatState.File:
@@ -369,7 +367,10 @@ namespace talk2.ViewModels
                     {
                         UsrNo = hub.UsrNo,
                         chat = hub.Message,
-                        Align = hub.UsrNo == _userService.Me.UsrNo ? "Right" : "Left",
+                        IsMine = hub.UsrNo == _userService.Me.UsrNo,
+                        UsrNm = UserUtil.getUsrNm(hub.UsrNo),
+                        ProfileImage = await ProfileUtil.GetProfileImageAsync(hub.UsrNo),
+                        ChatFg = "E",
                         FileBuffer = hub.Data2,
                         isFile = hub.Data2 is not null ? "Visible" : "Collapsed",
                         isImage = ImageUtil.IsImage(hub.Data2) ? "Visible" : "Collapsed",
@@ -382,7 +383,10 @@ namespace talk2.ViewModels
                     {
                         UsrNo = hub.UsrNo,
                         chat = hub.Message,
-                        Align = hub.UsrNo == _userService.Me.UsrNo ? "Right" : "Left",
+                        IsMine = hub.UsrNo == _userService.Me.UsrNo,
+                        UsrNm = UserUtil.getUsrNm(hub.UsrNo),
+                        ProfileImage = await ProfileUtil.GetProfileImageAsync(hub.UsrNo),
+                        ChatFg = "A",
                     });
 
                     // 일단 무조건 깜빡이도록 하지만, 활성화 상태면 안깜빡일꺼고, 비활성화 상태면 깜빡일꺼임
