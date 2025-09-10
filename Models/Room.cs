@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using System.Windows;
+using talkLib.Util;
 
 namespace talk2.Models
 {
@@ -19,9 +21,10 @@ namespace talk2.Models
         public string Chat { get; set; }
         [JsonPropertyName("rgtDtm")]
         public string RgtDtm { get; set; }
+        public string Layout_Date { get => DateUtil.TimeWhenToday(RgtDtm); }
         [JsonPropertyName("cntUnread")]
         public int CntUnread { get; set; }
-        public string ColorUnreadChat { get => CntUnread > 0 ? "skyblue" : "Black"; }
+        public Visibility HasUnreadCnt { get => CntUnread > 0 ? Visibility.Visible : Visibility.Hidden; }
 
         public string Layout
         {

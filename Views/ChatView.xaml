@@ -6,6 +6,14 @@
              xmlns:local="clr-namespace:talk2.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/talk2;component/Views/Templates/RoomsTemplate.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
@@ -27,8 +35,8 @@
         </Grid>
         <Grid Grid.Row="2">
             <ScrollViewer x:Name="scroll">
-                <ItemsControl ItemsSource="{Binding ChatList}">
-                    <ItemsControl.ItemTemplate>
+                <ItemsControl ItemsSource="{Binding ChatList}" ItemTemplate="{StaticResource ItemTemplate}" />
+                <!--<ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Layout}">
                                 <TextBlock.Style>
@@ -48,8 +56,8 @@
                                 </TextBlock.InputBindings>
                             </TextBlock>
                         </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                    </ItemsControl.ItemTemplate>-->
+
             </ScrollViewer>
         </Grid>
         <Grid Grid.Row="3">
