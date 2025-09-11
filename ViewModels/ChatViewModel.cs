@@ -58,7 +58,7 @@ namespace talk2.ViewModels
             // ChatList = await _chatService.getChatList(_userService.Me.UsrNo);
         }
 
-        public async Task Reload(int roomNo, int usrNo, string msg)
+        public async Task Reload(int roomNo, string msg)
         {
             for (int i=0; i < ChatList.Count; i++)
             {
@@ -78,6 +78,17 @@ namespace talk2.ViewModels
                     break;
                 }
             }
+        }
+        public async Task Reload_Create(int roomNo, string title, string msg)
+        {
+            ChatList.Insert(0, new Room()
+            {
+                RoomNo = roomNo,
+                Title = title,
+                CntUnread = 1,
+                Chat = msg,
+                RgtDtm = DateUtil.now("yyyyMMddHHmmss"),
+            });
         }
 
         private void GotoUser(object _)
@@ -120,10 +131,13 @@ namespace talk2.ViewModels
                     var chat = ChatList[i];
                     if (chat.RoomNo == roomNo)
                     {
-                        Room removed = ChatList[i];
-                        ChatList.RemoveAt(i);
-                        removed.CntUnread = 0;
-                        ChatList.Insert(0, removed);
+                        if (chat.CntUnread > 0)
+                        {
+                            Room removed = ChatList[i];
+                            ChatList.RemoveAt(i);
+                            removed.CntUnread = 0;
+                            ChatList.Insert(i, removed);
+                        }
                         break;
                     }
                 }
@@ -183,14 +197,16 @@ namespace talk2.ViewModels
             }
 
             // 새로운방번호
-            var newRoomNo = await _chatService.CreateRoom(userList);
-            if (newRoomNo > 0)
+            var newRoom = await _chatService.CreateRoom(userList);
+            if (newRoom.RoomNo > 0)
             {
                 var _clientHandler = ((UserViewModel)App.Current.Services.GetService(typeof(UserViewModel))!).getClientHandler();
                 _clientHandler?.Send(new ChatHub
                 {
-                    RoomId = 0,
-                    State = ChatState.ChatReload,
+                    RoomId = newRoom.RoomNo,
+                    Message = newRoom.Chat,
+                    Title = newRoom.Title,
+                    State = ChatState.Create,
                 });
             }
 
