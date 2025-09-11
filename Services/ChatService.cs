@@ -20,7 +20,7 @@ namespace talk2.Services
         public Task<List<Chat>> SelectChats(int roomNo);
         public Task<List<Chat>> SelectChats(int roomNo, int page);
         public Task<int> CountChats(int roomNo);
-        public Task<int> CreateRoom(List<User> userList);
+        public Task<Room> CreateRoom(List<User> userList);
         [Obsolete]  public string Invite(int roomNo, List<User> userList);
         public Task<string> Invite(int roomNo, List<int> userList, string invitedUsers);
         public Task<string> Leave(int roomNo, int usrNo);
@@ -114,7 +114,7 @@ namespace talk2.Services
             return JsonUtil.StringToObject<int>(responseBody);
         }
 
-        public async Task<int> CreateRoom(List<User> userList)
+        public async Task<Room> CreateRoom(List<User> userList)
         {
             // int newRoomNo = _chatRepository.GetRoomNo();
             // 
@@ -153,7 +153,7 @@ namespace talk2.Services
             // 
             // return newRoomNo;
             string responseBody = await HttpUtil.Post($"/room/create", new { userList=userList, me= _userService.Me });
-            return JsonUtil.StringToObject<int>(responseBody);
+            return JsonUtil.StringToObject<Room>(responseBody);
         }
 
         public string Invite(int roomNo, List<User> userList)
