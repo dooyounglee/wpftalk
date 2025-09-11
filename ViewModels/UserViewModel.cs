@@ -287,12 +287,31 @@ namespace talk2.ViewModels
                         Align = "Center",
                     });
                     break; */
-                case ChatState.ChatReload: // 서버 전파 받고 채팅목록 최신화
-                    ChatHub data = ChatHub.Parse(hub.Data1);
+                case ChatState.Invite:
+                // _chats.Add(new Chat()
+                // {
+                //     UsrNo = 0,
+                //     chat = $"{hub.inviter}님이 {hub.invitee}를 초대했습니다.",
+                //     Align = "Center",
+                // });
+                // break;
+                case ChatState.Leave:
+                case ChatState.File:
+                case ChatState.Chat: // 서버 전파 받고 채팅목록 최신화
+                    ChatHub Data1 = ChatHub.Parse(hub.Data1);
+                    // ChatViewModel chatViewModel = (ChatViewModel)App.Current.Services.GetService(typeof(ChatViewModel))!;
+                    // chatViewModel.Reload(data.RoomId, data.Message);
                     ChatViewModel chatViewModel = (ChatViewModel)App.Current.Services.GetService(typeof(ChatViewModel))!;
-                    chatViewModel.Reload(data.RoomId, data.UsrNo, data.Message);
+                    chatViewModel.Reload(Data1.RoomId, Data1.Message);
                     break;
-                case ChatState.ProfileReload: // 서버 전파 받고 프로필사진 cache 최신화
+                case ChatState.Create:
+                    Data1 = ChatHub.Parse(hub.Data1);
+                    // ChatViewModel chatViewModel = (ChatViewModel)App.Current.Services.GetService(typeof(ChatViewModel))!;
+                    // chatViewModel.Reload(data.RoomId, data.Message);
+                    chatViewModel = (ChatViewModel)App.Current.Services.GetService(typeof(ChatViewModel))!;
+                    chatViewModel.Reload_Create(Data1.RoomId, Data1.Title, Data1.Message);
+                    break;
+                case ChatState.Profile: // 서버 전파 받고 프로필사진 cache 최신화
                     var users = await _userService.getUserList();
                     UserUtil.setUsers(users);
                     ProfileUtil.clearProfileImage(hub.UsrNo);

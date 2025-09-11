@@ -137,7 +137,7 @@ namespace talk2.ViewModels
             var vm = new UserPopupViewModel(_userPopupView, _userService);
             _userPopupView.DataContext = vm;
             await vm.InitAsync();
-            ((UserPopupViewModel)_userPopupView.DataContext).Validate += Validate;
+            vm.Validate += Validate;
             _userPopupView.ShowDialog();
             // if (userPopupView.ShowDialog() == true)
             // {
@@ -329,6 +329,7 @@ namespace talk2.ViewModels
                 RoomId = _roomNo,
                 UsrNo = _userService.Me.UsrNo,
                 Message = Msg,
+                State = ChatState.Chat
             });
             Msg = "";
         }
@@ -352,6 +353,10 @@ namespace talk2.ViewModels
                     {
                         UsrNo = hub.UsrNo,
                         chat = hub.Message,
+                        IsMine = hub.UsrNo == _userService.Me.UsrNo,
+                        UsrNm = UserUtil.getUsrNm(hub.UsrNo),
+                        ProfileImage = await ProfileUtil.GetProfileImageAsync(hub.UsrNo),
+                        ChatFg = "C",
                     });
                     break;
                 case ChatState.Leave:
@@ -359,6 +364,10 @@ namespace talk2.ViewModels
                     {
                         UsrNo = hub.UsrNo,
                         chat = hub.Message,
+                        IsMine = hub.UsrNo == _userService.Me.UsrNo,
+                        UsrNm = UserUtil.getUsrNm(hub.UsrNo),
+                        ProfileImage = await ProfileUtil.GetProfileImageAsync(hub.UsrNo),
+                        ChatFg = "D",
                     });
                     break;
                 case ChatState.File:
@@ -377,7 +386,7 @@ namespace talk2.ViewModels
                         Image = ImageUtil.IsImage(hub.Data2) ? byteToBitmapImage(hub.Data2) : null,
                     });
                     break;
-                default:
+                case ChatState.Chat:
                     _chatService.ReadChat(_roomNo, _userService.Me.UsrNo);
                     Chats.Add(new Chat()
                     {
@@ -393,6 +402,7 @@ namespace talk2.ViewModels
                     _flashWindow.FlashApplicationWindow();
 
                     break;
+                default: break;
             }
 
             //ChatsViewModel ContentViewModel = ShellViewModel.ServiceProvider.GetService(typeof(ChatsViewModel)) as ChatsViewModel;
