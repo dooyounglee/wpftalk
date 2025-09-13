@@ -61,9 +61,14 @@ namespace talk2.ViewModels
             Connect();
 
             _me = _userService.Me;
-            UserList = await _userService.getUserList();
-            UserUtil.setUsers(UserList); // cache에 users 담기
-            UserList = UserList.Where(u => u.UsrNo != _me.UsrNo).ToList();
+            var users = await _userService.getUserList();
+            UserUtil.setUsers(users); // cache에 users 담기
+            users = users.Where(u => u.UsrNo > 0 && u.UsrNo != _me.UsrNo ).ToList();
+            foreach (var user in users)
+            {
+                user.ProfileImage = await ProfileUtil.GetProfileImageAsync(user.UsrNo);
+            };
+            UserList = users;
             SelectedConnState = "Online"; // 로그인 시, 첫 상태는 Online(비동기로 가져오느라, Socket Connect랑 순서가 꼬임)
         }
 

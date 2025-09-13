@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 namespace talk2.Models
 {
@@ -31,6 +32,7 @@ namespace talk2.Models
         public int Port { get; set; }
         [JsonPropertyName("profileNo")]
         public int ProfileNo { get; set; }
+        public BitmapImage ProfileImage { get; set; }
         public ConnState ConnState { get; set; }
         public Boolean IsAdmin { get; set; } = false;
         public string Layout

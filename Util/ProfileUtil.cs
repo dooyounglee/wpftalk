@@ -20,7 +20,7 @@ namespace talkLib.Util
             if (_cache.TryGetValue(usrNo, out var cachedImage))
                 return cachedImage;
 
-            if (UserUtil.getUser(usrNo).ProfileNo == 0)
+            if (UserUtil.getUser(usrNo) is null || UserUtil.getUser(usrNo).ProfileNo == 0)
             {
                 return getDefaultImage();
             }

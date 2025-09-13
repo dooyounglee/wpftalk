@@ -4,15 +4,15 @@
     <DataTemplate x:Key="ItemTemplate">
         <Border Background="Transparent">
             <Border.InputBindings>
-                <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DataContext.UserInfoCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" CommandParameter="{Binding UsrNo}"/>
-                <MouseBinding Gesture="RightClick" Command="{Binding DataContext.UserContextmenuCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding DataContext.UserInfoCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" CommandParameter="{Binding UsrNo}"/>
+                <MouseBinding MouseAction="RightClick" Command="{Binding DataContext.UserContextmenuCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
             </Border.InputBindings>
 
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="40"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="40"/>
                 </Grid.ColumnDefinitions>
                 <Grid.Style>
                     <Style TargetType="Grid">
@@ -27,15 +27,15 @@
                 <!-- 프로필 이미지 -->
                 <Border Width="40" Height="40"
                     CornerRadius="20"
-                    Background="White"
+                    Background="Transparent"
                     ClipToBounds="True"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center">
                     <!--<Border.Clip>
                         <EllipseGeometry Center="20,20" RadiusX="20" RadiusY="20"/>
                     </Border.Clip>-->
-                    <Image Width="50" Height="40"
-                        Source="/Images/cat-5183427_640.jpg"
+                    <Image Width="40" Height="40"
+                        Source="{Binding ProfileImage}"
                         Stretch="UniformToFill"
                         Grid.Column="0"/>
                 </Border>
