@@ -13,6 +13,7 @@ CREATE TABLE talk."user" (
 	profile_no int8 NULL,
 	CONSTRAINT user_pk PRIMARY KEY (usr_no)
 );
+ALTER TABLE talk."user" ADD profile_no int8 NULL;
 
 -- DROP TABLE talk.div;
 CREATE TABLE talk.div (
@@ -51,6 +52,7 @@ CREATE TABLE talk.chat (
 	rgt_dtm varchar NULL,
 	CONSTRAINT chat_pk PRIMARY KEY (chat_no)
 );
+ALTER TABLE talk.chat ADD file_no int8 NULL;
 
 -- DROP TABLE talk.chatuser;
 CREATE TABLE talk.chatuser (
