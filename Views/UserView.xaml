@@ -7,6 +7,14 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="300"
              x:Name="root">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Templates/UsersTemplate.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
@@ -17,28 +25,7 @@
 
         <Grid Grid.Row="2">
             <ScrollViewer x:Name="scroll">
-                <ItemsControl ItemsSource="{Binding UserList}" >
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Layout}">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property= "Foreground" Value="Black"/>
-                                        <Style.Triggers>
-                                            <Trigger Property ="IsMouseOver" Value="True">
-                                                <Setter Property= "Background" Value="Red"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                                <TextBlock.InputBindings>
-                                    <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DataContext.UserInfoCommand, Source={x:Reference root}}" CommandParameter="{Binding UsrNo}"/>
-                                    <MouseBinding Gesture="RightClick" Command="{Binding DataContext.UserContextmenuCommand, Source={x:Reference root}}"/>
-                                </TextBlock.InputBindings>
-                            </TextBlock>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                <ItemsControl ItemsSource="{Binding UserList}" ItemTemplate="{StaticResource ItemTemplate}" />
             </ScrollViewer>
         </Grid>
         <Grid Grid.Row="3">
