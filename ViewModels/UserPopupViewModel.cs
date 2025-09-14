@@ -10,6 +10,7 @@ using talk2.Commands;
 using talk2.Models;
 using talk2.Services;
 using talk2.Views;
+using talkLib.Util;
 
 namespace talk2.ViewModels
 {
@@ -31,12 +32,12 @@ namespace talk2.ViewModels
         public async Task InitAsync()
         {
             var users = await _userService.getUserList();
-            var filteredUsers = users.Where(u => u.UsrNo != _userService.Me.UsrNo).ToList();
-            UserList.Clear();
-            foreach (var user in filteredUsers)
+            var filteredUsers = users.Where(u => u.UsrNo > 0 && u.UsrNo != _userService.Me.UsrNo).ToList();
+            foreach (var user in users)
             {
+                user.ProfileImage = await ProfileUtil.GetProfileImageAsync(user.UsrNo);
                 UserList.Add(user);
-            }
+            };
         }
 
         // private List<User> _userList;

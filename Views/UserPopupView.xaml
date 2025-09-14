@@ -6,6 +6,14 @@
         xmlns:local="clr-namespace:talk2.Views"
         mc:Ignorable="d"
         Title="UserPopupView" Height="450" Width="300">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Templates/UsersTemplate.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
@@ -14,13 +22,7 @@
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
 
-        <ListBox Grid.Row="2" ItemsSource="{Binding UserList}" SelectionMode="Extended" SelectionChanged="ListBox_SelectionChanged">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Layout}" />
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <ListBox Grid.Row="2" ItemsSource="{Binding UserList}" ItemTemplate="{StaticResource InviteTemplate}" SelectionMode="Extended" SelectionChanged="ListBox_SelectionChanged" />
 
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>

@@ -8,6 +8,7 @@ using System.Windows;
 using talk2.Models;
 using talk2.Services;
 using talk2.Views;
+using talkLib.Util;
 
 namespace talk2.ViewModels
 {
@@ -27,9 +28,9 @@ namespace talk2.ViewModels
         public async void InitAsync()
         {
             var users = await _chatService.RoomUserList(_roomNo);
-            UserList.Clear();
             foreach (var user in users)
             {
+                user.ProfileImage = await ProfileUtil.GetProfileImageAsync(user.UsrNo);
                 UserList.Add(user);
             }
         }

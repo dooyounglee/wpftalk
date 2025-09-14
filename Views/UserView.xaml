@@ -25,7 +25,7 @@
 
         <Grid Grid.Row="2">
             <ScrollViewer x:Name="scroll">
-                <ItemsControl ItemsSource="{Binding UserList}" ItemTemplate="{StaticResource ItemTemplate}" />
+                <ItemsControl ItemsSource="{Binding UserList}" ItemTemplate="{StaticResource UsersTemplate}" />
             </ScrollViewer>
         </Grid>
         <Grid Grid.Row="3">
@@ -47,7 +47,7 @@
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="{Binding Me.UsrNm}">
                 <TextBlock.InputBindings>
-                    <MouseBinding Gesture="LeftDoubleClick" Command="{Binding UserInfoCommand}" CommandParameter="{Binding Me.UsrNo}"/>
+                    <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding UserInfoCommand}" CommandParameter="{Binding Me.UsrNo}"/>
                 </TextBlock.InputBindings>
             </TextBlock>
             <ComboBox Grid.Column="1" ItemsSource="{Binding ConnStateItems}" SelectedItem="{Binding SelectedConnState}" />
