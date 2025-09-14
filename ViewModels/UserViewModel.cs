@@ -23,7 +23,7 @@ using talkLib.Util;
 
 namespace talk2.ViewModels
 {
-    class UserViewModel : ObservableObject
+    public partial class UserViewModel : ObservableObject
     {
         private readonly MainViewModel _mainViewModel;
 
@@ -32,14 +32,16 @@ namespace talk2.ViewModels
         private int _roomNo = 0;
 
         private readonly IUserService _userService;
+        private readonly IDivService _divService;
         private User _me;
         private List<User> _userList = new List<User>();
 
-        public UserViewModel(IUserService userService)
+        public UserViewModel(IUserService userService, IDivService divService)
         {
             _mainViewModel = (MainViewModel)App.Current.Services.GetService(typeof(MainViewModel))!;
 
             _userService = userService;
+            _divService = divService;
         }
 
         public async void InitAsync()
@@ -156,6 +158,16 @@ namespace talk2.ViewModels
         private void GotoSetting(object _)
         {
             _mainViewModel.changeViewModel(NaviType.SettingView);
+        }
+
+        [CommunityToolkit.Mvvm.Input.RelayCommand]
+        private async Task Div()
+        {
+            var divView = new DivView();
+            var vm = new DivViewModel(_divService);
+            divView.DataContext = vm;
+            await vm.InitAsync();
+            divView.ShowDialog();
         }
 
         public ICommand LogoutCommand { get; set; }

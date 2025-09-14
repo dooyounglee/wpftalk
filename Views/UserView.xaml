@@ -44,6 +44,7 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="{Binding Me.UsrNm}">
                 <TextBlock.InputBindings>
@@ -53,6 +54,7 @@
             <ComboBox Grid.Column="1" ItemsSource="{Binding ConnStateItems}" SelectedItem="{Binding SelectedConnState}" />
             <Button Grid.Column="2" Content="Logout" Command="{Binding LogoutCommand}" />
             <Button Grid.Column="3" Content="New" Command="{Binding CreateUserCommand}" />
+            <Button Grid.Column="4" Content="Div" Command="{Binding DivCommand}" />
         </Grid>
     </Grid>
 </UserControl>
