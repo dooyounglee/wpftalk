@@ -29,6 +29,7 @@ public partial class App : Application
         services.AddSingleton<IUserService, UserService>();
         services.AddSingleton<IChatService, ChatService>();
         services.AddSingleton<IFileService, FileService>();
+        services.AddSingleton<IDivService,  DivService>();
 
         services.AddSingleton<IUserRepository, UserRepository>();
         services.AddSingleton<IChatRepository, ChatRepository>();
