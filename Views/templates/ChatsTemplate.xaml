@@ -59,7 +59,13 @@
                 </StackPanel>
             </StackPanel>
             <StackPanel>
-                <Image Source="{Binding Image}" HorizontalAlignment="Left" Visibility="{Binding isImage}" MaxWidth="160" />
+                <Image Source="{Binding Image}" HorizontalAlignment="Left" Visibility="{Binding isImage}" MaxWidth="160">
+                    <Image.InputBindings>
+                        <MouseBinding MouseAction="LeftClick"
+                        Command="{Binding DataContext.ImageViewCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                        CommandParameter="{Binding Image}" />
+                    </Image.InputBindings>
+                </Image>
             </StackPanel>
         </StackPanel>
     </DataTemplate>
@@ -83,7 +89,13 @@
                 </Button>
             </StackPanel>
             <StackPanel>
-                <Image Source="{Binding Image}" HorizontalAlignment="Right" Visibility="{Binding isImage}" MaxWidth="160" />
+                <Image Source="{Binding Image}" HorizontalAlignment="Right" Visibility="{Binding isImage}" MaxWidth="160">
+                    <Image.InputBindings>
+                        <MouseBinding MouseAction="LeftClick"
+                            Command="{Binding DataContext.ImageViewCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                            CommandParameter="{Binding Image}" />
+                    </Image.InputBindings>
+                </Image>
             </StackPanel>
         </StackPanel>
     </DataTemplate>

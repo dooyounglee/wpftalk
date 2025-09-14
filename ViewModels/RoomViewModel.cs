@@ -28,7 +28,7 @@ using talk2.Util;
 
 namespace talk2.ViewModels
 {
-    public class RoomViewModel : ObservableObject
+    public partial class RoomViewModel : ObservableObject
     {
         private IUserService _userService;
         private IChatService _chatService;
@@ -462,6 +462,16 @@ namespace talk2.ViewModels
                 image.EndInit();
                 return image;
             }
+        }
+
+        [CommunityToolkit.Mvvm.Input.RelayCommand]
+        private async Task ImageView(BitmapImage b)
+        {
+            OtiLogger.log1("image");
+            Window imagePreviewView = new ImagePreviewView();
+            var vm = new ImagePreviewViewModel(b);
+            imagePreviewView.DataContext = vm;
+            imagePreviewView.ShowDialog();
         }
     }
 }
