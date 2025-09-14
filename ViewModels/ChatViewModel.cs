@@ -185,6 +185,15 @@ namespace talk2.ViewModels
         {
             var userList = ((UserPopupViewModel)_userPopupView.DataContext).SelectedList;
 
+            // 본인을 선택했다면 제외(api보낼때 추가해서 보냄)
+            foreach (var u in userList)
+            {
+                if (u.UsrNo == _userService.Me.UsrNo)
+                {
+                    userList.Remove(u);
+                }
+            }
+
             // 1:1방을 만들때는 이미 있는지 확인
             if (userList.Count == 1)
             {
