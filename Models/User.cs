@@ -32,6 +32,7 @@ namespace talk2.Models
         public int Port { get; set; }
         [JsonPropertyName("profileNo")]
         public int ProfileNo { get; set; }
+        [JsonIgnore]
         public BitmapImage ProfileImage { get; set; }
         public ConnState ConnState { get; set; }
         public Boolean IsAdmin { get; set; } = false;
