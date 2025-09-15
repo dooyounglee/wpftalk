@@ -21,6 +21,7 @@ namespace talk2.ViewModels
 
         public async Task InitAsync()
         {
+            Divs.Clear();
             var divs = await _divService.getDivList();
             foreach(var d in divs)
             {
@@ -52,13 +53,39 @@ namespace talk2.ViewModels
         [CommunityToolkit.Mvvm.Input.RelayCommand]
         private async Task Create()
         {
+            if (NewDiv is null || NewDiv.DivNm is null || NewDiv.DivNm.Trim().Length == 0) return;
+
             await _divService.InsertDiv(NewDiv.DivNm);
+            NewDiv = new();
+
+            InitAsync();
         }
 
         [CommunityToolkit.Mvvm.Input.RelayCommand]
         private async Task Edit()
         {
+            if (SelectedDiv is null) return;
+
             await _divService.EditDiv(SelectedDiv.DivNo, SelectedDiv.DivNm);
+            SelectedDiv = null;
+        }
+
+        [CommunityToolkit.Mvvm.Input.RelayCommand]
+        private async Task Delete()
+        {
+            if (SelectedDiv is null) return;
+
+            await _divService.DeleteDiv(SelectedDiv.DivNo);
+
+            foreach (var d in Divs)
+            {
+                if (d.DivNo == SelectedDiv.DivNo)
+                {
+                    Divs.Remove(d);
+                    break;
+                }
+            }
+            SelectedDiv = null;
         }
     }
 }

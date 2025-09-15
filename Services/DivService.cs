@@ -11,8 +11,9 @@ namespace talk2.Services
     public interface IDivService
     {
         public Task<List<Div>> getDivList();
-        public Task InsertDiv(string divNm);
+        public Task<List<Div>> InsertDiv(string divNm);
         public Task EditDiv(int divNo, string divNm);
+        public Task DeleteDiv(int divNo);
     }
 
     public class DivService : IDivService
@@ -23,14 +24,20 @@ namespace talk2.Services
             return JsonUtil.StringToObject<List<Div>>(responseBody);
         }
 
-        public async Task InsertDiv(string divNm)
+        public async Task<List<Div>> InsertDiv(string divNm)
         {
-            await HttpUtil.Post($"/div", new { divNm = divNm });
+            string responseBody = await HttpUtil.Post($"/div", new { divNm = divNm });
+            return JsonUtil.StringToObject<List<Div>>(responseBody);
         }
 
         public async Task EditDiv(int divNo, string divNm)
         {
             await HttpUtil.Put($"/div", new { divNo=divNo, divNm=divNm });
+        }
+
+        public async Task DeleteDiv(int divNo)
+        {
+            await HttpUtil.Delete($"/div", new { divNo = divNo });
         }
     }
 }
