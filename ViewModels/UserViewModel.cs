@@ -326,7 +326,7 @@ namespace talk2.ViewModels
                     // ChatViewModel chatViewModel = (ChatViewModel)App.Current.Services.GetService(typeof(ChatViewModel))!;
                     // chatViewModel.Reload(data.RoomId, data.Message);
                     chatViewModel = (ChatViewModel)App.Current.Services.GetService(typeof(ChatViewModel))!;
-                    chatViewModel.Reload_Create(Data1.RoomId, Data1.Title, Data1.Message);
+                    chatViewModel.Reload_Create(Data1.RoomId, Data1.UsrNo, Data1.Title, Data1.Message);
                     break;
                 case ChatState.Profile: // 서버 전파 받고 프로필사진 cache 최신화
                     var users = await _userService.getUserList();

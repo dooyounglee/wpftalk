@@ -79,13 +79,13 @@ namespace talk2.ViewModels
                 }
             }
         }
-        public async Task Reload_Create(int roomNo, string title, string msg)
+        public async Task Reload_Create(int roomNo, int usrNo, string title, string msg)
         {
             ChatList.Insert(0, new Room()
             {
                 RoomNo = roomNo,
                 Title = title,
-                CntUnread = 1,
+                CntUnread = usrNo == _userService.Me.UsrNo ? 0 : 1,
                 Chat = msg,
                 RgtDtm = DateUtil.now("yyyyMMddHHmmss"),
             });
@@ -186,13 +186,7 @@ namespace talk2.ViewModels
             var userList = ((UserPopupViewModel)_userPopupView.DataContext).SelectedList;
 
             // 본인을 선택했다면 제외(api보낼때 추가해서 보냄)
-            foreach (var u in userList)
-            {
-                if (u.UsrNo == _userService.Me.UsrNo)
-                {
-                    userList.Remove(u);
-                }
-            }
+            userList = userList.Where(u => u.UsrNo != _userService.Me.UsrNo).ToList();
 
             // 1:1방을 만들때는 이미 있는지 확인
             if (userList.Count == 1)
@@ -213,10 +207,19 @@ namespace talk2.ViewModels
                 _clientHandler?.Send(new ChatHub
                 {
                     RoomId = newRoom.RoomNo,
+                    UsrNo = _userService.Me.UsrNo,
                     Message = newRoom.Chat,
                     Title = newRoom.Title,
                     State = ChatState.Create,
                 });
+
+                // 새로운방 열기
+                var roomView = new RoomView();
+                roomView.Tag = newRoom.RoomNo;
+                var vm = new RoomViewModel(newRoom.RoomNo, _userService, _chatService);
+                roomView.DataContext = vm;
+                vm.InitAsync();
+                roomView.Show();
             }
 
             _userPopupView.DialogResult = true;
