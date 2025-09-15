@@ -16,20 +16,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Images\cat-5183427_640.jpg" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\wpftalklib\talkLib.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Images\cat-5183427_640.jpg" />
+    <ProjectReference Include="..\talkLib\talkLib.csproj" />
   </ItemGroup>
 
 </Project>
