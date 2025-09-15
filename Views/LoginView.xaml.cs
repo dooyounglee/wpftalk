@@ -38,5 +38,15 @@ namespace talk2.Views
         {
             Pw.SelectAll();  // 전체 텍스트 선택
         }
+
+        private void IpBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            IpBox.SelectAll();  // 전체 텍스트 선택
+        }
+
+        private void PortBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            PortBox.SelectAll();  // 전체 텍스트 선택
+        }
     }
 }
