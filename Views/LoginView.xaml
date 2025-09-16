@@ -55,5 +55,9 @@
                       IsHitTestVisible="False"
                       Visibility="{Binding Text, ElementName=PortBox, Converter={StaticResource EmptyToVisibilityConverter}}"/>
         </Grid>
+
+        <CheckBox Content="ID저장" IsChecked="{Binding IsCheckedSaveId}" Height="20" Width="200" Margin="0,80,0,10" />
+        <CheckBox Content="자동로그인" IsChecked="{Binding IsCheckedAutoLogin}" Height="20" Width="200" Margin="0,120,0,10"/>
+        
     </Grid>
 </UserControl>

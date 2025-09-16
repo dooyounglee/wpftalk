@@ -13,6 +13,7 @@ namespace talk2.Services
 {
     public interface IUserService
     {
+        public Task<User> login(string id);
         public Task<User> login(string id, string pw);
         public Task<List<User>> getUserList();
         public Task<User> getUser(int usrNo);
@@ -33,6 +34,14 @@ namespace talk2.Services
         public UserService(IUserRepository userRepository)
         {
             _userRepository = userRepository;
+        }
+
+        public async Task<User> login(string id)
+        {
+            string responseBody = await HttpUtil.Put("/user/login", new { usrId = id });
+            _user = JsonUtil.StringToObject<User>(responseBody);
+            if (_user.UsrNo == 0) _user.IsAdmin = true;
+            return _user;
         }
         public async Task<User> login(string id, string pw)
         {
