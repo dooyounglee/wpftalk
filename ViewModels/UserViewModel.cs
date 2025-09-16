@@ -63,9 +63,9 @@ namespace talk2.ViewModels
             Connect();
 
             _me = _userService.Me;
-            var users = await _userService.getUserList();
-            UserUtil.setUsers(users); // cache에 users 담기
-            users = users.Where(u => u.UsrNo > 0 && u.UsrNo != _me.UsrNo ).ToList();
+            _allUsers = await _userService.getUserList();
+            UserUtil.setUsers(_allUsers); // cache에 users 담기
+            var users = _allUsers.Where(u => u.UsrNo > 0 && u.UsrNo != _me.UsrNo ).ToList();
             foreach (var user in users)
             {
                 user.ProfileImage = await ProfileUtil.GetProfileImageAsync(user.UsrNo);
@@ -109,6 +109,42 @@ namespace talk2.ViewModels
                 });
             }
         }
+
+        #region 검색, filter
+        private List<User> _allUsers;
+        [ObservableProperty] public string searchConnState = "전체";
+        partial void OnSearchConnStateChanged(string value) { FilterUsers(); }
+        [ObservableProperty] public string searchDiv = "전체";
+        partial void OnSearchDivChanged(string value) { FilterUsers(); }
+        [ObservableProperty] public string searchUsrNm = "";
+        partial void OnSearchUsrNmChanged(string value) { FilterUsers(); }
+        [ObservableProperty] public List<string> stateItems = new() { "전체", "Offline", "Online", "Busy", "AFK" };
+        [ObservableProperty] public List<string> divItems = new(){ "전체", "전략사업1 Div.", "전략사업2 Div.", "공공사업1 Div.", "공공사업2 Div." };
+
+
+        [CommunityToolkit.Mvvm.Input.RelayCommand]
+        private async Task ReloadUser()
+        {
+            _allUsers = await _userService.getUserList();
+            UserUtil.setUsers(_allUsers); // cache에 users 담기
+            ProfileUtil.Clear();
+            foreach (var user in _allUsers)
+            {
+                OtiLogger.log1(user.UsrNo);
+                user.ProfileImage = await ProfileUtil.GetProfileImageAsync(user.UsrNo);
+            };
+            FilterUsers();
+        }
+        private void FilterUsers()
+        {
+            var filteredUsers = _allUsers.Where(u => u.UsrNo > 0 && u.UsrNo != _me.UsrNo);
+            filteredUsers = SearchUsrNm.Trim().Length == 0 ? filteredUsers : filteredUsers.Where(u => u.UsrNm.Contains(SearchUsrNm));
+            filteredUsers = "전체".Equals(SearchDiv) ? filteredUsers : filteredUsers.Where(u => u.DivNm.Equals(SearchDiv));
+            filteredUsers = "전체".Equals(searchConnState) ? filteredUsers : filteredUsers.Where(u => u.ConnState.ToString() == searchConnState);
+            UserList = filteredUsers.ToList();
+
+        }
+        #endregion 검색, filter
 
         private void GoToLogout(object _)
         {
