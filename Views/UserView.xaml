@@ -55,8 +55,14 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <TextBox Grid.Column="0" Text="{Binding SearchUsrNm, UpdateSourceTrigger=PropertyChanged}" />
-            <ComboBox Grid.Column="1" ItemsSource="{Binding StateItems}" SelectedItem="{Binding SearchConnState}" />
-            <ComboBox Grid.Column="2" ItemsSource="{Binding DivItems}" SelectedItem="{Binding SearchDiv}" />
+            <ComboBox Grid.Column="1" ItemsSource="{Binding SearchConnStateItems}"
+                      SelectedValue="{Binding SearchConnState}"
+                      SelectedValuePath="State"
+                      DisplayMemberPath="Display"/>
+            <ComboBox Grid.Column="2" ItemsSource="{Binding SearchDivItems}"
+                      SelectedValue="{Binding SearchDiv}"
+                      SelectedValuePath="DivNo"
+                      DisplayMemberPath="DivNm"/>
             <Button Grid.Column="3" Content="새로고침" Command="{Binding ReloadUserCommand}" />
         </Grid>
         <Grid Grid.Row="3">

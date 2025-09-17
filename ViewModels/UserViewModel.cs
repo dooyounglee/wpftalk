@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Interop;
 using talk2.Commands;
+using talk2.Items;
 using talk2.Models;
 using talk2.Services;
 using talk2.Util;
@@ -107,15 +108,28 @@ namespace talk2.ViewModels
 
         #region 검색, filter
         private List<User> _allUsers;
-        [ObservableProperty] public string searchConnState = "전체";
-        partial void OnSearchConnStateChanged(string value) { FilterUsers(); }
-        [ObservableProperty] public string searchDiv = "전체";
-        partial void OnSearchDivChanged(string value) { FilterUsers(); }
+        [ObservableProperty] public ConnState searchConnState = ConnState.Null;
+        partial void OnSearchConnStateChanged(ConnState value) { FilterUsers(); }
+        [ObservableProperty] public int searchDiv = 0;
+        partial void OnSearchDivChanged(int value) { FilterUsers(); }
         [ObservableProperty] public string searchUsrNm = "";
         partial void OnSearchUsrNmChanged(string value) { FilterUsers(); }
-        [ObservableProperty] public List<string> stateItems = new() { "전체", "Offline", "Online", "Busy", "AFK" };
-        [ObservableProperty] public List<string> divItems = new(){ "전체", "전략사업1 Div.", "전략사업2 Div.", "공공사업1 Div.", "공공사업2 Div." };
-
+        [ObservableProperty] private List<ConnStateItem> searchConnStateItems = new()
+        {
+            new ConnStateItem { State = ConnState.Null, Display = "전체" },
+            new ConnStateItem { State = ConnState.Offline, Display = "오프라인" },
+            new ConnStateItem { State = ConnState.Online, Display = "온라인" },
+            new ConnStateItem { State = ConnState.Busy, Display = "바쁨" },
+            new ConnStateItem { State = ConnState.AFK, Display = "A.F.K" },
+        };
+        [ObservableProperty] private List<DivItem> searchDivItems = new()
+        {
+            new DivItem { DivNo = 0, DivNm = "전체" },
+            new DivItem { DivNo = 1, DivNm = "전략사업1 Div." },
+            new DivItem { DivNo = 2, DivNm = "전략사업2 Div." },
+            new DivItem { DivNo = 3, DivNm = "전략사업3 Div." },
+            new DivItem { DivNo = 4, DivNm = "공공사업2 Div." },
+        };
 
         [CommunityToolkit.Mvvm.Input.RelayCommand]
         private async Task ReloadUser()
@@ -134,8 +148,8 @@ namespace talk2.ViewModels
         {
             var filteredUsers = _allUsers.Where(u => u.UsrNo > 0 && u.UsrNo != _me.UsrNo);
             filteredUsers = SearchUsrNm.Trim().Length == 0 ? filteredUsers : filteredUsers.Where(u => u.UsrNm.Contains(SearchUsrNm));
-            filteredUsers = "전체".Equals(SearchDiv) ? filteredUsers : filteredUsers.Where(u => u.DivNm.Equals(SearchDiv));
-            filteredUsers = "전체".Equals(searchConnState) ? filteredUsers : filteredUsers.Where(u => u.ConnState.ToString() == searchConnState);
+            filteredUsers = SearchDiv == 0 ? filteredUsers : filteredUsers.Where(u => u.DivNo == SearchDiv);
+            filteredUsers = SearchConnState == ConnState.Null ? filteredUsers : filteredUsers.Where(u => u.ConnState == SearchConnState);
             UserList = filteredUsers.ToList();
 
         }
