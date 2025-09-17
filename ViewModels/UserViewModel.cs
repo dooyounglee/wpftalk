@@ -142,7 +142,15 @@ namespace talk2.ViewModels
                 OtiLogger.log1(user.UsrNo);
                 user.ProfileImage = await ProfileUtil.GetProfileImageAsync(user.UsrNo);
             };
-            FilterUsers();
+            
+            // 소켓서버에 접속한 유저 상태를 받아오기 위해서
+            _clientHandler?.Send(new ChatHub
+            {
+                RoomId = 0,
+                UsrNo = _userService.Me.UsrNo,
+                State = ChatState.StateChange,
+                connState = SelectedMyConnState,
+            });
         }
         private void FilterUsers()
         {
