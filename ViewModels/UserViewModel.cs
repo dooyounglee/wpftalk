@@ -107,7 +107,7 @@ namespace talk2.ViewModels
         }
 
         #region 검색, filter
-        private List<User> _allUsers;
+        private List<User> _allUsers = new();
         [ObservableProperty] public ConnState searchConnState = ConnState.Null;
         partial void OnSearchConnStateChanged(ConnState value) { FilterUsers(); }
         [ObservableProperty] public int searchDiv = 0;
@@ -310,36 +310,40 @@ namespace talk2.ViewModels
                     // hub.Data1 = _roomManager.ClientStates();
                     Dictionary<int, ConnState> p_connMap = JsonUtil.StringToObject<Dictionary<int, ConnState>>(hub.Data1);
                     List<User> p_userList = new List<User>();
-                    for (var i=0; i<_userList.Count; i++)
+                    for (var i=0; i<_allUsers.Count; i++)
                     {
-                        if (p_connMap.ContainsKey(_userList[i].UsrNo))
+                        if (p_connMap.ContainsKey(_allUsers[i].UsrNo))
                         {
-                            _userList[i].ConnState = p_connMap[_userList[i].UsrNo];
+                            _allUsers[i].ConnState = p_connMap[_allUsers[i].UsrNo];
                         }
                         else
                         {
-                            _userList[i].ConnState = ConnState.Offline;
+                            _allUsers[i].ConnState = ConnState.Offline;
                         }
-                        p_userList.Add(_userList[i]);
+                        p_userList.Add(_allUsers[i]);
                     }
                     UserList = new List<User>();
                     UserList = p_userList;
+
+                    FilterUsers();
                     break;
                 case ChatState.Disconnect:
                     // 나갈사람은 더이상 받든말든 상관없음
                     // 대신 이미 접속한 유저는 나간사람을 알아야 함. 한명만 알아도 됌
                     // new ChatHub{RoomId = 0,UsrNo = e.Hub.UsrNo,State = ChatState.Disconnect,}
-                    for (var i = 0; i < _userList.Count; i++)
+                    for (var i = 0; i < _allUsers.Count; i++)
                     {
-                        if (_userList[i].UsrNo == hub.UsrNo)
+                        if (_allUsers[i].UsrNo == hub.UsrNo)
                         {
-                            _userList[i].ConnState = ConnState.Offline;
-                            p_userList = _userList;
+                            _allUsers[i].ConnState = ConnState.Offline;
+                            p_userList = _allUsers;
                             UserList = new List<User>();
                             UserList = p_userList;
                             break;
                         }
                     }
+
+                    FilterUsers();
                     break;
                 /* case ChatState.Invite:
                     _chats.Add(new Chat()
