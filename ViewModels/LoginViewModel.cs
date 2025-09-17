@@ -21,12 +21,6 @@ namespace talk2.ViewModels
     {
         private readonly IUserService _userService;
 
-        [ObservableProperty]
-        public bool isCheckedSaveId;
-
-        [ObservableProperty]
-        public bool isCheckedAutoLogin;
-
         public LoginViewModel(IUserService userService)
         {
             _userService = userService;
@@ -52,6 +46,22 @@ namespace talk2.ViewModels
 
                 // 바로 GoToUser() 호출 하니까, thread가 꼬인다고 하여 아래처럼 호출하라 함
                 Application.Current.Dispatcher.Invoke(() => GoToUser()); // GoToUser();
+            }
+        }
+
+        [ObservableProperty] public bool isCheckedSaveId;
+        [ObservableProperty] public bool isCheckedAutoLogin;
+        [ObservableProperty] public bool isEnabledAutoLogin;
+        partial void OnIsCheckedSaveIdChanged(bool value)
+        {
+            if (value)
+            {
+                IsEnabledAutoLogin = true;
+            }
+            else
+            {
+                IsCheckedAutoLogin = false;
+                IsEnabledAutoLogin = false;
             }
         }
 
