@@ -71,7 +71,7 @@ namespace talk2.ViewModels
                 user.ProfileImage = await ProfileUtil.GetProfileImageAsync(user.UsrNo);
             };
             UserList = users;
-            SelectedConnState = "Online"; // 로그인 시, 첫 상태는 Online(비동기로 가져오느라, Socket Connect랑 순서가 꼬임)
+            SelectedMyConnState = ConnState.Online; // 로그인 시, 첫 상태는 Online(비동기로 가져오느라, Socket Connect랑 순서가 꼬임)
         }
 
         public List<User> UserList
@@ -86,28 +86,23 @@ namespace talk2.ViewModels
 
         public User Me { get => _me; }
 
-        public ObservableCollection<string> ConnStateItems
+        public ObservableCollection<ConnStateItem> MyConnStateItems { get; } = new ObservableCollection<ConnStateItem>
         {
-            get => new ObservableCollection<string>
-            {
-                "Offline", "Online", "Busy", "AFK"
-            };
-        }
-        private string _selectedConnState;
-        public string SelectedConnState
+            new ConnStateItem { State = ConnState.Offline, Display = "오프라인" },
+            new ConnStateItem { State = ConnState.Online, Display = "온라인" },
+            new ConnStateItem { State = ConnState.Busy, Display = "바쁨" },
+            new ConnStateItem { State = ConnState.AFK, Display = "A.F.K" },
+        };
+        [ObservableProperty] private ConnState selectedMyConnState;
+        partial void OnSelectedMyConnStateChanged(ConnState value)
         {
-            get { return _selectedConnState; }
-            set
+            _clientHandler?.Send(new ChatHub
             {
-                _selectedConnState = value;
-                _clientHandler?.Send(new ChatHub
-                {
-                    RoomId = 0,
-                    UsrNo = _userService.Me.UsrNo,
-                    State = ChatState.StateChange,
-                    connState = "Offline".Equals(_selectedConnState) ? ConnState.Offline : "Online".Equals(_selectedConnState) ? ConnState.Online : "Busy".Equals(_selectedConnState) ? ConnState.Busy : ConnState.AFK
-                });
-            }
+                RoomId = 0,
+                UsrNo = _userService.Me.UsrNo,
+                State = ChatState.StateChange,
+                connState = value,
+            });
         }
 
         #region 검색, filter
