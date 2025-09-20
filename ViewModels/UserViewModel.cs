@@ -26,8 +26,6 @@ namespace talk2.ViewModels
 {
     public partial class UserViewModel : ObservableObject
     {
-        private readonly MainViewModel _mainViewModel;
-
         private ChatClient _client;
         private ClientHandler? _clientHandler;
         private int _roomNo = 0;
@@ -39,8 +37,6 @@ namespace talk2.ViewModels
 
         public UserViewModel(IUserService userService, IDivService divService)
         {
-            _mainViewModel = (MainViewModel)App.Current.Services.GetService(typeof(MainViewModel))!;
-
             _userService = userService;
             _divService = divService;
         }
@@ -51,9 +47,6 @@ namespace talk2.ViewModels
             CreateUserCommand = new RelayCommand<object>(GoToCreateUser);
             UserInfoCommand = new RelayCommand<int>(GoToUserInfo);
             UserContextmenuCommand = new RelayCommand<object>(GoToUserContextmenu);
-            GotoUserCommand = new RelayCommand<object>(GotoUser);
-            GotoChatCommand = new RelayCommand<object>(GotoChat);
-            GotoSettingCommand = new RelayCommand<object>(GotoSetting);
 
             _client = new ChatClient(IPAddress.Parse("127.0.0.1"), 8080);
             _client.Connected += Connected;
@@ -170,7 +163,7 @@ namespace talk2.ViewModels
             _client = null;
             _clientHandler = null;
             _userList.Clear();
-            _mainViewModel.changeViewModel(NaviType.LoginView);
+            ((MainViewModel)App.Current.Services.GetService(typeof(MainViewModel))).changeViewModel(NaviType.LoginView);
 
             ProfileUtil.Clear();
             UserUtil.Clear();
@@ -196,21 +189,6 @@ namespace talk2.ViewModels
         private void GoToUserContextmenu(object _)
         {
             OtiLogger.log1("usercontextmenu");
-        }
-
-        private void GotoUser(object _)
-        {
-            _mainViewModel.changeViewModel(NaviType.UserView);
-        }
-
-        private void GotoChat(object _)
-        {
-            _mainViewModel.changeViewModel(NaviType.ChatView);
-        }
-
-        private void GotoSetting(object _)
-        {
-            _mainViewModel.changeViewModel(NaviType.SettingView);
         }
 
         [CommunityToolkit.Mvvm.Input.RelayCommand]

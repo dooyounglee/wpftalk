@@ -23,16 +23,12 @@ namespace talk2.ViewModels
     {
         private readonly IChatService _chatService;
         private readonly IUserService _userService;
-        private List<Room> _chatList = new List<Room>();
 
         public ChatViewModel(IUserService userService, IChatService chatService)
         {
             _chatService = chatService;
             _userService = userService;
 
-            GotoUserCommand = new RelayCommand<object>(GotoUser);
-            GotoChatCommand = new RelayCommand<object>(GotoChat);
-            GotoSettingCommand = new RelayCommand<object>(GotoSetting);
             ChatCommand = new RelayCommand<int>(Chat);
             ToCreateRoom = new RelayCommand<object>(CreateRoom);
         }
@@ -89,24 +85,6 @@ namespace talk2.ViewModels
                 Chat = msg,
                 RgtDtm = DateUtil.now("yyyyMMddHHmmss"),
             });
-        }
-
-        private void GotoUser(object _)
-        {
-            var _mainViewModel = (MainViewModel)App.Current.Services.GetService(typeof(MainViewModel))!;
-            _mainViewModel.changeViewModel(NaviType.UserView);
-        }
-
-        private void GotoChat(object _)
-        {
-            var _mainViewModel = (MainViewModel)App.Current.Services.GetService(typeof(MainViewModel))!;
-            _mainViewModel.changeViewModel(NaviType.ChatView);
-        }
-
-        private void GotoSetting(object _)
-        {
-            var _mainViewModel = (MainViewModel)App.Current.Services.GetService(typeof(MainViewModel))!;
-            _mainViewModel.changeViewModel(NaviType.SettingView);
         }
 
         private void Chat(int roomNo)
@@ -225,9 +203,6 @@ namespace talk2.ViewModels
             _userPopupView.DialogResult = true;
         }
 
-        public ICommand GotoUserCommand { get; set; }
-        public ICommand GotoChatCommand { get; set; }
-        public ICommand GotoSettingCommand { get; set; }
         public ICommand ChatCommand { get; set; }
         public ICommand ToCreateRoom { get; set; }
     }

@@ -21,7 +21,6 @@
             <RowDefinition Height="20"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -69,16 +68,6 @@
             <ScrollViewer x:Name="scroll">
                 <ItemsControl ItemsSource="{Binding UserList}" ItemTemplate="{StaticResource UsersTemplate}" />
             </ScrollViewer>
-        </Grid>
-        <Grid Grid.Row="4">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Content="User" Command="{Binding GotoUserCommand}" />
-            <Button Grid.Column="1" Content="Chat" Command="{Binding GotoChatCommand}" />
-            <Button Grid.Column="2" Content="Setting" Command="{Binding GotoSettingCommand}" />
         </Grid>
     </Grid>
 </UserControl>

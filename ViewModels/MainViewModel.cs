@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -12,7 +14,7 @@ using talk2.Commands;
 
 namespace talk2.ViewModels
 {
-    public class MainViewModel : ViewModelBase
+    public partial class MainViewModel : ObservableObject
     {
         // private readonly MainNavigationStore _mainNavigationStore;
         private INotifyPropertyChanged? _currentViewModel;
@@ -56,6 +58,24 @@ namespace talk2.ViewModels
                     OnPropertyChanged();
                 }
             }
+        }
+
+        [RelayCommand]
+        private void GotoUser(object _)
+        {
+            changeViewModel(NaviType.UserView);
+        }
+
+        [RelayCommand]
+        private void GotoChat(object _)
+        {
+            changeViewModel(NaviType.ChatView);
+        }
+
+        [RelayCommand]
+        private void GotoSetting(object _)
+        {
+            changeViewModel(NaviType.SettingView);
         }
     }
 }
