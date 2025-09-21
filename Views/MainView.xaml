@@ -37,21 +37,61 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Image Grid.Column="0" Source="/Images/cat-5183427_640.jpg" Stretch="Fill" Margin="0">
-                <Image.InputBindings>
+
+            <Border Grid.Column="0" Background="Transparent">
+                <Border.InputBindings>
                     <MouseBinding MouseAction="LeftClick" Command="{Binding GotoUserCommand}"/>
-                </Image.InputBindings>
-            </Image>
-            <Image Grid.Column="1" Source="/Images/cat-5183427_640.jpg" Stretch="Fill" Margin="0">
-                <Image.InputBindings>
+                </Border.InputBindings>
+                <Grid>
+                    <Grid.Style>
+                        <Style TargetType="Grid">
+                            <Style.Triggers>
+                                <Trigger Property ="IsMouseOver" Value="True">
+                                    <Setter Property= "Background" Value="LightGray"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+                    
+                    <Image Source="/Images/7542670.png" Stretch="Uniform" Margin="0" />
+                </Grid>
+            </Border>
+            <Border Grid.Column="1" Background="Transparent">
+                <Border.InputBindings>
                     <MouseBinding MouseAction="LeftClick" Command="{Binding GotoChatCommand}"/>
-                </Image.InputBindings>
-            </Image>
-            <Image Grid.Column="2" Source="/Images/cat-5183427_640.jpg" Stretch="Fill" Margin="0">
-                <Image.InputBindings>
+                </Border.InputBindings>
+                <Grid>
+                    <Grid.Style>
+                        <Style TargetType="Grid">
+                            <Style.Triggers>
+                                <Trigger Property ="IsMouseOver" Value="True">
+                                    <Setter Property= "Background" Value="LightGray"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+                    
+                    <Image Source="/Images/7612572.png" Stretch="Uniform" Margin="0"/>
+                </Grid>
+            </Border>
+            <Border Grid.Column="2" Background="Transparent">
+                <Border.InputBindings>
                     <MouseBinding MouseAction="LeftClick" Command="{Binding GotoSettingCommand}"/>
-                </Image.InputBindings>
-            </Image>
+                </Border.InputBindings>
+                <Grid>
+                    <Grid.Style>
+                        <Style TargetType="Grid">
+                            <Style.Triggers>
+                                <Trigger Property ="IsMouseOver" Value="True">
+                                    <Setter Property= "Background" Value="LightGray"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+
+                    <Image Source="/Images/pngegg.png" Stretch="Uniform" Margin="0"/>
+                </Grid>
+            </Border>
         </Grid>
     </Grid>
 </Window>
