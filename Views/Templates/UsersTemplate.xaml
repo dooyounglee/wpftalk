@@ -4,8 +4,8 @@
     <DataTemplate x:Key="UsersTemplate">
         <Border Background="Transparent">
             <Border.InputBindings>
-                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding DataContext.UserInfoCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" CommandParameter="{Binding UsrNo}"/>
-                <MouseBinding MouseAction="RightClick" Command="{Binding DataContext.UserContextmenuCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding DataContext.UserInfoCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding UsrNo}"/>
+                <MouseBinding MouseAction="RightClick" Command="{Binding DataContext.UserContextmenuCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"/>
             </Border.InputBindings>
 
             <Grid>
