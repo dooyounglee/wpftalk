@@ -43,7 +43,7 @@
                     <MouseBinding MouseAction="LeftClick" Command="{Binding GotoUserCommand}"/>
                 </Border.InputBindings>
                 <Grid Background="{Binding ColorUser}">
-                    <Image Source="/Images/7542670.png" Stretch="Uniform" Margin="0" />
+                    <TextBlock Text="👤" FontSize="35" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Grid>
             </Border>
             <Border Grid.Column="1" Background="Transparent">
@@ -51,7 +51,7 @@
                     <MouseBinding MouseAction="LeftClick" Command="{Binding GotoChatCommand}"/>
                 </Border.InputBindings>
                 <Grid Background="{Binding ColorChat}">
-                    <Image Source="/Images/7612572.png" Stretch="Uniform" Height="45" Margin="0"/>
+                    <TextBlock Text="💭" FontSize="35" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Grid>
             </Border>
             <Border Grid.Column="2" Background="Transparent">
@@ -59,7 +59,7 @@
                     <MouseBinding MouseAction="LeftClick" Command="{Binding GotoSettingCommand}"/>
                 </Border.InputBindings>
                 <Grid Background="{Binding ColorSetting}">
-                    <Image Source="/Images/pngegg.png" Stretch="Uniform" Height="35" Margin="0"/>
+                    <TextBlock Text="⚙️" FontSize="35" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Grid>
             </Border>
         </Grid>

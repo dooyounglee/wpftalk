@@ -18,8 +18,8 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
-            <RowDefinition Height="20"/>
             <RowDefinition Height="40"/>
+            <RowDefinition Height="20"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -27,31 +27,23 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="20"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="{Binding Me.UsrNm}">
-                <TextBlock.InputBindings>
-                    <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding UserInfoCommand}" CommandParameter="{Binding Me.UsrNo}"/>
-                </TextBlock.InputBindings>
-            </TextBlock>
-            <ComboBox Grid.Column="1"
-                      ItemsSource="{Binding MyConnStateItems}"
-                      SelectedValue="{Binding SelectedMyConnState, Mode=TwoWay}"
-                      SelectedValuePath="State"
-                      DisplayMemberPath="Display" />
-            <Button Grid.Column="2" Content="Logout" Command="{Binding LogoutCommand}" />
-            <Button Grid.Column="3" Content="New" Command="{Binding CreateUserCommand}" />
-            <Button Grid.Column="4" Content="Div" Command="{Binding DivCommand}" />
+            <Button Grid.Column="2" Content="🔒" Command="{Binding LogoutCommand}" />
+            <Button Grid.Column="3" Content="➕" Command="{Binding CreateUserCommand}" />
+            <Button Grid.Column="4" Content="📚" Command="{Binding DivCommand}" />
         </Grid>
         <Grid Grid.Row="1">
+            <ItemsControl ItemsSource="{Binding MeList}" ItemTemplate="{StaticResource MeTemplate}" />
+        </Grid>
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="20"/>
             </Grid.ColumnDefinitions>
             <TextBox Grid.Column="0" Text="{Binding SearchUsrNm, UpdateSourceTrigger=PropertyChanged}" />
             <ComboBox Grid.Column="1" ItemsSource="{Binding SearchConnStateItems}"
@@ -62,7 +54,7 @@
                       SelectedValue="{Binding SearchDiv}"
                       SelectedValuePath="DivNo"
                       DisplayMemberPath="DivNm"/>
-            <Button Grid.Column="3" Content="새로고침" Command="{Binding ReloadUserCommand}" />
+            <Button Grid.Column="3" Content="🔃" Command="{Binding ReloadUserCommand}" />
         </Grid>
         <Grid Grid.Row="3">
             <ScrollViewer x:Name="scroll">

@@ -1,6 +1,68 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+    <DataTemplate x:Key="MeTemplate">
+        <Border Background="Transparent">
+            <Border.InputBindings>
+                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding DataContext.UserInfoCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding UsrNo}"/>
+                <MouseBinding MouseAction="RightClick" Command="{Binding DataContext.UserContextmenuCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"/>
+            </Border.InputBindings>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="100"/>
+                </Grid.ColumnDefinitions>
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Style.Triggers>
+                            <Trigger Property ="IsMouseOver" Value="True">
+                                <Setter Property= "Background" Value="LightGray"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+
+                <!-- 프로필 이미지 -->
+                <Border Width="40" Height="40"
+                CornerRadius="20"
+                Background="Transparent"
+                ClipToBounds="True"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+                    <!--<Border.Clip>
+                    <EllipseGeometry Center="20,20" RadiusX="20" RadiusY="20"/>
+                </Border.Clip>-->
+                    <Image Width="40" Height="40"
+                    Source="{Binding ProfileImage}"
+                    Stretch="UniformToFill"
+                    Grid.Column="0"/>
+                </Border>
+
+                <!-- 이름 -->
+                <StackPanel Grid.Column="1" Margin="5,0" Background="Transparent">
+                    <TextBlock Text="{Binding DivNm}" />
+                    <TextBlock Text="{Binding UsrNm}"
+                    FontWeight="Bold"
+                    FontSize="15"
+                    Grid.Row="1"/>
+                </StackPanel>
+
+                <!-- 상태 -->
+                <StackPanel Grid.Column="2"
+           HorizontalAlignment="Center" VerticalAlignment="Center"
+           Margin="5,0" Background="Transparent">
+                    <ComboBox
+                        ItemsSource="{Binding DataContext.MyConnStateItems, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                        SelectedValue="{Binding DataContext.SelectedMyConnState, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                        SelectedValuePath="State"
+                        DisplayMemberPath="Display" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </DataTemplate>
+    
     <DataTemplate x:Key="UsersTemplate">
         <Border Background="Transparent">
             <Border.InputBindings>
