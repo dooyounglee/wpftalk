@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Media;
 using talk2.Commands;
 // using talk2.Services;
 // using talk2.Stores;
@@ -18,6 +19,8 @@ namespace talk2.ViewModels
     {
         // private readonly MainNavigationStore _mainNavigationStore;
         private INotifyPropertyChanged? _currentViewModel;
+
+        private Brush _selectedColor = Brushes.AliceBlue;
 
         public MainViewModel()
         {
@@ -35,15 +38,18 @@ namespace talk2.ViewModels
                 case NaviType.UserView:
                     CurrentViewModel = (UserViewModel)App.Current.Services.GetService(typeof(UserViewModel))!;
                     MenuHeight = 50;
+                    changeMenuColor(naviType);
                     // ((UserViewModel)CurrentViewModel).Init();
                     break;
                 case NaviType.ChatView:
                     CurrentViewModel = (ChatViewModel)App.Current.Services.GetService(typeof(ChatViewModel))!;
                     MenuHeight = 50;
+                    changeMenuColor(naviType);
                     break;
                 case NaviType.SettingView:
                     CurrentViewModel = (SettingViewModel)App.Current.Services.GetService(typeof(SettingViewModel))!;
                     MenuHeight = 50;
+                    changeMenuColor(naviType);
                     break;
                 default:
                     return;
@@ -66,6 +72,17 @@ namespace talk2.ViewModels
 
         [ObservableProperty]
         private int menuHeight = 0;
+
+        [ObservableProperty] private Brush colorUser = null;
+        [ObservableProperty] private Brush colorChat = null;
+        [ObservableProperty] private Brush colorSetting = null;
+
+        private void changeMenuColor(NaviType type)
+        {
+            ColorUser = type == NaviType.UserView ? _selectedColor : null;
+            ColorChat = type == NaviType.ChatView ? _selectedColor : null;
+            ColorSetting = type == NaviType.SettingView ? _selectedColor : null;
+        }
 
         [RelayCommand]
         private void GotoUser(object _)

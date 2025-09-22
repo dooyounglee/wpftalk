@@ -42,17 +42,7 @@
                 <Border.InputBindings>
                     <MouseBinding MouseAction="LeftClick" Command="{Binding GotoUserCommand}"/>
                 </Border.InputBindings>
-                <Grid>
-                    <Grid.Style>
-                        <Style TargetType="Grid">
-                            <Style.Triggers>
-                                <Trigger Property ="IsMouseOver" Value="True">
-                                    <Setter Property= "Background" Value="LightGray"/>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Grid.Style>
-                    
+                <Grid Background="{Binding ColorUser}">
                     <Image Source="/Images/7542670.png" Stretch="Uniform" Margin="0" />
                 </Grid>
             </Border>
@@ -60,17 +50,7 @@
                 <Border.InputBindings>
                     <MouseBinding MouseAction="LeftClick" Command="{Binding GotoChatCommand}"/>
                 </Border.InputBindings>
-                <Grid>
-                    <Grid.Style>
-                        <Style TargetType="Grid">
-                            <Style.Triggers>
-                                <Trigger Property ="IsMouseOver" Value="True">
-                                    <Setter Property= "Background" Value="LightGray"/>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Grid.Style>
-                    
+                <Grid Background="{Binding ColorChat}">
                     <Image Source="/Images/7612572.png" Stretch="Uniform" Margin="0"/>
                 </Grid>
             </Border>
@@ -78,17 +58,7 @@
                 <Border.InputBindings>
                     <MouseBinding MouseAction="LeftClick" Command="{Binding GotoSettingCommand}"/>
                 </Border.InputBindings>
-                <Grid>
-                    <Grid.Style>
-                        <Style TargetType="Grid">
-                            <Style.Triggers>
-                                <Trigger Property ="IsMouseOver" Value="True">
-                                    <Setter Property= "Background" Value="LightGray"/>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Grid.Style>
-
+                <Grid Background="{Binding ColorSetting}">
                     <Image Source="/Images/pngegg.png" Stretch="Uniform" Margin="0"/>
                 </Grid>
             </Border>
