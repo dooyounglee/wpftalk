@@ -132,7 +132,6 @@ namespace talk2.ViewModels
             ProfileUtil.Clear();
             foreach (var user in _allUsers)
             {
-                OtiLogger.log1(user.UsrNo);
                 user.ProfileImage = await ProfileUtil.GetProfileImageAsync(user.UsrNo);
             };
             
