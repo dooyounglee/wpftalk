@@ -30,16 +30,20 @@ namespace talk2.ViewModels
             {
                 case NaviType.LoginView:
                     CurrentViewModel = (LoginViewModel)App.Current.Services.GetService(typeof(LoginViewModel))!;
+                    MenuHeight = 0;
                     break;
                 case NaviType.UserView:
                     CurrentViewModel = (UserViewModel)App.Current.Services.GetService(typeof(UserViewModel))!;
+                    MenuHeight = 50;
                     // ((UserViewModel)CurrentViewModel).Init();
                     break;
                 case NaviType.ChatView:
                     CurrentViewModel = (ChatViewModel)App.Current.Services.GetService(typeof(ChatViewModel))!;
+                    MenuHeight = 50;
                     break;
                 case NaviType.SettingView:
                     CurrentViewModel = (SettingViewModel)App.Current.Services.GetService(typeof(SettingViewModel))!;
+                    MenuHeight = 50;
                     break;
                 default:
                     return;
@@ -59,6 +63,9 @@ namespace talk2.ViewModels
                 }
             }
         }
+
+        [ObservableProperty]
+        private int menuHeight = 0;
 
         [RelayCommand]
         private void GotoUser(object _)
