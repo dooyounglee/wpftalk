@@ -18,6 +18,7 @@ using talk2.Commands;
 using talk2.Items;
 using talk2.Models;
 using talk2.Services;
+using talk2.Settings;
 using talk2.Util;
 using talk2.Views;
 using talkLib.Util;
@@ -176,8 +177,16 @@ namespace talk2.ViewModels
             Disconnected();
             _client = null;
             _clientHandler = null;
+
+            // 자동로그인 해제
+            var settings = LoginSettingsManager.Load();
+            settings.IsAutoLogin = false;
+            LoginSettingsManager.Save(settings);
+
             _userList.Clear();
             ((MainViewModel)App.Current.Services.GetService(typeof(MainViewModel))).changeViewModel(NaviType.LoginView);
+            var loginVM = (LoginViewModel)App.Current.Services.GetService(typeof(LoginViewModel));
+            loginVM.Init();
 
             ProfileUtil.Clear();
             UserUtil.Clear();

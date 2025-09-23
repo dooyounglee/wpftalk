@@ -31,8 +31,8 @@ namespace talk2.ViewModels
         public async Task Init()
         {
             var settings = LoginSettingsManager.Load();
-
             Id = settings.SavedID;
+            Pw = "";
             IsCheckedSaveId = settings.IsSaveID;
             IsCheckedAutoLogin = settings.IsAutoLogin;
             Ip = settings.Ip;
@@ -68,17 +68,19 @@ namespace talk2.ViewModels
         [RelayCommand]
         private async Task Login()
         {
+            var settings = new LoginSettings();
+
+            // setting에 자동로그인 체크없었으면 비번 필수
+            if (Pw is null || Pw.Trim().Length == 0) return;
+
             User user = await _userService.login(Id, Pw);
             if (user is null) return;
-
-            var settings = new LoginSettings();
 
             settings.SavedID = IsCheckedSaveId ? Id : "";
             settings.IsSaveID = IsCheckedSaveId;
             settings.IsAutoLogin = IsCheckedAutoLogin;
             settings.Ip = Ip;
             settings.Port = Port;
-
             LoginSettingsManager.Save(settings);
 
             GoToUser();
