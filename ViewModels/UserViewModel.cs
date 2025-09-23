@@ -77,7 +77,7 @@ namespace talk2.ViewModels
         }
 
         [ObservableProperty]
-        private List<User> meList = new();
+        private ObservableCollection<User> meList = new();
         public List<User> UserList
         {
             get => _userList;
@@ -139,12 +139,17 @@ namespace talk2.ViewModels
         {
             _allUsers = await _userService.getUserList();
             UserUtil.setUsers(_allUsers); // cache에 users 담기
+
             ProfileUtil.Clear();
             foreach (var user in _allUsers)
             {
                 user.ProfileImage = await ProfileUtil.GetProfileImageAsync(user.UsrNo);
             };
-            
+
+            // 내정보 최신화
+            _me.ProfileImage = await ProfileUtil.GetProfileImageAsync(_me.UsrNo);
+            MeList.Clear(); MeList.Add(_me);
+
             // 소켓서버에 접속한 유저 상태를 받아오기 위해서
             _clientHandler?.Send(new ChatHub
             {
