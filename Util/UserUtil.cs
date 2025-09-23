@@ -17,8 +17,15 @@ namespace talk2.Util
             Clear();
             foreach (var user in users)
             {
-                _cache.Add(user.UsrNo, user);
+                setUser(user.UsrNo, user);
             }
+        }
+        public static void setUser(int usrNo, User user)
+        {
+            if (_cache.ContainsKey(usrNo))
+                _cache.Remove(usrNo);
+
+            _cache.Add(user.UsrNo, user);
         }
 
         public static User getUser(int usrNo) => _cache.GetValueOrDefault(usrNo);
