@@ -9,6 +9,7 @@
              x:Name="root">
     <UserControl.Resources>
         <ResourceDictionary>
+            <local:EmptyToVisibilityConverter x:Key="EmptyToVisibilityConverter"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Templates/UsersTemplate.xaml"/>
             </ResourceDictionary.MergedDictionaries>
@@ -45,7 +46,15 @@
                 <ColumnDefinition Width="80"/>
                 <ColumnDefinition Width="20"/>
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" Text="{Binding SearchUsrNm, UpdateSourceTrigger=PropertyChanged}" />
+            <Grid Grid.Column="0">
+                <TextBox x:Name="SearchNm" Text="{Binding SearchUsrNm, UpdateSourceTrigger=PropertyChanged}" />
+                <!--<TextBox x:Name="Id" Text="{Binding Id}" GotKeyboardFocus="Id_GotKeyboardFocus"/>-->
+                <TextBlock Text="이름 검색"
+                    Foreground="Gray"
+                    Margin="5,2,0,0"
+                    IsHitTestVisible="False"
+                    Visibility="{Binding Text, ElementName=SearchNm, Converter={StaticResource EmptyToVisibilityConverter}}"/>
+            </Grid>
             <ComboBox Grid.Column="1" ItemsSource="{Binding SearchConnStateItems}"
                       SelectedValue="{Binding SearchConnState}"
                       SelectedValuePath="State"
