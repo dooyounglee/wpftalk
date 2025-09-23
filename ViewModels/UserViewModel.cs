@@ -56,12 +56,17 @@ namespace talk2.ViewModels
 
             Connect();
 
+            // 모든사람들
+            _allUsers = await _userService.getUserList();
+            UserUtil.setUsers(_allUsers); // cache에 users 담기
+
+            // 나
             _me = _userService.Me;
             _me.ProfileImage = await ProfileUtil.GetProfileImageAsync(_me.UsrNo);
             _me.ConnState = SelectedMyConnState;
             MeList.Clear();MeList.Add(_me);
-            _allUsers = await _userService.getUserList();
-            UserUtil.setUsers(_allUsers); // cache에 users 담기
+
+            // 다른사람들
             var users = _allUsers.Where(u => u.UsrNo > 0 && u.UsrNo != _me.UsrNo ).ToList();
             foreach (var user in users)
             {
