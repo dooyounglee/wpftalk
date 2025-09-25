@@ -56,12 +56,12 @@
         </Grid>
         <Grid Grid.Row="2">
             <ScrollViewer x:Name="scroll">
-                <ItemsControl ItemsSource="{Binding Chats}" ItemTemplateSelector="{StaticResource MessageTemplateSelector}"/>
+                <ItemsControl ItemsSource="{Binding Chats}" ItemTemplateSelector="{StaticResource MessageTemplateSelector}" AutomationProperties.AutomationId="chats"/>
             </ScrollViewer>
         </Grid>
 
         <Grid Grid.Row="3">
-            <TextBox KeyDown="TextBox_KeyDown" TextWrapping="Wrap"
+            <TextBox KeyDown="TextBox_KeyDown" TextWrapping="Wrap" AutomationProperties.AutomationId="txt"
              Text="{Binding Msg, UpdateSourceTrigger=PropertyChanged}"
              AllowDrop="True" PreviewDragOver="TextBox_PreviewDragOver" Drop="TextBox_Drop" />
         </Grid>
