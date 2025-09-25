@@ -35,7 +35,7 @@ namespace talk2.ViewModels
         private BitmapImage profileImage;
 
         [ObservableProperty]
-        private string isMe;
+        private Visibility isMe;
 
         public NewUserViewModel(Window userInfoView, IUserService userService)
         {
@@ -47,7 +47,7 @@ namespace talk2.ViewModels
         {
             He = await _userService.getUser(usrNo);
             ProfileImage = He.ProfileNo > 0 ? new BitmapImage(ImageUtil.getImage(He.ProfileNo)) : ProfileUtil.getDefault();
-            IsMe = usrNo == _userService.Me.UsrNo ? "Visible" : "Hidden";
+            IsMe = usrNo == _userService.Me.UsrNo ? Visibility.Visible : Visibility.Hidden;
         }
 
         [RelayCommand]
