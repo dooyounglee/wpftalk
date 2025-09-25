@@ -34,7 +34,7 @@
         </Grid>
         <Grid Grid.Row="2">
             <ScrollViewer x:Name="scroll">
-                <ItemsControl ItemsSource="{Binding ChatList}" ItemTemplate="{StaticResource ItemTemplate}" />
+                <ItemsControl ItemsSource="{Binding ChatList}" ItemTemplate="{StaticResource ItemTemplate}" AutomationProperties.AutomationId="chats"/>
                 <!--<ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Layout}">

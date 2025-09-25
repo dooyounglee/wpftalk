@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Interop;
@@ -97,6 +98,7 @@ namespace talk2.ViewModels
             else
             {
                 var roomView = new RoomView();
+                AutomationProperties.SetAutomationId(roomView, $"RoomNo_{roomNo}");
                 roomView.Tag = roomNo;
                 var vm = new RoomViewModel(roomNo, _userService, _chatService);
                 roomView.DataContext = vm;

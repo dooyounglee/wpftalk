@@ -14,11 +14,11 @@
     
     <Grid>
         <TextBlock HorizontalAlignment="Left" Height="32" Margin="37,42,0,0" TextWrapping="Wrap" Text="Login" VerticalAlignment="Top" Width="173"/>
-        <Button Content="Login" HorizontalAlignment="Left" Height="65" Margin="37,300,0,0" VerticalAlignment="Top" Width="113" Command="{Binding LoginCommand}"/>
+        <Button Content="Login" HorizontalAlignment="Left" Height="65" Margin="37,300,0,0" VerticalAlignment="Top" Width="113" Command="{Binding LoginCommand}" AutomationProperties.AutomationId="btnLogin" />
 
         <!-- ID -->
         <Grid Margin="80,103,0,0" Width="175" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top">
-            <TextBox x:Name="Id" Text="{Binding Id}" GotKeyboardFocus="Id_GotKeyboardFocus"/>
+            <TextBox x:Name="Id" Text="{Binding Id}" GotKeyboardFocus="Id_GotKeyboardFocus" AutomationProperties.AutomationId="txtId" />
             <TextBlock Text="Enter ID"
                       Foreground="Gray"
                       Margin="5,2,0,0"
@@ -28,7 +28,7 @@
 
         <!-- Password -->
         <Grid Margin="80,134,0,0" Width="175" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top">
-            <TextBox x:Name="Pw" Text="{Binding Pw}" GotKeyboardFocus="Pw_GotKeyboardFocus"/>
+            <TextBox x:Name="Pw" Text="{Binding Pw}" GotKeyboardFocus="Pw_GotKeyboardFocus" AutomationProperties.AutomationId="txtPw" />
             <TextBlock Text="Enter Password"
                       Foreground="Gray"
                       Margin="5,2,0,0"

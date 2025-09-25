@@ -8,7 +8,7 @@
                   Command="{Binding DataContext.ChatCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                   CommandParameter="{Binding RoomNo}" />
             </Border.InputBindings>
-            
+
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="50"/>
@@ -33,7 +33,7 @@
 
                 <!-- 이름 + 메시지 -->
                 <StackPanel Orientation="Vertical" Grid.Column="1" Margin="5,0" Background="Transparent">
-                    <TextBlock Text="{Binding Title}" FontWeight="Bold" Grid.Row="0"/>
+                    <TextBlock Text="{Binding Title}" FontWeight="Bold" Grid.Row="0" AutomationProperties.AutomationId="{Binding RoomNo}"/>
                     <TextBlock Text="{Binding Chat}"
                        TextTrimming="CharacterEllipsis"
                        MaxHeight="40"
