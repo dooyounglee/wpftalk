@@ -40,6 +40,8 @@ namespace talk2.Services
         {
             string responseBody = await HttpUtil.Put("/user/login", new { usrId = id });
             _user = JsonUtil.StringToObject<User>(responseBody);
+            _user.Ip = "127.0.0.1";
+            _user.Port = 8080;
             if (_user.UsrNo == 0) _user.IsAdmin = true;
             return _user;
         }
@@ -52,6 +54,8 @@ namespace talk2.Services
             // return _user;
             string responseBody = await HttpUtil.Post("/user/login", new { usrId = id, password = pw });
             _user = JsonUtil.StringToObject<User>(responseBody);
+            _user.Ip = "127.0.0.1";
+            _user.Port = 8080;
             if (_user.UsrNo == 0) _user.IsAdmin = true;
             return _user;
         }
