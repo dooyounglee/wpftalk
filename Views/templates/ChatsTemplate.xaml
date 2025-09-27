@@ -41,6 +41,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
                         <Border Grid.Column="0"
@@ -55,6 +56,7 @@
                                 <Binding Path="." />
                             </Button.CommandParameter>
                         </Button>
+                        <TextBlock Grid.Column="2" Text="{Binding Layout_Date}" FontSize="10" Foreground="LightGray" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="3,0,0,0"/>
                     </Grid>
                 </StackPanel>
             </StackPanel>
@@ -76,6 +78,7 @@
             <StackPanel Orientation="Horizontal"
                 HorizontalAlignment="Right"
                 Margin="0,0,4,4">
+                <TextBlock Text="{Binding Layout_Date}" FontSize="10" Foreground="LightGray" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,3,0"/>
                 <Border Background="#FFDCF8C6"
                     CornerRadius="10"
                     Padding="10"
@@ -112,6 +115,7 @@
                     MaxWidth="200">
                     <TextBox Text="{Binding chat}" Style="{StaticResource ChatStyle}" AutomationProperties.AutomationId="chat"/>
                 </Border>
+                <TextBlock Text="{Binding Layout_Date}" FontSize="10" Foreground="LightGray" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,3,0"/>
             </StackPanel>
         </StackPanel>
     </DataTemplate>

@@ -357,6 +357,7 @@ namespace talk2.ViewModels
                         UsrNm = UserUtil.getUsrNm(hub.UsrNo),
                         ProfileImage = await ProfileUtil.GetProfileImageAsync(hub.UsrNo),
                         ChatFg = "C",
+                        RgtDtm = DateUtil.now("yyyyMMddHHmmss"),
                     });
                     break;
                 case ChatState.Leave:
@@ -368,6 +369,7 @@ namespace talk2.ViewModels
                         UsrNm = UserUtil.getUsrNm(hub.UsrNo),
                         ProfileImage = await ProfileUtil.GetProfileImageAsync(hub.UsrNo),
                         ChatFg = "D",
+                        RgtDtm = DateUtil.now("yyyyMMddHHmmss"),
                     });
                     break;
                 case ChatState.File:
@@ -384,6 +386,7 @@ namespace talk2.ViewModels
                         isFile = hub.Data2 is not null ? "Visible" : "Collapsed",
                         isImage = ImageUtil.IsImage(hub.Data2) ? "Visible" : "Collapsed",
                         Image = ImageUtil.IsImage(hub.Data2) ? byteToBitmapImage(hub.Data2) : null,
+                        RgtDtm = DateUtil.now("yyyyMMddHHmmss"),
                     });
                     break;
                 case ChatState.Chat:
@@ -396,6 +399,7 @@ namespace talk2.ViewModels
                         UsrNm = UserUtil.getUsrNm(hub.UsrNo),
                         ProfileImage = await ProfileUtil.GetProfileImageAsync(hub.UsrNo),
                         ChatFg = "A",
+                        RgtDtm = DateUtil.now("yyyyMMddHHmmss"),
                     });
 
                     // 일단 무조건 깜빡이도록 하지만, 활성화 상태면 안깜빡일꺼고, 비활성화 상태면 깜빡일꺼임
