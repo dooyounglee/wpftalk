@@ -25,6 +25,7 @@ using System.Globalization;
 using System.Windows.Data;
 using OTILib.Util;
 using talk2.Util;
+using talk2.Dto;
 
 namespace talk2.ViewModels
 {
@@ -177,13 +178,14 @@ namespace talk2.ViewModels
             }
 
             string invitedUsers = string.Join(",", userList.Select(u => u.UsrNm));
-            string msg = await _chatService.Invite(_roomNo, usrNoList, invitedUsers);
+            Room room = await _chatService.Invite(_roomNo, usrNoList, invitedUsers);
 
             _clientHandler?.Send(new ChatHub
             {
                 RoomId = _roomNo,
                 UsrNo = _userService.Me.UsrNo,
-                Message = msg,
+                Message = room.Chat,
+                Data1 = JsonUtil.ObjectToString(new SocketDto() { UsrNoList=usrNoList, Room=room, }),
                 State = ChatState.Invite,
             });
 
@@ -218,6 +220,10 @@ namespace talk2.ViewModels
             // 창 찾아서 닫기
             var roomWin = Application.Current.Windows.Cast<Window>().FirstOrDefault(p => p.Tag is not null && Convert.ToInt16(p.Tag) == _roomNo);
             roomWin.Close();
+
+            // 본인 채팅목록에서 제거
+            ChatViewModel chatViewModel = (ChatViewModel)App.Current.Services.GetService(typeof(ChatViewModel))!;
+            await chatViewModel.Leave(_roomNo);
         }
         public ICommand AllChatCommand { get; set; }
         private void AllChat(object _)
@@ -235,7 +241,8 @@ namespace talk2.ViewModels
             get => _titleReadonly;
             set => SetProperty(ref _titleReadonly, value);
         }
-        public string Title { get; set; }
+        [ObservableProperty]
+        private string title;
         public ICommand SaveTitleCommand { get; set; }
         private async void SaveTitle(object _)
         {

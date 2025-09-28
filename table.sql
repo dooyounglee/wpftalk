@@ -30,6 +30,7 @@ CREATE TABLE talk.room (
 	rgt_dtm varchar NULL,
 	CONSTRAINT room_pk PRIMARY KEY (room_no)
 );
+ALTER TABLE talk.room DROP COLUMN title;
 
 -- DROP TABLE talk.roomuser;
 CREATE TABLE talk.roomuser (
@@ -38,8 +39,10 @@ CREATE TABLE talk.roomuser (
 	chat_no int8,
 	title varchar NOT NULL,
 	del_yn char(1) NOT NULL,
+	modify_yn char(1) NOT NULL,
 	CONSTRAINT roomuser_pk PRIMARY KEY (room_no,usr_no,chat_no)
 );
+ALTER TABLE talk.roomuser ADD modify_yn char(1) NOT NULL DEFAULT 'N';
 
 -- DROP TABLE talk.chat;
 CREATE TABLE talk.chat (

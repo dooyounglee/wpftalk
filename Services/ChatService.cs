@@ -22,7 +22,7 @@ namespace talk2.Services
         public Task<int> CountChats(int roomNo);
         public Task<Room> CreateRoom(List<User> userList);
         [Obsolete]  public string Invite(int roomNo, List<User> userList);
-        public Task<string> Invite(int roomNo, List<int> userList, string invitedUsers);
+        public Task<Room> Invite(int roomNo, List<int> userList, string invitedUsers);
         public Task<string> Leave(int roomNo, int usrNo);
         public Task<List<User>> RoomUserList(int roomNo);
         public Task<int> CountRoomWithMe(int usrNo);
@@ -178,7 +178,7 @@ namespace talk2.Services
             return msg;
         }
 
-        public async Task<string> Invite(int roomNo, List<int> usrNoList, string invitedUsers)
+        public async Task<Room> Invite(int roomNo, List<int> usrNoList, string invitedUsers)
         {
 
             // // 방-유저 연결하기
@@ -199,7 +199,7 @@ namespace talk2.Services
             // return msg;
             var usrNoListString = string.Join(",", usrNoList);
             string responseBody = await HttpUtil.Get($"/chat/invite/{roomNo}?usrNos={usrNoListString}&usrNms={invitedUsers}&meNo={_userService.Me.UsrNo}&meNm={_userService.Me.UsrNm}");
-            return JsonUtil.StringToObject<string>(responseBody);
+            return JsonUtil.StringToObject<Room>(responseBody);
         }
 
         public async Task<string> Leave(int roomNo, int usrNo)

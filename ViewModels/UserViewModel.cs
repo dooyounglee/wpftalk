@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Interop;
 using talk2.Commands;
+using talk2.Dto;
 using talk2.Items;
 using talk2.Models;
 using talk2.Services;
@@ -249,7 +250,7 @@ namespace talk2.ViewModels
                 State = ChatState.ProfileReload,
             });
         }
-        
+
         #region socket
         private async void Connect()
         {
@@ -363,20 +364,27 @@ namespace talk2.ViewModels
                     });
                     break; */
                 case ChatState.Invite:
-                // _chats.Add(new Chat()
-                // {
-                //     UsrNo = 0,
-                //     chat = $"{hub.inviter}님이 {hub.invitee}를 초대했습니다.",
-                //     Align = "Center",
-                // });
-                // break;
+                    ChatHub Data1 = ChatHub.Parse(hub.Data1);
+                    var Data2 = JsonUtil.StringToObject<SocketDto>(Data1.Data1);
+                    ChatViewModel chatViewModel = (ChatViewModel)App.Current.Services.GetService(typeof(ChatViewModel))!;
+                    await chatViewModel.Reload(Data1.RoomId, Data1.Message);
+
+                    List<int> usrNoList = Data2.UsrNoList;
+                    foreach (int usrNo in usrNoList)
+                    {
+                        if (_userService.Me.UsrNo == usrNo)
+                        {
+                            chatViewModel.Reload_Create(Data1.RoomId, Data1.UsrNo, Data2.Room.Title, Data2.Room.Chat);
+                        }
+                    }
+                    break;
                 case ChatState.Leave:
                 case ChatState.File:
                 case ChatState.Chat: // 서버 전파 받고 채팅목록 최신화
-                    ChatHub Data1 = ChatHub.Parse(hub.Data1);
+                    Data1 = ChatHub.Parse(hub.Data1);
                     // ChatViewModel chatViewModel = (ChatViewModel)App.Current.Services.GetService(typeof(ChatViewModel))!;
                     // chatViewModel.Reload(data.RoomId, data.Message);
-                    ChatViewModel chatViewModel = (ChatViewModel)App.Current.Services.GetService(typeof(ChatViewModel))!;
+                    chatViewModel = (ChatViewModel)App.Current.Services.GetService(typeof(ChatViewModel))!;
                     chatViewModel.Reload(Data1.RoomId, Data1.Message);
                     break;
                 case ChatState.Create:

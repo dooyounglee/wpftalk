@@ -205,6 +205,19 @@ namespace talk2.ViewModels
             _userPopupView.DialogResult = true;
         }
 
+        public async Task Leave(int roomNo)
+        {
+            for (int i = 0; i < ChatList.Count; i++)
+            {
+                var chat = ChatList[i];
+                if (chat.RoomNo == roomNo)
+                {
+                    ChatList.RemoveAt(i);
+                    break;
+                }
+            }
+        }
+
         public ICommand ChatCommand { get; set; }
         public ICommand ToCreateRoom { get; set; }
     }
