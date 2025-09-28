@@ -21,7 +21,7 @@ namespace talk2.Models
         public string Chat { get; set; }
         [JsonPropertyName("rgtDtm")]
         public string RgtDtm { get; set; }
-        public string Layout_Date { get => DateUtil.TimeWhenToday(RgtDtm); }
+        public string Layout_Date { get => string.IsNullOrEmpty(RgtDtm) ? "" : DateUtil.TimeWhenToday(RgtDtm); }
         [JsonPropertyName("cntUnread")]
         public int CntUnread { get; set; }
         public Visibility HasUnreadCnt { get => CntUnread > 0 ? Visibility.Visible : Visibility.Hidden; }
