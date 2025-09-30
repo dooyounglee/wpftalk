@@ -33,13 +33,12 @@
 
                 <!-- 이름 + 메시지 -->
                 <StackPanel Orientation="Vertical" Grid.Column="1" Margin="5,0" Background="Transparent">
-                    <TextBlock Text="{Binding Title}" FontWeight="Bold" Grid.Row="0" AutomationProperties.AutomationId="{Binding RoomNo}"/>
-                    <TextBlock Text="{Binding Chat}"
+                    <TextBlock Grid.Row="0" Text="{Binding Title}" FontWeight="Bold" TextTrimming="CharacterEllipsis" AutomationProperties.AutomationId="{Binding RoomNo}"/>
+                    <TextBlock Grid.Row="1" Text="{Binding Chat}"
                        TextTrimming="CharacterEllipsis"
                        MaxHeight="40"
                        TextWrapping="Wrap"
-                       FontSize="11"
-                       Grid.Row="1"/>
+                       FontSize="11"/>
                 </StackPanel>
 
                 <!-- 날짜 + 빨간 타원 -->
