@@ -243,24 +243,36 @@ namespace talk2.ViewModels
         }
         [ObservableProperty]
         private string title;
+        private string _title_original;
         public ICommand SaveTitleCommand { get; set; }
         private async void SaveTitle(object _)
         {
             await _chatService.EditTitle(_roomNo, _userService.Me.UsrNo, Title);
             TitleReadonly = false;
+            TitleReadMode = Visibility.Visible;
+            TitleEditMode = Visibility.Collapsed;
+            _title_original = "";
 
-            // 채팅방목록 새로고침
-            ReloadChatList();
+            // 채팅방목록에서 방제 수정
+            ChatViewModel chatViewModel = (ChatViewModel)App.Current.Services.GetService(typeof(ChatViewModel))!;
+            await chatViewModel.Reload_TitleChange(_roomNo, title);
         }
         public ICommand EditTitleCommand { get; set; }
         private void EditTitle(object _)
         {
             TitleReadonly = true;
+            TitleReadMode = Visibility.Collapsed;
+            TitleEditMode = Visibility.Visible;
+            _title_original = title;
         }
         public ICommand CancleTitleCommand { get; set; }
         private void CancleTitle(object _)
         {
             TitleReadonly = false;
+            TitleReadMode = Visibility.Visible;
+            TitleEditMode = Visibility.Collapsed;
+            Title = _title_original;
+            _title_original = "";
         }
 
         public ICommand DownloadCommand { get; set; }
@@ -484,5 +496,12 @@ namespace talk2.ViewModels
             imagePreviewView.DataContext = vm;
             imagePreviewView.ShowDialog();
         }
+
+        #region ui control
+        [ObservableProperty]
+        private Visibility titleReadMode = Visibility.Visible;
+        [ObservableProperty]
+        private Visibility titleEditMode = Visibility.Collapsed;
+        #endregion
     }
 }

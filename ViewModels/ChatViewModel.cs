@@ -87,6 +87,21 @@ namespace talk2.ViewModels
                 RgtDtm = DateUtil.now("yyyyMMddHHmmss"),
             });
         }
+        public async Task Reload_TitleChange(int roomNo, string title)
+        {
+            for (int i = 0; i < ChatList.Count; i++)
+            {
+                var chat = ChatList[i];
+                if (chat.RoomNo == roomNo)
+                {
+                    Room removed = ChatList[i];
+                    ChatList.RemoveAt(i);
+                    removed.Title = title;
+                    ChatList.Insert(i, removed);
+                    break;
+                }
+            }
+        }
 
         private void Chat(int roomNo)
         {

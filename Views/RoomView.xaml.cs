@@ -65,5 +65,12 @@ namespace talk2.Views
 
             scroll.ScrollToBottom();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var roomViewModel = this.DataContext as RoomViewModel;
+            roomViewModel.SendMsg();
+            scroll.ScrollToBottom();
+        }
     }
 }
