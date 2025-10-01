@@ -204,6 +204,14 @@ namespace talk2.ViewModels
         public ICommand LeaveCommand { get; set; }
         private async void Leave(object _)
         {
+            MessageBoxResult result = MessageBox.Show(
+                "정말로 방 나갈테야??",        // 메시지
+                "방 나가기",                  // 제목
+                MessageBoxButton.OKCancel,   // 버튼: 확인/취소
+                MessageBoxImage.Question     // 아이콘 (선택)
+            );
+            if (result == MessageBoxResult.Cancel) return;
+
             // TODO confirm창 띄워서 ok일때만 돌게
             // room-user연결 끊기
             string msg = await _chatService.Leave(_roomNo, _userService.Me.UsrNo);
