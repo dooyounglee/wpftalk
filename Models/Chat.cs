@@ -34,7 +34,7 @@ namespace talk2.Models
         public bool IsMine { get; set; }
         [JsonPropertyName("rgtDtm")]
         public string RgtDtm { get; set; }
-        public string Layout_Date { get => DateUtil.EmptyWhenSame(RgtDtm, "yyyy") + "\n" + DateUtil.EmptyWhenSame(RgtDtm, "MM-dd") + "\n" + DateUtil.format(RgtDtm, "HH:mm"); }
+        public string Layout_Date { get => DateUtil.EmptyWhenSame(RgtDtm, "yyyy ") + DateUtil.EmptyWhenSame(RgtDtm, "MM-dd") + "\n" + DateUtil.format(RgtDtm, "HH:mm"); }
         public string Layout
         {
             get
