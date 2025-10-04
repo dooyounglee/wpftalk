@@ -161,7 +161,7 @@
                 <!-- 이름 -->
                 <StackPanel Grid.Column="1" Margin="5,0" Background="Transparent">
                     <TextBlock Text="{Binding DivNm}" />
-                    <TextBlock Text="{Binding UsrNm}"
+                    <TextBlock Text="{Binding UsrNm}" AutomationProperties.AutomationId="{Binding UsrNo}"
                         FontWeight="Bold"
                         FontSize="15"
                         Grid.Row="1"/>

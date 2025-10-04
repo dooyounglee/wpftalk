@@ -22,15 +22,15 @@
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
 
-        <ListBox Grid.Row="2" ItemsSource="{Binding UserList}" ItemTemplate="{StaticResource InviteTemplate}" SelectionMode="Extended" SelectionChanged="ListBox_SelectionChanged" />
+        <ListBox Grid.Row="2" ItemsSource="{Binding UserList}" ItemTemplate="{StaticResource InviteTemplate}" SelectionMode="Extended" SelectionChanged="ListBox_SelectionChanged" AutomationProperties.AutomationId="users"/>
 
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Content="선택" Command="{Binding SelectCommand}" />
-            <Button Grid.Column="1" Content="닫기" Command="{Binding CloseCommand}" />
+            <Button Grid.Column="0" Content="선택" Command="{Binding SelectCommand}" AutomationProperties.AutomationId="BtnSelect"/>
+            <Button Grid.Column="1" Content="닫기" Command="{Binding CloseCommand}" AutomationProperties.AutomationId="BtnClose"/>
         </Grid>
     </Grid>
 </Window>

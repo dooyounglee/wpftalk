@@ -143,6 +143,7 @@ namespace talk2.ViewModels
         private async void CreateRoom(object _)
         {
             _userPopupView = new UserPopupView();
+            AutomationProperties.SetAutomationId(_userPopupView, "UserPopupView");
             var vm = new UserPopupViewModel(_userPopupView, _userService);
             _userPopupView.DataContext = vm;
             await vm.InitAsync();

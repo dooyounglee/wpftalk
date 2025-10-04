@@ -30,7 +30,7 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="Chat"/>
-            <Button Grid.Column="3" Content="Room+" Command="{Binding ToCreateRoom}" />
+            <Button Grid.Column="3" Content="Room+" Command="{Binding ToCreateRoom}" AutomationProperties.AutomationId="BtnCreate"/>
         </Grid>
         <Grid Grid.Row="2">
             <ScrollViewer x:Name="scroll">
