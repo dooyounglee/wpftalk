@@ -15,6 +15,7 @@ using System.Windows.Interop;
 using talk2.Commands;
 using talk2.Models;
 using talk2.Services;
+using talk2.Util;
 using talk2.Views;
 using talkLib.Util;
 
@@ -114,6 +115,11 @@ namespace talk2.ViewModels
             {
                 var roomView = new RoomView();
                 AutomationProperties.SetAutomationId(roomView, $"RoomNo_{roomNo}");
+                roomView.Closing += (s, e) =>
+                {
+                    PositionUtil.SavePosition(roomNo, roomView.Left, roomView.Top);
+                };
+                (roomView.Left, roomView.Top) = PositionUtil.GetRoomPosition(roomNo);
                 roomView.Tag = roomNo;
                 var vm = new RoomViewModel(roomNo, _userService, _chatService);
                 roomView.DataContext = vm;

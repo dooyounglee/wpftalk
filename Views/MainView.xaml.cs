@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OTILib.Util;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -16,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using talk2.Models;
+using talk2.Util;
 
 namespace talk2.Views
 {
@@ -35,6 +37,12 @@ namespace talk2.Views
             // [중복실행 방지2]
             // this.Title = "dlendud";
             // if (FindWindow(null, Title) > 1) Application.Current.Shutdown();
+
+            this.Loaded += (s, e) =>
+            {
+                // 실행위치 저장
+                PositionUtil.SavePosition(-1, this.Left, this.Top);
+            };
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
