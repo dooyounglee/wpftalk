@@ -43,6 +43,12 @@ namespace talk2.Views
                 // 실행위치 저장
                 PositionUtil.SavePosition(-1, this.Left, this.Top);
             };
+
+            this.LocationChanged += (s, e) =>
+            {
+                PositionUtil.SetCnt0();
+                PositionUtil.SetResetFalse();
+            };
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)

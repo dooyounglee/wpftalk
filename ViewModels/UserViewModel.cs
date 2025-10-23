@@ -203,6 +203,7 @@ namespace talk2.ViewModels
         private void GoToUserInfo(int usrNo)
         {
             var userInfoView = new NewUserView();
+            (userInfoView.Left, userInfoView.Top) = PositionUtil.GetRoomPosition(-1);
             var vm = new NewUserViewModel(userInfoView, _userService);
             userInfoView.DataContext = vm;
             vm.InitAsync(usrNo);
